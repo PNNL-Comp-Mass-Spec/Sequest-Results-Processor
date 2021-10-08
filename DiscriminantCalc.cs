@@ -30,10 +30,7 @@ namespace SequestResultsProcessor
         protected DTAFileInformation m_dtaFileInfo
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _m_dtaFileInfo;
-            }
+            get => _m_dtaFileInfo;
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
@@ -288,10 +285,7 @@ namespace SequestResultsProcessor
             protected dtaFileOffsets m_Offsets
             {
                 [MethodImpl(MethodImplOptions.Synchronized)]
-                get
-                {
-                    return _m_Offsets;
-                }
+                get => _m_Offsets;
 
                 [MethodImpl(MethodImplOptions.Synchronized)]
                 set
@@ -336,13 +330,7 @@ namespace SequestResultsProcessor
                 m_dtaStream.Close();
             }
 
-            public PeptideIntensities DTAScanInfo
-            {
-                get
-                {
-                    return m_DTAFileIntensities;
-                }
-            }
+            public PeptideIntensities DTAScanInfo => m_DTAFileIntensities;
 
             protected void OffsetLoadingProgressHandler(double fractionDone)
             {
@@ -538,76 +526,34 @@ namespace SequestResultsProcessor
                 }
             }
 
-            public double BFNLT
-            {
-                get
-                {
-                    return m_BFNLT;
-                }
-            }
+            public double BFNLT => m_BFNLT;
 
-            public int IsPoorSpec
-            {
-                get
-                {
-                    return m_IsPoorSpec;
-                }
-            }
+            public int IsPoorSpec => m_IsPoorSpec;
 
-            public NeutralLossList NeutralLosses
-            {
-                get
-                {
-                    return m_NeutralLoss;
-                }
-            }
+            public NeutralLossList NeutralLosses => m_NeutralLoss;
 
             public int ScanNum
             {
-                get
-                {
-                    return m_ScanNum;
-                }
+                get => m_ScanNum;
 
-                set
-                {
-                    m_ScanNum = value;
-                }
+                set => m_ScanNum = value;
             }
 
             public int ParentCS
             {
-                get
-                {
-                    return m_ParentCS;
-                }
+                get => m_ParentCS;
 
-                set
-                {
-                    m_ParentCS = value;
-                }
+                set => m_ParentCS = value;
             }
 
             public double ParentMHMass
             {
-                get
-                {
-                    return m_ParentMH;
-                }
+                get => m_ParentMH;
 
-                set
-                {
-                    m_ParentMH = value;
-                }
+                set => m_ParentMH = value;
             }
 
-            public double ParentMZ
-            {
-                get
-                {
-                    return (m_ParentMH - 1.0d + m_ParentCS) / m_ParentCS;
-                }
-            }
+            public double ParentMZ => (m_ParentMH - 1.0d + m_ParentCS) / m_ParentCS;
 
             public void GetIntensitiesFromDTA(long startOffset)
             {

@@ -35,21 +35,9 @@ namespace SequestResultsProcessor.Containers
             m_FragmentList = new List<Fragment>();
         }
 
-        public List<Fragment> FragmentList
-        {
-            get
-            {
-                return m_FragmentList;
-            }
-        }
+        public List<Fragment> FragmentList => m_FragmentList;
 
-        public int maxIndex
-        {
-            get
-            {
-                return m_FragmentList.Count - 1;
-            }
-        }
+        public int maxIndex => m_FragmentList.Count - 1;
 
         public virtual void Add(double mZ, double intensity)
         {

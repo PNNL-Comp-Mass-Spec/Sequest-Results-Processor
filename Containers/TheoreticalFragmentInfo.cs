@@ -84,21 +84,9 @@ namespace SequestResultsProcessor.Containers
 
         protected const string KNOWN_RESIDUES = "ACDEFGHIKLMNPQRSTVWY";
 
-        public List<Fragment> YIons
-        {
-            get
-            {
-                return m_TheoYIons;
-            }
-        }
+        public List<Fragment> YIons => m_TheoYIons;
 
-        public List<Fragment> BIons
-        {
-            get
-            {
-                return m_TheoBIons;
-            }
-        }
+        public List<Fragment> BIons => m_TheoBIons;
 
         public TheoreticalFragmentInfo(string peptideSequence, int chargeState)
         {

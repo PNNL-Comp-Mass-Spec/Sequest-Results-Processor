@@ -29,10 +29,7 @@ namespace SequestResultsProcessor.Containers
         protected static DiscriminantCalc s_DiscriminantCalc
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _s_DiscriminantCalc;
-            }
+            get => _s_DiscriminantCalc;
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
@@ -102,13 +99,7 @@ namespace SequestResultsProcessor.Containers
             m_MultiProteinEntries.Clear();
         }
 
-        public string IDKey
-        {
-            get
-            {
-                return GetIDKey();
-            }
-        }
+        public string IDKey => GetIDKey();
 
         private string GetIDKey()
         {
@@ -345,10 +336,7 @@ namespace SequestResultsProcessor.Containers
 
         public string Reference
         {
-            get
-            {
-                return m_Reference;
-            }
+            get => m_Reference;
 
             set
             {

@@ -126,13 +126,7 @@ namespace SequestResultsProcessor.Containers
         public int EndScanNumber { get; private set; }
         public int ChargeState { get; private set; }
 
-        public SortedList<int, PeptideHitEntry> PeptideHits
-        {
-            get
-            {
-                return m_PeptideHits;
-            }
-        }
+        public SortedList<int, PeptideHitEntry> PeptideHits => m_PeptideHits;
 
         #endregion
     }

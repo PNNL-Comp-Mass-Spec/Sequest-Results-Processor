@@ -83,13 +83,7 @@ namespace SequestResultsProcessor
             WriteEntries(m_DataList);
         }
 
-        public string OutputFilePath
-        {
-            get
-            {
-                return Path.Combine(m_OutputDirectory, m_RootName + m_Ext);
-            }
-        }
+        public string OutputFilePath => Path.Combine(m_OutputDirectory, m_RootName + m_Ext);
 
         public struct IRREntry
         {

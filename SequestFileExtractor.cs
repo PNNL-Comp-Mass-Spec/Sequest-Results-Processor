@@ -40,10 +40,7 @@ namespace SequestResultsProcessor
         private ConcatenatedOutFileProcessor m_parser
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _m_parser;
-            }
+            get => _m_parser;
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
@@ -1001,15 +998,9 @@ namespace SequestResultsProcessor
 
             public string SourceDirectory
             {
-                get
-                {
-                    return m_SourceDirectory;
-                }
+                get => m_SourceDirectory;
 
-                set
-                {
-                    m_SourceDirectory = value;
-                }
+                set => m_SourceDirectory = value;
             }
 
             public string DestinationDirectory
@@ -1026,39 +1017,18 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                set
-                {
-                    m_DestinationDirectory = value;
-                }
+                set => m_DestinationDirectory = value;
             }
 
-            public bool CatOutFileExists
-            {
-                get
-                {
-                    return CheckFileExists(InputFileFullPath);
-                }
-            }
+            public bool CatOutFileExists => CheckFileExists(InputFileFullPath);
 
-            public bool CatDTAFileExists
-            {
-                get
-                {
-                    return CheckFileExists(DTAFileFullPath);
-                }
-            }
+            public bool CatDTAFileExists => CheckFileExists(DTAFileFullPath);
 
             public string RootFileName
             {
-                get
-                {
-                    return m_RootFileName;
-                }
+                get => m_RootFileName;
 
-                set
-                {
-                    m_RootFileName = value;
-                }
+                set => m_RootFileName = value;
             }
 
             public string InputFileName
@@ -1075,10 +1045,7 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                set
-                {
-                    m_InputFileName = value;
-                }
+                set => m_InputFileName = value;
             }
 
             public string SynopsisFileName
@@ -1095,10 +1062,7 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                set
-                {
-                    m_SynopsisFileName = value;
-                }
+                set => m_SynopsisFileName = value;
             }
 
             public string FirstHitsFileName
@@ -1115,10 +1079,7 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                set
-                {
-                    m_FirstHitsFileName = value;
-                }
+                set => m_FirstHitsFileName = value;
             }
 
             public string DTAFileName
@@ -1135,10 +1096,7 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                set
-                {
-                    m_DTAFileName = value;
-                }
+                set => m_DTAFileName = value;
             }
 
             public string LogFileName
@@ -1155,10 +1113,7 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                set
-                {
-                    m_LogFileName = value;
-                }
+                set => m_LogFileName = value;
             }
 
             public bool FilterEFS { get; set; } = false;
@@ -1172,45 +1127,15 @@ namespace SequestResultsProcessor
             public double SynFilterScoreThreshold { get; set; } = 0.1d;
             public bool RemoveDuplicatedMultiProtRefs { get; set; } = false;
 
-            public string InputFileFullPath
-            {
-                get
-                {
-                    return Path.Combine(DestinationDirectory, InputFileName);
-                }
-            }
+            public string InputFileFullPath => Path.Combine(DestinationDirectory, InputFileName);
 
-            public string DTAFileFullPath
-            {
-                get
-                {
-                    return Path.Combine(DestinationDirectory, DTAFileName);
-                }
-            }
+            public string DTAFileFullPath => Path.Combine(DestinationDirectory, DTAFileName);
 
-            public string FirstHitsFullPath
-            {
-                get
-                {
-                    return Path.Combine(DestinationDirectory, FirstHitsFileName);
-                }
-            }
+            public string FirstHitsFullPath => Path.Combine(DestinationDirectory, FirstHitsFileName);
 
-            public string SynopsisFileFullPath
-            {
-                get
-                {
-                    return Path.Combine(DestinationDirectory, SynopsisFileName);
-                }
-            }
+            public string SynopsisFileFullPath => Path.Combine(DestinationDirectory, SynopsisFileName);
 
-            public string LogFileFullPath
-            {
-                get
-                {
-                    return Path.Combine(DestinationDirectory, LogFileName);
-                }
-            }
+            public string LogFileFullPath => Path.Combine(DestinationDirectory, LogFileName);
         }
 
         // Unused class

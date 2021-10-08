@@ -105,7 +105,7 @@ namespace SequestResultsProcessor.Containers
             double[] peptideLeft;
             double[] peptideRight;
             double[] peptideMass;
-            ResidueInfo r;
+
             peptideResidues = KNOWN_RESIDUES.ToCharArray();
             peptideLeft = new double[] { -0.2d, -0.75d, 0.45d, -0.05d, 0.4d, -0.8d, 0.35d, -0.4d, -0.25d, -0.15d, -0.2d, -0.5d, -1.15d, -0.35d, -0.75d, -0.6d, -0.65d, 0d, 0.25d, -0.4d };
             peptideRight = new double[] { 0.35d, -0.2d, -0.45d, -0.15d, 0.45d, 0.5d, 0.25d, 0.35d, 0.3d, 0.05d, 0.1d, 0.1d, 1.15d, -0.05d, -0.35d, 0.5d, 0.45d, 0.2d, 0.45d, 0.4d };
@@ -116,13 +116,18 @@ namespace SequestResultsProcessor.Containers
             var loopTo = maxIndex;
             for (counter = 0; counter <= loopTo; counter++)
             {
-                residue = peptideResidues[counter].ToString();
-                r = new ResidueInfo();
-                r.Name = (Residues)Conversions.ToInteger(Enum.Parse(typeof(Residues), residue));
+                var residueSymbol = peptideResidues[counter].ToString();
+                var r = new ResidueInfo();
+                if (!Enum.TryParse(residueSymbol, out Residues symbol))
+                {
+                    throw new Exception("Unrecognized residue: " + residueSymbol);
+                }
+
+                r.Name = symbol;
                 r.Mass = peptideMass[counter];
                 r.LeftIntensity = peptideLeft[counter];
                 r.RightIntensity = peptideRight[counter];
-                s_Intensities.Add(residue, r);
+                s_Intensities.Add(residueSymbol, r);
             }
         }
 

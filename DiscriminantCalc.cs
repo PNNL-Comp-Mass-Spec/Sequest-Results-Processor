@@ -396,8 +396,8 @@ namespace SequestResultsProcessor
                     string chargeExtra;
                     var dtaCount = default(int);
                     long fileLength;
-                    var r = new Regex(@"^\s*[=]{5,}\s+\""(?<rootname>.+)\.(?<startscannum>\d+)\.(?<endscannum>\d+)\.(?<chargeblock>(?<chargestate>\d+)[^0-9]?(?<chargeextra>\S*))\.(?<filetype>.+)\""\s+[=]{5,}\s*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
-                    // Dim r As New Regex("\=+\s\""\S+\.(?<startscannum>\d+)\.(?<endscannum>\d+)\.(?<chargestate>\d)\.\S+\""\s\=")
+                    var r = new Regex(@"^\s*[=]{5,}\s+\""(?<rootname>.+)\.(?<StartScan>\d+)\.(?<EndScan>\d+)\.(?<ChargeBlock>(?<ChargeState>\d+)[^0-9]?(?<ChargeExtra>\S*))\.(?<FileType>.+)\""\s+[=]{5,}\s*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
                     var lineMatch = new Regex("^===*");
                     Match m;
                     if (fi.Exists)
@@ -413,16 +413,19 @@ namespace SequestResultsProcessor
                             {
                                 dtaStartPos = currPos - s.Length - lineEndCharCount;
                                 m = r.Match(s);
-                                if (m.Groups["chargeextra"].Length > 0)
+                                if (m.Groups["ChargeExtra"].Length > 0)
                                 {
-                                    chargeExtra = m.Groups["chargeextra"].Value;
+                                    chargeExtra = m.Groups["ChargeExtra"].Value;
                                 }
                                 else
                                 {
                                     chargeExtra = "";
                                 }
 
-                                AddOffset(Conversions.ToInteger(m.Groups["startscannum"].Value), Conversions.ToInteger(m.Groups["endscannum"].Value), Conversions.ToInteger(m.Groups["chargestate"].Value), dtaStartPos, chargeExtra);
+                                AddOffset(
+                                    int.Parse(m.Groups["StartScan"].Value),
+                                    int.Parse(m.Groups["EndScan"].Value),
+                                    int.Parse(m.Groups["ChargeState"].Value), dtaStartPos, chargeExtra);
                                 dtaCount += 1;
                                 if (dtaCount % 3000 == 0)
                                 {
@@ -523,32 +526,31 @@ namespace SequestResultsProcessor
                 Clear();
                 sr.BaseStream.Seek(startOffset, SeekOrigin.Begin);
                 s = sr.ReadLine();
-                var HeaderLine = new Regex(@"^=+\s+\""\S+\.(?<scannum>\d+)\.\d+\.\d+\.dta");
-                Match headerLineMatch;
+                var HeaderLine = new Regex(@"^=+\s+\""\S+\.(?<Scan>\d+)\.\d+\.\d+\.dta");
                 if (HeaderLine.IsMatch(s))
                 {
-                    headerLineMatch = HeaderLine.Match(s);
-                    m_ScanNum = Conversions.ToInteger(headerLineMatch.Groups["scannum"].Value);
+                    var headerLineMatch = HeaderLine.Match(s);
+                    m_ScanNum = int.Parse(headerLineMatch.Groups["Scan"].Value);
                 }
 
                 s = sr.ReadLine();
-                var ParentLine = new Regex(@"^(?<parentmass>\d+\.*\d*)\s+(?<chargestate>\d+)");
+                var ParentLine = new Regex(@"^(?<ParentMass>\d+\.*\d*)\s+(?<ChargeState>\d+)");
                 Match parentLineMatch;
                 if (Regex.IsMatch(s, @"^\S+"))
                 {
                     parentLineMatch = ParentLine.Match(s);
-                    m_ParentMH = Conversions.ToDouble(parentLineMatch.Groups["parentmass"].Value);
-                    m_ParentCS = Conversions.ToInteger(parentLineMatch.Groups["chargestate"].Value);
+                    m_ParentMH = double.Parse(parentLineMatch.Groups["ParentMass"].Value);
+                    m_ParentCS = int.Parse(parentLineMatch.Groups["ChargeState"].Value);
                 }
 
-                var LineMatch = new Regex(@"^(?<mass>\d+\.\d+)\s(?<intensity>\d+\.\d+)");
+                var LineMatch = new Regex(@"^(?<Mass>\d+\.\d+)\s(?<Intensity>\d+\.\d+)");
                 Match m;
                 s = sr.ReadLine();
                 while (LineMatch.IsMatch(s))
                 {
                     m = LineMatch.Match(s);
-                    tmpMass = Conversions.ToDouble(m.Groups["mass"].Value);
-                    tmpIntensity = Conversions.ToDouble(m.Groups["intensity"].Value);
+                    tmpMass = double.Parse(m.Groups["Mass"].Value);
+                    tmpIntensity = double.Parse(m.Groups["Intensity"].Value);
                     if (tmpIntensity > maxIntensity)
                     {
                         maxIntensity = tmpIntensity;

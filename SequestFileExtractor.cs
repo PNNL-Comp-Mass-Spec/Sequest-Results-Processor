@@ -121,7 +121,7 @@ namespace SequestResultsProcessor
 
             if (mHeaderMassMatcher is null)
             {
-                mHeaderMassMatcher = new Regex(@"mass\s+=\s+(?<headermass>\d+\.\d+)", RegexOptions.Compiled);
+                mHeaderMassMatcher = new Regex(@"mass\s+=\s+(?<HeaderMass>\d+\.\d+)", RegexOptions.Compiled);
             }
 
             if (mDataBlockDelimiterMatcher is null)
@@ -317,7 +317,7 @@ namespace SequestResultsProcessor
                 var lstOutFilesProcessed = new SortedSet<string>();
                 var FHTOutputIndexList = new List<ResultsStorage.OutputRecordIndex>();
                 var SynOutputIndexList = new List<ResultsStorage.OutputRecordIndex>();
-                var r_FileDelimiterMatcher = new Regex(@"^\s*[=]{5,}\s+\""(?<rootname>.+)\.(?<startscan>\d+)\.(?<endscan>\d+)\.(?<chargeblock>(?<chargestate>\d+)[^0-9]?(?<chargeextra>\S*))\.(?<filetype>.+)\""\s+[=]{5,}\s*$", RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                var r_FileDelimiterMatcher = new Regex(@"^\s*[=]{5,}\s+\""(?<rootname>.+)\.(?<StartScan>\d+)\.(?<EndScan>\d+)\.(?<ChargeBlock>(?<ChargeState>\d+)[^0-9]?(?<ChargeExtra>\S*))\.(?<FileType>.+)\""\s+[=]{5,}\s*$", RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 if (m_StartupArguments.MakeIRRFile)
                 {
                     m_IRRDumper = new OutputIRRFile(m_StartupArguments.RootFileName, m_StartupArguments.DestinationDirectory);
@@ -534,9 +534,9 @@ namespace SequestResultsProcessor
                 var fileHeaderMatch = fileDelimiterMatcher.Match(fileHeaderLine);
                 if (fileHeaderMatch.Success)
                 {
-                    currentStartScan = int.Parse(fileHeaderMatch.Groups["startscan"].Value);
-                    currentEndScan = int.Parse(fileHeaderMatch.Groups["endscan"].Value);
-                    currentCS = int.Parse(fileHeaderMatch.Groups["chargestate"].Value);
+                    currentStartScan = int.Parse(fileHeaderMatch.Groups["StartScan"].Value);
+                    currentEndScan = int.Parse(fileHeaderMatch.Groups["EndScan"].Value);
+                    currentCS = int.Parse(fileHeaderMatch.Groups["ChargeState"].Value);
                 }
                 else
                 {
@@ -555,7 +555,7 @@ namespace SequestResultsProcessor
 
                 // grab the header mass value
                 var headerMassMatch = mHeaderMassMatcher.Match(matchingLine);
-                currentHeaderMass = Conversions.ToDouble(headerMassMatch.Groups["headermass"].Value);
+                currentHeaderMass = double.Parse(headerMassMatch.Groups["HeaderMass"].Value);
 
                 // Wait until we see the dashed line underneath the headings for the data block
 

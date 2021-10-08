@@ -161,7 +161,7 @@ namespace SequestResultsProcessor.Containers
 
         private string GetCleanSequence(string rawPeptideSeq)
         {
-            var r = new Regex(@"^*.\.(?<cleanseq>\S+)\..*$");
+            var r = new Regex(@"^.*\.(?<cleanseq>\S+)\..*$");
             var m = r.Match(rawPeptideSeq);
             var cleanSeq = m.Groups["cleanseq"].Value;
             cleanSeq = Regex.Replace(cleanSeq, "[^" + KNOWN_RESIDUES + "]", "");

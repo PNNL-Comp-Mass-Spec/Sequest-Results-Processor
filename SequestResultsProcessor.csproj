@@ -164,8 +164,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy "$(TargetPath)" "$(ProjectDir)..\Debug\Executable\"
-copy "$(TargetPath)" "$(ProjectDir)..\Required_DLLs"
-copy "$(TargetName).*" "$(ProjectDir)..\Peptide_File_Extractor_Console\bin"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

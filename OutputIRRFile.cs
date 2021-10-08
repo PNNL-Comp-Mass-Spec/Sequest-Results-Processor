@@ -1,11 +1,11 @@
 ﻿
 // This class extracts observed vs theoretical ion ratio information from sequest
 // .out files (the n/m value in the peptide hit lines) and places it into its own
-// separate results file (rootname_IRR.txt)
+// separate results file (RootName_IRR.txt)
 //
 // -------------------------------------------------------------------------------
 // Written by Ken Auberry for the Department of Energy (PNNL, Richland, WA)
-// Coding for this class began on 19 November 2004
+// Coding for this class began in November 2004
 // -------------------------------------------------------------------------------
 //
 // Licensed under the Apache License, Version 2.0; you may not use this file except

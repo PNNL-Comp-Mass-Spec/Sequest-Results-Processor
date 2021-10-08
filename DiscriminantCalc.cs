@@ -471,14 +471,10 @@ namespace SequestResultsProcessor
                     m_FileStream = dtaFileStream;
                 }
 
-                if (NLCalc is null)
-                {
-                    NLCalc = new CalcNeutralLosses();
-                }
+                NLCalc ??= new CalcNeutralLosses();
             }
 
             public NeutralLossList NeutralLosses => m_NeutralLoss;
-
 
             public double ParentMZ => (m_ParentMH - 1.0d + m_ParentCS) / m_ParentCS;
 

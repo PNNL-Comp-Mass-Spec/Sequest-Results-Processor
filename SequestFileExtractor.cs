@@ -79,10 +79,8 @@ namespace SequestResultsProcessor
 
         private void InitializeMatchers()
         {
-            if (mExtraProteinLineMatcher is null)
-            {
-                mExtraProteinLineMatcher = new Regex(@"^\s+\d*\s+(?<reference>\S+)\s*(?<description>.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            }
+            mExtraProteinLineMatcher ??= new Regex(@"^\s+\d*\s+(?<reference>\S+)\s*(?<description>.*)",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
             // Notes:
             // The ID column is not always present; thus the use of * in (?<idblock>...)*

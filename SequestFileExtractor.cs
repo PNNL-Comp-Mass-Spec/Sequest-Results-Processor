@@ -417,8 +417,11 @@ namespace SequestResultsProcessor
                 var query = from item in peptideCountsByXCorr.Keys
                             orderby item
                             select item;
+
                 foreach (var scoreThreshold in query)
+                {
                     msg += string.Format("{0,7} peptides above {1}, ", peptideCountsByXCorr[scoreThreshold], scoreThreshold);
+                }
 
                 // Remove the trailing comma and space
                 var trimmedMsg = msg.Trim();
@@ -571,6 +574,7 @@ namespace SequestResultsProcessor
                         currentPeptide.EndScanNum = currentEndScan;
                         currentPeptide.ScanCount = currentEndScan - currentStartScan + 1;
                         currentPeptide.ChargeState = currentCS;
+
                         if (makeIRRFile)
                         {
                             m_IRRDumper.MakeIRREntry(currentStartScan, currentCS, currentPeptide.RankXc, currentPeptide.ObsIons, currentPeptide.PossIons);

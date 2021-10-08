@@ -515,7 +515,7 @@ namespace SequestResultsProcessor
                 // (to separate that VERY last hit that creeps in)
 
                 var eMatchType = eHitMatchType.MatchWithProtein;
-                while (eMatchType != eHitMatchType.NoMatch && dataLine is object)
+                while (eMatchType != eHitMatchType.NoMatch && dataLine != null)
                 {
                     var dataLineMatch = mHitLineMatcher.Match(dataLine);
                     if (dataLineMatch.Success)

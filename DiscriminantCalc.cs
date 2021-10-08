@@ -304,7 +304,7 @@ namespace SequestResultsProcessor
                         withBlock.GetIntensitiesFromDTA(fileOffset);
                     }
                 }
-                else if (m_DTAFileIntensities is object)
+                else if (m_DTAFileIntensities != null)
                 {
                     m_DTAFileIntensities.Clear();
                 }

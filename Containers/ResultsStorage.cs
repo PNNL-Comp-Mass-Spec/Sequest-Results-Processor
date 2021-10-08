@@ -138,9 +138,10 @@ namespace SequestResultsProcessor.Containers
                             currentMultiProteinID += 1;
                         }
 
-                        if (outputType == OutputTypeList.FHT && proteinExportList is object)
+                        if (outputType == OutputTypeList.FHT && proteinExportList != null && xrefWriter != null)
                         {
                             foreach (var proteinLine in proteinExportList.Values)
+                            {
                                 xrefWriter.WriteLine(proteinLine);
                         }
                     }

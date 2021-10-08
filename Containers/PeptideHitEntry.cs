@@ -241,7 +241,7 @@ namespace SequestResultsProcessor.Containers
             }
 
             exportList.Add(0, sbFront.ToString() + Reference + delim.ToString() + sbRear.ToString());
-            if (ExpandMultiProteinEntries && m_MultiProteinEntries is object)
+            if (ExpandMultiProteinEntries && m_MultiProteinEntries != null)
             {
                 // Keys in m_MultiProteinEntries are MultiProteinID #, values are protein names
                 foreach (var objEntry in m_MultiProteinEntries)

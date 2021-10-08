@@ -40,11 +40,11 @@ namespace SequestResultsProcessor
                 fi.Delete();
             m_FileStream = new FileStream(OutputFilePath, FileMode.CreateNew);
             m_StreamWriter = new StreamWriter(m_FileStream);
-            string headerLine = "Scannum" + ControlChars.Tab.ToString() + "NL1_Intensity" + ControlChars.Tab.ToString() + "NL2_Intensity" + ControlChars.Tab.ToString() + "NL3_Intensity" + ControlChars.Tab.ToString();
+            string headerLine = "Scannum" + '\t' + "NL1_Intensity" + '\t' + "NL2_Intensity" + '\t' + "NL3_Intensity" + '\t';
             m_StreamWriter.WriteLine(headerLine);
             foreach (var entry in dataList)
             {
-                string outputLine = entry.ScanNumber.ToString() + ControlChars.Tab.ToString() + entry.NeutralLossTxt;
+                string outputLine = entry.ScanNumber.ToString() + '\t' + entry.NeutralLossTxt;
                 m_StreamWriter.WriteLine(outputLine);
             }
 
@@ -71,7 +71,7 @@ namespace SequestResultsProcessor
             public NLIEntry(int ScanNumber, NeutralLossList NeutralLosses)
             {
                 this.ScanNumber = ScanNumber;
-                NeutralLossTxt = NeutralLosses.NL1Intensity.ToString() + ControlChars.Tab.ToString() + NeutralLosses.NL2Intensity.ToString() + ControlChars.Tab.ToString() + NeutralLosses.NL3Intensity.ToString() + ControlChars.Tab.ToString();
+                NeutralLossTxt = NeutralLosses.NL1Intensity.ToString() + '\t' + NeutralLosses.NL2Intensity.ToString() + '\t' + NeutralLosses.NL3Intensity.ToString() + '\t';
             }
 
             public int ScanNumber;

@@ -193,13 +193,13 @@ namespace SequestResultsProcessor.Containers
                         identifierSB.Append(objEntry.Key.ToString());
                         lineSB.Clear();
                         lineSB.Append(RankXc.ToString());
-                        lineSB.Append(ControlChars.Tab);
+                        lineSB.Append('\t');
                         lineSB.Append(StartScanNum.ToString());
-                        lineSB.Append(ControlChars.Tab);
+                        lineSB.Append('\t');
                         lineSB.Append(ChargeState.ToString());
-                        lineSB.Append(ControlChars.Tab);
+                        lineSB.Append('\t');
                         lineSB.Append(objEntry.Key.ToString());
-                        lineSB.Append(ControlChars.Tab);
+                        lineSB.Append('\t');
                         lineSB.Append(objEntry.Value);
                         proteinList.Add(identifierSB.ToString(), lineSB.ToString());
                     }
@@ -215,7 +215,7 @@ namespace SequestResultsProcessor.Containers
             StringBuilder sbRear;
             sbFront = new StringBuilder(150);
             sbRear = new StringBuilder(150);
-            const char delim = ControlChars.Tab;
+            const char delim = '\t';
 
             // Tracks protein names:
             // keys are 0, 1, 2, etc.

@@ -108,7 +108,7 @@ namespace SequestResultsProcessor.Containers
                 var proteinOutputFileInfo = new FileInfo(proteinXrefFilePath);
                 if (proteinOutputFileInfo.Length == 0L)
                 {
-                    xrefWriter.WriteLine("RankXc" + Conversions.ToString(ControlChars.Tab) + "ScanNum" + Conversions.ToString(ControlChars.Tab) + "ChargeState" + Conversions.ToString(ControlChars.Tab) + "MultiProteinID" + Conversions.ToString(ControlChars.Tab) + "Reference" + Conversions.ToString(ControlChars.Tab));
+                    xrefWriter.WriteLine("RankXc" + '\t' + "ScanNum" + '\t' + "ChargeState" + '\t' + "MultiProteinID" + '\t' + "Reference" + '\t');
                 }
             }
 

@@ -185,24 +185,21 @@ namespace SequestResultsProcessor.Containers
                 var reUpdateHitNum = new Regex(@"^\d+");
                 outputRecordList.Sort(new OutputRecordIndexComparer());
 
-                using (var fsInFile = new FileStream(outputFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    using (var swOutFile = new StreamWriter(new FileStream(finalOutputPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
-                    {
-                        swOutFile.WriteLine(HEADER);
-                        foreach (var entry in outputRecordList)
-                        {
-                            var buffer = new byte[entry.RecordLength + 1];
-                            fsInFile.Seek(entry.StartOffset, SeekOrigin.Begin);
-                            fsInFile.Read(buffer, 0, entry.RecordLength);
-                            var inputString = Encoding.Default.GetString(buffer);
+                using var fsInFile = new FileStream(outputFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var swOutFile = new StreamWriter(new FileStream(finalOutputPath, FileMode.Create, FileAccess.Write, FileShare.Read));
 
-                            // Update the the row number (the first number on the line)
-                            var outputString = reUpdateHitNum.Replace(inputString, rowCount.ToString());
-                            swOutFile.Write(outputString.Trim('\0'));
-                            rowCount++;
-                        }
-                    }
+                swOutFile.WriteLine(HEADER);
+                foreach (var entry in outputRecordList)
+                {
+                    var buffer = new byte[entry.RecordLength + 1];
+                    fsInFile.Seek(entry.StartOffset, SeekOrigin.Begin);
+                    fsInFile.Read(buffer, 0, entry.RecordLength);
+                    var inputString = Encoding.Default.GetString(buffer);
+
+                    // Update the the row number (the first number on the line)
+                    var outputString = reUpdateHitNum.Replace(inputString, rowCount.ToString());
+                    swOutFile.Write(outputString.Trim('\0'));
+                    rowCount++;
                 }
             }
 

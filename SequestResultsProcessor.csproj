@@ -119,6 +119,7 @@
     <Compile Include="ComputeDelMPPM.cs" />
     <Compile Include="DiscriminantCalc.cs" />
     <Compile Include="Containers\FragmentInfo.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="OutputIRRFile.cs" />
     <Compile Include="OutputNLIFile.cs" />
     <Compile Include="Containers\PeptideHitEntry.cs" />

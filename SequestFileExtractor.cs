@@ -735,8 +735,10 @@ namespace SequestResultsProcessor
                 set => m_DestinationDirectory = value;
             }
 
+            // ReSharper disable once UnusedMember.Global
             public bool CatOutFileExists => CheckFileExists(InputFileFullPath);
 
+            // ReSharper disable once UnusedMember.Global
             public bool CatDTAFileExists => CheckFileExists(DTAFileFullPath);
 
             public string RootFileName

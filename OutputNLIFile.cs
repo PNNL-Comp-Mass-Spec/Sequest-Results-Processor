@@ -59,6 +59,7 @@ namespace SequestResultsProcessor
             m_DataList.Add(new NLIEntry(ScanNum, NeutralLosses));
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void CloseNLIWriter()
         {
             WriteEntries(m_DataList);

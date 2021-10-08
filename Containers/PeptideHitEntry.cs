@@ -33,6 +33,7 @@ namespace SequestResultsProcessor.Containers
             dtaLoadProgress?.Invoke(taskDescription, fractiondone);
         }
 
+        // ReSharper disable once UnusedMember.Global
         public void Clear()
         {
             HitNum = 0;
@@ -62,6 +63,7 @@ namespace SequestResultsProcessor.Containers
             m_MultiProteinEntries.Clear();
         }
 
+        // ReSharper disable once UnusedMember.Global
         public string IDKey => GetIDKey();
 
         private string GetIDKey()
@@ -93,6 +95,8 @@ namespace SequestResultsProcessor.Containers
             NumTrypticEnds = CountTrypticEnds(Peptide);
         }
 
+        // ReSharper disable once IdentifierTypo
+        // ReSharper disable once UnusedMember.Global
         public int CalculatePassFilt()
         {
             double myScore = CalculateFilterScore(XCorr, DelCn2, NumTrypticEnds, ChargeState);

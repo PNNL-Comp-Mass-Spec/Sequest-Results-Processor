@@ -308,6 +308,7 @@ namespace SequestResultsProcessor
                 m_dtaFilePath = dtaFilePath;
             }
 
+            // ReSharper disable once UnusedMember.Local
             public void Configure()
             {
                 m_Offsets.LoadOffsetsFromDTAFile(m_dtaFilePath);
@@ -315,6 +316,7 @@ namespace SequestResultsProcessor
                 m_DTAFileIntensities = new PeptideIntensities(m_dtaStream);
             }
 
+            // ReSharper disable once UnusedMember.Local
             public void Close()
             {
                 m_dtaStream.Close();

@@ -48,6 +48,7 @@ namespace SequestResultsProcessor.Containers
 
         public enum Residues
         {
+            // ReSharper disable UnusedMember.Global
             A,
             C,
             D,
@@ -68,6 +69,7 @@ namespace SequestResultsProcessor.Containers
             V,
             W,
             Y
+            // ReSharper restore UnusedMember.Global
         }
 
         public enum FragmentTypes

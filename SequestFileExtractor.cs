@@ -164,14 +164,6 @@ namespace SequestResultsProcessor
             EndTask?.Invoke();
         }
 
-        public void AbortProcessing()
-        {
-            if (m_parser is object)
-            {
-                m_parser.AbortProcessing();
-            }
-        }
-
         private void ImportProgressHandler(string currentTask, long currentPosition, long totalSize)
         {
             UpdateProgress(currentTask, currentPosition, totalSize);
@@ -701,8 +693,6 @@ namespace SequestResultsProcessor
             private string m_LogFileName;
             private string m_RootFileName;
 
-            // Xcorr Thresh
-            // EFS Filter Thresh
 
             public StartupArguments(string SourceDirectory, string RootFileName)
             {
@@ -841,16 +831,11 @@ namespace SequestResultsProcessor
                 set => m_LogFileName = value;
             }
 
-            public bool FilterEFS { get; set; } = false;
-            public bool MakeIRRFile { get; set; } = false;
-            public bool MakeNLIFile { get; set; } = false;
+            public bool MakeIRRFile { get; set; }
             public bool ExpandMultiORF { get; set; } = true;
-            public bool HeaderInOutFile { get; set; } = false;
             public double FHTXCorrThreshold { get; set; } = 0.0d;
-            public double FHTFilterScoreThreshold { get; set; } = 0.1d;
             public double SynXCorrThreshold { get; set; } = 1.5d;
-            public double SynFilterScoreThreshold { get; set; } = 0.1d;
-            public bool RemoveDuplicatedMultiProtRefs { get; set; } = false;
+            public bool RemoveDuplicatedMultiProtRefs { get; set; }
 
             public string InputFileFullPath => Path.Combine(DestinationDirectory, InputFileName);
 

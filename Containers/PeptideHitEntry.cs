@@ -25,27 +25,6 @@ namespace SequestResultsProcessor.Containers
         private static CleavageStateCalculator m_CleavageStateCalculator = new CleavageStateCalculator();
         private static DiscriminantCalc _s_DiscriminantCalc;
 
-        private static DiscriminantCalc s_DiscriminantCalc
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get => _s_DiscriminantCalc;
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_s_DiscriminantCalc != null)
-                {
-                    _s_DiscriminantCalc.ProgressUpdate -= OnDTALoadUpdate;
-                }
-
-                _s_DiscriminantCalc = value;
-                if (_s_DiscriminantCalc != null)
-                {
-                    _s_DiscriminantCalc.ProgressUpdate += OnDTALoadUpdate;
-                }
-            }
-        }
-
         public static event dtaLoadProgressEventHandler dtaLoadProgress;
 
         public delegate void dtaLoadProgressEventHandler(string taskDescription, double fractionDone);
@@ -339,19 +318,6 @@ namespace SequestResultsProcessor.Containers
         public int PossIons { get; set; }
         public int NumTrypticEnds { get; set; }
         public double DelMPPM { get; set; } = 0d;
-
-        public SortedList<int, string> MultiProteinRefs
-        {
-            get
-            {
-                if (m_MultiProteinEntries is null)
-                {
-                    m_MultiProteinEntries = new SortedList<int, string>();
-                }
-
-                return m_MultiProteinEntries;
-            }
-        }
 
         #endregion
 

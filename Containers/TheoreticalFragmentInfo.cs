@@ -22,7 +22,6 @@ namespace SequestResultsProcessor.Containers
         private static Dictionary<string, ResidueInfo> s_Intensities = new Dictionary<string, ResidueInfo>();
         private List<Fragment> m_TheoYIons;
         private List<Fragment> m_TheoBIons;
-        private string m_Sequence;
 
         public struct Fragment
         {
@@ -95,7 +94,6 @@ namespace SequestResultsProcessor.Containers
                 SetupResidueHashes();
             }
 
-            m_Sequence = peptideSequence;
             CalculateTheoreticalIonHashes(peptideSequence, chargeState);
         }
 

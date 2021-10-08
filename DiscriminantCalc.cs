@@ -236,12 +236,6 @@ namespace SequestResultsProcessor
 
             int maxObsIndex = maxObsRecord - 1;
             double match;
-            if (peptideRecord.ParentCS >= 2)
-            {
-            }
-            else
-            {
-            }
 
             int obsCount = 0;
             match = 0d;
@@ -487,32 +481,8 @@ namespace SequestResultsProcessor
                 }
             }
 
-            public double BFNLT => m_BFNLT;
-
-            public int IsPoorSpec => m_IsPoorSpec;
-
             public NeutralLossList NeutralLosses => m_NeutralLoss;
 
-            public int ScanNum
-            {
-                get => m_ScanNum;
-
-                set => m_ScanNum = value;
-            }
-
-            public int ParentCS
-            {
-                get => m_ParentCS;
-
-                set => m_ParentCS = value;
-            }
-
-            public double ParentMHMass
-            {
-                get => m_ParentMH;
-
-                set => m_ParentMH = value;
-            }
 
             public double ParentMZ => (m_ParentMH - 1.0d + m_ParentCS) / m_ParentCS;
 
@@ -562,8 +532,6 @@ namespace SequestResultsProcessor
                         break;
                 }
 
-                // sr.Close()
-
                 NormalizeIntensities();
             }
 
@@ -571,11 +539,6 @@ namespace SequestResultsProcessor
             {
                 m_NeutralLoss = NLCalc.CalculateNeutralLosses(this, 0.7d);
             }
-
-            public void GetFakeNeutralLosses()
-            {
-                m_NeutralLoss = NLCalc.GetFillerNeutralLosses();
             }
-        }
     }
 }

@@ -226,12 +226,12 @@ namespace SequestResultsProcessor
                     return true;
                 }
 
-                do
+                while (true)
                 {
                     if (!srInFile.EndOfStream)
                     {
                         var nextLine = srInFile.ReadLine();
-                        var matchFound = reMatcher.IsMatch(nextLine);
+                        var matchFound = reMatcher.IsMatch(nextLine ?? string.Empty);
                         if (matchFound)
                         {
                             matchingLine = nextLine;
@@ -244,7 +244,6 @@ namespace SequestResultsProcessor
                         return false;
                     }
                 }
-                while (true);
             }
 
             private void DumpCachedResults(string tmpFHTPath, string tmpSynPath, List<ResultsStorage.OutputRecordIndex> FHTOutputIndexList, List<ResultsStorage.OutputRecordIndex> SynOutputIndexList)
@@ -586,10 +585,11 @@ namespace SequestResultsProcessor
                             dataLine = srInFile.ReadLine();
 
                             // Look for multi-protein hit lines, but make sure to exclude those top scoring protein lines underneath them
-                            do
+                            while (true)
                             {
-                                var extraProteinLineMatch = mExtraProteinLineMatcher.Match(dataLine);
-                                if (extraProteinLineMatch.Success && !mTopProteinsMatcher.IsMatch(dataLine))
+                                var extraProteinLineMatch = mExtraProteinLineMatcher.Match(dataLine ?? string.Empty);
+
+                                if (extraProteinLineMatch.Success && !mTopProteinsMatcher.IsMatch(dataLine ?? string.Empty))
                                 {
                                     var tmpMultiProteinRef = extraProteinLineMatch.Groups["reference"].Value;
 
@@ -620,7 +620,7 @@ namespace SequestResultsProcessor
                                     break;
                                 }
                             }
-                            while (true);
+
                         }
 
                         currentPeptide.MultiProteinCount = tmpMultiProteinRefs.Count;

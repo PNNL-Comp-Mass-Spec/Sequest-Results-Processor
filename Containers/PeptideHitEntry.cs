@@ -20,7 +20,6 @@ namespace SequestResultsProcessor.Containers
     {
         private string m_Reference;
         private SortedList<int, string> m_MultiProteinEntries;
-        private int m_MultiProteinID = 0;
         private int m_MultiProteinID;
         private static readonly CleavageStateCalculator m_CleavageStateCalculator = new();
 
@@ -107,16 +106,16 @@ namespace SequestResultsProcessor.Containers
             switch (intChargeState)
             {
                 case 1:
-                    trypRelScore = new double[] { 0.35d, 0.9d, 1.04d };
+                    trypRelScore = new[] { 0.35d, 0.9d, 1.04d };
                     var myScore = trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((1.49d - dblXCorr) / 0.25d))) * (0.98d / (1d + Math.Exp((0.07d - deltCn) / 0.085d)));
                     return myScore - 0.1d;
 
                 case 2:
-                    trypRelScore = new double[] { 0.31d, 0.76d, 0.98d };
+                    trypRelScore = new[] { 0.31d, 0.76d, 0.98d };
                     return trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((2.44d - dblXCorr) / 0.524d))) * (1.02d / (1d + Math.Exp((0.09d - deltCn) / 0.03d)));
 
                 case 3:
-                    trypRelScore = new double[] { 0.21d, 0.62d, 1.04d };
+                    trypRelScore = new[] { 0.21d, 0.62d, 1.04d };
                     return trypRelScore[intNumTrypticEnds] * (1.01d / (1d + Math.Exp((3.2d - dblXCorr) / 0.48d))) * (1.04d / (1d + Math.Exp((0.11d - deltCn) / 0.06d)));
             }
 
@@ -290,16 +289,16 @@ namespace SequestResultsProcessor.Containers
 
         public int MultiProteinCount { get; set; }
         public string Peptide { get; set; }
-        public double DelCn2 { get; set; } = 0.0d;
+        public double DelCn2 { get; set; }
         public int RankSp { get; set; }
         public int RankXc { get; set; }
-        public double DelM { get; set; } = 0.0d;
+        public double DelM { get; set; }
         public double XcRatio { get; set; } = 1.0d;
 
         public int ObsIons { get; set; }
         public int PossIons { get; set; }
         public int NumTrypticEnds { get; set; }
-        public double DelMPPM { get; set; } = 0d;
+        public double DelMPPM { get; set; }
 
         #endregion
 

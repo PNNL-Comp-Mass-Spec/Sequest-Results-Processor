@@ -178,7 +178,7 @@ namespace SequestResultsProcessor.Containers
         private double GetMass(string sequence, int cs)
         {
             var seq = sequence.ToCharArray();
-            var tmpMass = default(double);
+            var tmpMass = 0.0;
             double tmpMZ;
             foreach (var resChar in seq)
             {

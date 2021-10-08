@@ -824,7 +824,7 @@ namespace SequestResultsProcessor
 
             public bool MakeIRRFile { get; set; }
             public bool ExpandMultiORF { get; set; } = true;
-            public double FHTXCorrThreshold { get; set; } = 0.0d;
+            public double FHTXCorrThreshold { get; set; }
             public double SynXCorrThreshold { get; set; } = 1.5d;
             public bool RemoveDuplicatedMultiProteinRefs { get; set; }
 

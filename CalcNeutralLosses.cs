@@ -21,9 +21,9 @@ namespace SequestResultsProcessor
         {
             var nll = new NeutralLossList();
 
-            var tmpNeuLoss1 = default(double);
-            var tmpNeuLoss2 = default(double);
-            var tmpNeuLoss3 = default(double);
+            var tmpNeuLoss1 = 0.0;
+            var tmpNeuLoss2 = 0.0;
+            var tmpNeuLoss3 = 0.0;
 
             var parentMZ = scan.ParentMZ;
 
@@ -59,8 +59,8 @@ namespace SequestResultsProcessor
 
     internal class NeutralLossList
     {
-        public double NL1Intensity { get; set; } = 0.0d;
-        public double NL2Intensity { get; set; } = 0.0d;
-        public double NL3Intensity { get; set; } = 0.0d;
+        public double NL1Intensity { get; set; }
+        public double NL2Intensity { get; set; }
+        public double NL3Intensity { get; set; }
     }
 }

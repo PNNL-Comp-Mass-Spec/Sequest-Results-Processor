@@ -341,12 +341,12 @@ namespace SequestResultsProcessor.Containers
 
             public Dictionary<int, int> GenerateXCorrSummaries()
             {
-                var GT5 = default(int);
-                var GT4 = default(int);
-                var GT3 = default(int);
-                var GT2 = default(int);
-                var GT1 = default(int);
-                var GT0 = default(int);
+                var GT5 = 0;
+                var GT4 = 0;
+                var GT3 = 0;
+                var GT2 = 0;
+                var GT1 = 0;
+                var GT0 = 0;
                 foreach (var entry in m_OutputIndexList)
                 {
                     switch (entry.XCorr)

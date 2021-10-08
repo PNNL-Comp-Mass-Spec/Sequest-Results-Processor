@@ -437,15 +437,17 @@ namespace SequestResultsProcessor
                 var sr = new StreamReader(m_FileStream);
                 Clear();
                 sr.BaseStream.Seek(startOffset, SeekOrigin.Begin);
-                s = sr.ReadLine();
-                var HeaderLine = new Regex(@"^=+\s+\""\S+\.(?<Scan>\d+)\.\d+\.\d+\.dta");
-                if (HeaderLine.IsMatch(s))
-                {
-                    var headerLineMatch = HeaderLine.Match(s);
-                    m_ScanNum = int.Parse(headerLineMatch.Groups["Scan"].Value);
-                }
 
-                s = sr.ReadLine();
+                // Read the header line
+                sr.ReadLine();
+
+                //var HeaderLine = new Regex(@"^=+\s+\""\S+\.(?<Scan>\d+)\.\d+\.\d+\.dta");
+                //if (HeaderLine.IsMatch(s))
+                //{
+                //    var headerLineMatch = HeaderLine.Match(s);
+                //    m_ScanNum = int.Parse(headerLineMatch.Groups["Scan"].Value);
+                //}
+
                 var precursorLine = sr.ReadLine();
                 var ParentLine = new Regex(@"^(?<ParentMass>\d+\.*\d*)\s+(?<ChargeState>\d+)");
                 if (Regex.IsMatch(precursorLine, @"^\S+"))

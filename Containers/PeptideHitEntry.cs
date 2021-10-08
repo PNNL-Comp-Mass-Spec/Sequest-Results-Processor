@@ -21,8 +21,8 @@ namespace SequestResultsProcessor.Containers
         private string m_Reference;
         private SortedList<int, string> m_MultiProteinEntries;
         private int m_MultiProteinID = 0;
-        private static CleavageStateCalculator m_CleavageStateCalculator = new CleavageStateCalculator();
-        private static DiscriminantCalc _s_DiscriminantCalc;
+        private static readonly CleavageStateCalculator m_CleavageStateCalculator = new CleavageStateCalculator();
+        private static readonly DiscriminantCalc _s_DiscriminantCalc;
 
         public static event dtaLoadProgressEventHandler dtaLoadProgress;
 

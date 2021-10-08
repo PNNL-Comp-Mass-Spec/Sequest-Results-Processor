@@ -51,11 +51,11 @@ namespace SequestResultsProcessor
         private int m_CachedScanNum;
         private string m_CachedScanKey;
         private int m_CachedCS;
-        private OutputNLIFile m_NLIDumper;
+        private readonly OutputNLIFile m_NLIDumper;
         private double m_MassTol;
-        private string m_dtaFilepath;
-        private string m_Version;
-        private bool m_NoDTAs;
+        private readonly string m_dtaFilepath;
+        private readonly string m_Version;
+        private readonly bool m_NoDTAs;
 
         public event ProgressUpdateEventHandler ProgressUpdate;
 
@@ -295,7 +295,7 @@ namespace SequestResultsProcessor
 
             private PeptideIntensities m_DTAFileIntensities;
             private FileStream m_dtaStream;
-            private string m_dtaFilePath;
+            private readonly string m_dtaFilePath;
 
             public event OffsetProgressEventHandler OffsetProgress;
 
@@ -351,8 +351,8 @@ namespace SequestResultsProcessor
 
             private class dtaFileOffsets
             {
-                private Dictionary<string, long> mOffsets = new Dictionary<string, long>();
-                private string m_FilePath;
+                private readonly Dictionary<string, long> mOffsets = new Dictionary<string, long>();
+                private readonly string m_FilePath;
 
                 public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {
@@ -454,8 +454,8 @@ namespace SequestResultsProcessor
         {
             private static FileStream m_FileStream;
             private NeutralLossList m_NeutralLoss;
-            private double m_BFNLT;
-            private int m_IsPoorSpec;
+            private readonly double m_BFNLT;
+            private readonly int m_IsPoorSpec;
             private double m_ParentMH;
             private int m_ScanNum;
             private int m_ParentCS;

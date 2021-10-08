@@ -135,7 +135,7 @@ namespace SequestResultsProcessor
             return CalculateMScore(PeptideSeq, ChargeState, m_CachedScanInfo);
         }
 
-        private double CalculateMScore(string peptideSequence, int peptideChargeState, PeptideIntensities scanIntensities)
+        private double CalculateMScore(string peptideSequence, int peptideChargeState, FragmentInfo scanIntensities)
         {
             var match = 0.0;
 
@@ -184,7 +184,7 @@ namespace SequestResultsProcessor
             return 10d;
         }
 
-        private double HashScanner(PeptideIntensities peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoFrags, double massTol, int CSToCheck)
+        private double HashScanner(FragmentInfo peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoreticalFragments, double massTol, int CSToCheck)
         {
             var maxObsRecord = peptideRecord.FragmentList.Count;
             if (maxObsRecord == 0)

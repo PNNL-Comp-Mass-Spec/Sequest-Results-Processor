@@ -674,7 +674,6 @@ namespace SequestResultsProcessor
             private string m_FirstHitsFileName;
             private string m_DTAFileName;
             private string m_LogFileName;
-            private string m_RootFileName;
 
             /// <summary>
             /// Parameterless constructor
@@ -693,7 +692,7 @@ namespace SequestResultsProcessor
             public StartupArguments(string SourceDirectory, string RootFileName)
             {
                 m_SourceDirectory = SourceDirectory;
-                m_RootFileName = RootFileName;
+                this.RootFileName = RootFileName;
             }
 
             private bool CheckFileExists(string filePath)
@@ -723,12 +722,7 @@ namespace SequestResultsProcessor
             // ReSharper disable once UnusedMember.Global
             public bool CatDTAFileExists => CheckFileExists(DTAFileFullPath);
 
-            public string RootFileName
-            {
-                get => m_RootFileName;
-
-                set => m_RootFileName = value;
-            }
+            public string RootFileName { get; set; }
 
             public string InputFileName
             {
@@ -736,7 +730,7 @@ namespace SequestResultsProcessor
                 {
                     if (m_InputFileName is null)
                     {
-                        return m_RootFileName + "_out.txt";
+                        return RootFileName + "_out.txt";
                     }
 
                     return m_InputFileName;
@@ -751,7 +745,7 @@ namespace SequestResultsProcessor
                 {
                     if (m_SynopsisFileName is null)
                     {
-                        return m_RootFileName + "_syn.txt";
+                        return RootFileName + "_syn.txt";
                     }
 
                     return m_SynopsisFileName;
@@ -766,7 +760,7 @@ namespace SequestResultsProcessor
                 {
                     if (m_FirstHitsFileName is null)
                     {
-                        return m_RootFileName + "_fht.txt";
+                        return RootFileName + "_fht.txt";
                     }
 
                     return m_FirstHitsFileName;
@@ -781,7 +775,7 @@ namespace SequestResultsProcessor
                 {
                     if (m_DTAFileName is null)
                     {
-                        return m_RootFileName + "_dta.txt";
+                        return RootFileName + "_dta.txt";
                     }
 
                     return m_DTAFileName;
@@ -796,7 +790,7 @@ namespace SequestResultsProcessor
                 {
                     if (m_LogFileName is null)
                     {
-                        return m_RootFileName + "_log.txt";
+                        return RootFileName + "_log.txt";
                     }
 
                     return m_LogFileName;

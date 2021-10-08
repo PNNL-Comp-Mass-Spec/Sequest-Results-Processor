@@ -195,13 +195,9 @@ namespace SequestResultsProcessor.Containers
         {
             ResidueInfo resLeft;
             ResidueInfo resRight;
-            if (s_Intensities.TryGetValue(LeftResidue, out resLeft))
+            if (s_Intensities.TryGetValue(LeftResidue, out resLeft) && s_Intensities.TryGetValue(RightResidue, out resRight))
             {
-                if (s_Intensities.TryGetValue(RightResidue, out resRight))
-                {
-                    double tmpIntens = Math.Round(resLeft.LeftIntensity + resRight.RightIntensity, 2);
-                    return tmpIntens;
-                }
+                return Math.Round(resLeft.LeftIntensity + resRight.RightIntensity, 2);
             }
 
             return 0d;

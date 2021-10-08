@@ -163,8 +163,7 @@ namespace SequestResultsProcessor
                 m_CachedCS = ChargeState;
             }
 
-            double mscore = CalculateMScore(PeptideSeq, ChargeState, m_CachedScanInfo);
-            return mscore;
+            return CalculateMScore(PeptideSeq, ChargeState, m_CachedScanInfo);
         }
 
         private double CalculateMScore(string peptideSequence, int peptideChargeState, PeptideIntensities scanIntensities)

@@ -60,7 +60,6 @@ namespace SequestResultsProcessor
             }
         }
 
-        private readonly BackgroundWorker m_bkg = null;
         private static Regex mExtraProteinLineMatcher;
         private static Regex mHitLineMatcher;
         private static Regex mHitLineMatcherNoReference;
@@ -78,13 +77,6 @@ namespace SequestResultsProcessor
         public SequestFileExtractor(StartupArguments StartupArgs)
         {
             m_parser = new ConcatenatedOutFileProcessor(StartupArgs);
-            InitializeMatchers();
-        }
-
-        public SequestFileExtractor(StartupArguments StartupArgs, BackgroundWorker BackgroundWorker)
-        {
-            m_bkg = BackgroundWorker;
-            m_parser = new ConcatenatedOutFileProcessor(StartupArgs, m_bkg);
             InitializeMatchers();
         }
 
@@ -155,7 +147,6 @@ namespace SequestResultsProcessor
 
         private void UpdateProgress(string currentTask, long currentFileCount, long totalFileCount)
         {
-            clsUserProgressState state;
             double fractionDone;
             if (totalFileCount > 0L)
             {
@@ -166,15 +157,7 @@ namespace SequestResultsProcessor
                 fractionDone = 0.0d;
             }
 
-            if (m_bkg is object)
-            {
-                state = new clsUserProgressState(currentFileCount, totalFileCount, currentTask);
-                m_bkg.ReportProgress(Conversions.ToInteger(fractionDone * 100.0d), state);
-            }
-            else
-            {
-                UpdateProgress(currentTask, fractionDone);
-            }
+            UpdateProgress(currentTask, fractionDone);
         }
 
         private void TaskEndHandler()
@@ -201,7 +184,6 @@ namespace SequestResultsProcessor
             private string m_SourceFileFullPath;
             private ResultsStorage m_Results;
             private OutputIRRFile m_IRRDumper;
-            private readonly BackgroundWorker m_bkg;
             private PRISM.Logging.FileLogger m_Logger;
             private bool m_StopProcessing;
             private const int RESULTS_DUMPING_INTERVAL = 200;
@@ -242,16 +224,9 @@ namespace SequestResultsProcessor
 
             #endregion
 
-            public ConcatenatedOutFileProcessor(StartupArguments ProcessSettings, BackgroundWorker backgroundWorker)
-            {
-                InitializeSettings(ProcessSettings);
-                m_bkg = backgroundWorker;
-            }
-
             public ConcatenatedOutFileProcessor(StartupArguments ProcessSettings)
             {
                 InitializeSettings(ProcessSettings);
-                m_bkg = null;
             }
 
             public void AbortProcessing()
@@ -410,12 +385,6 @@ namespace SequestResultsProcessor
 
                         if (currentOutFileCount % RESULTS_DUMPING_INTERVAL == 0 | currentOutFileCount >= totalOutFileCount)
                         {
-                            if (m_bkg is object && m_bkg.CancellationPending)
-                            {
-                                EndTask();
-                                return;
-                            }
-
                             DumpCachedResults(tmpFHTPath, tmpSynPath, FHTOutputIndexList, SynOutputIndexList);
                             UpdateProgressExtracting(currentOutFileCount, totalOutFileCount);
                             GC.Collect();

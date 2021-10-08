@@ -325,7 +325,7 @@ namespace SequestResultsProcessor
                     throw new KeyNotFoundException("Offsets dictionary does not have key " + keyName);
                 }
 
-                public void AddOffset(int StartScanNumber, int EndScanNumber, int ChargeState, long StartOffset, string ChargeExtra = "")
+                private void AddOffset(int StartScanNumber, int EndScanNumber, int ChargeState, long StartOffset, string ChargeExtra = "")
                 {
                     var keyName = StartScanNumber + "." + EndScanNumber + "." + ChargeState;
                     if (ChargeExtra.Length > 0)

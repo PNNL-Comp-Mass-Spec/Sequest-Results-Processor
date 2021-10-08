@@ -591,10 +591,9 @@ namespace SequestResultsProcessor
                                     var tmpMultiProteinRef = extraProteinLineMatch.Groups["reference"].Value;
 
                                     if (tmpMultiProteinRefs.Contains(tmpMultiProteinRef) && removeDupMultiProteinRefs && !string.Equals(tmpMultiProteinRef, currentPeptide.Reference, StringComparison.OrdinalIgnoreCase))
-
                                     {
+                                        // Skip this protein name
                                     }
-                                    // Skip this protein name
                                     else
                                     {
                                         // Store this protein name

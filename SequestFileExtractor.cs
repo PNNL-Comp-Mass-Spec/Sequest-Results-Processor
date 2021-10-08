@@ -499,7 +499,7 @@ namespace SequestResultsProcessor
 
                 // Wait until we see the dashed line underneath the headings for the data block
 
-                var foundDataBlock = AdvanceReaderUntilMatch(srInFile, mDataBlockDelimiterMatcher, "", out matchingLine);
+                var foundDataBlock = AdvanceReaderUntilMatch(srInFile, mDataBlockDelimiterMatcher, "", out _);
                 if (!foundDataBlock || srInFile.EndOfStream)
                     return;
 

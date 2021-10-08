@@ -47,20 +47,6 @@ namespace SequestResultsProcessor.Containers
             }
         }
 
-        // 'Sub ConfigureDiscriminantCalc(ByVal dtaFilePath As String)
-        // '    If COMPUTE_DISCRIMINANT_SCORE AndAlso PeptideHitEntry.s_DiscriminantCalc Is Nothing Then
-        // '        PeptideHitEntry.s_DiscriminantCalc = New DiscriminantCalc(dtaFilePath)
-        // '        PeptideHitEntry.s_DiscriminantCalc.ConfigureDiscriminantCalc()
-        // '    End If
-        // 'End Sub
-
-        // 'Sub CloseoutDiscriminantCalc()
-        // '    If COMPUTE_DISCRIMINANT_SCORE AndAlso Not PeptideHitEntry.s_DiscriminantCalc Is Nothing Then
-        // '        PeptideHitEntry.s_DiscriminantCalc.CloseDiscriminantCalc()
-        // '        PeptideHitEntry.s_DiscriminantCalc = Nothing
-        // '    End If
-        // 'End Sub
-
         public static event dtaLoadProgressEventHandler dtaLoadProgress;
 
         public delegate void dtaLoadProgressEventHandler(string taskDescription, double fractionDone);
@@ -128,9 +114,6 @@ namespace SequestResultsProcessor.Containers
         public void CalculateScoreComponents()
         {
             NumTrypticEnds = CountTrypticEnds(Peptide);
-
-            // 'm_PassFilt = CalculatePassFilt()
-
         }
 
         public int CalculatePassFilt()
@@ -352,25 +335,7 @@ namespace SequestResultsProcessor.Containers
         public int RankXc { get; set; }
         public double DelM { get; set; } = 0.0d;
         public double XcRatio { get; set; } = 1.0d;
-
-        // Legacy columns (Deprecated in Fall 2011)
-        // 'Property PassFilt() As Integer
-        // '    Get
-        // '        Return m_PassFilt
-        // '    End Get
-        // '    Set(ByVal Value As Integer)
-        // '        m_PassFilt = Value
-        // '    End Set
-        // 'End Property
-        // 'Property MScore() As Double
-        // '    Get
-        // '        Return m_MScore
-        // '    End Get
-        // '    Set(ByVal Value As Double)
-        // '        m_MScore = Value
-        // '    End Set
-        // 'End Property
-
+        
         public int ObsIons { get; set; }
         public int PossIons { get; set; }
         public int NumTrypticEnds { get; set; }

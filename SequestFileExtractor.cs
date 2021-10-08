@@ -661,16 +661,11 @@ namespace SequestResultsProcessor
                         currentPeptide.Peptide = dataLineMatch.Groups["sequence"].Value.ToString();
                         currentPeptide.RankSp = int.Parse(dataLineMatch.Groups["ranksp"].Value);
                         currentPeptide.RankXc = int.Parse(dataLineMatch.Groups["rankxc"].Value);
-                        // If dataLineMatch.Groups("sf").Length > 0 Then
-                        // .Sf = Double.Parse(dataLineMatch.Groups("sf").Value)
-                        // Else
-                        // .Sf = 0
-                        // End If
+
                         currentPeptide.ObsIons = int.Parse(dataLineMatch.Groups["obsions"].Value);
                         currentPeptide.PossIons = int.Parse(dataLineMatch.Groups["theoions"].Value);
                         currentPeptide.XcRatio = 1d;
-                        // '.PassFilt = 0
-                        // '.MScore = 0
+                        
                         currentPeptide.StartScanNum = currentStartScan;
                         currentPeptide.EndScanNum = currentEndScan;
                         currentPeptide.ScanCount = currentEndScan - currentStartScan + 1;
@@ -732,238 +727,12 @@ namespace SequestResultsProcessor
             }
         }
 
-        // Unused class
-        // Private Class DTAFileInformation
-        // Private m_Offsets As dtaFileOffsets
-        // Private m_DTAFileIntensities As PeptideIntensities
-        // Private m_dtaStream As FileStream
-        // Private m_CurrScanNum As Integer
-        // Private m_CurrCS As Integer
-
-        // Public Sub New(ByVal dtaFilePath As String)
-        // 'Scan the dta file for dta file boundaries
-        // m_Offsets = New dtaFileOffsets
-        // m_Offsets.LoadOffsetsFromDTAFile(dtaFilePath)
-        // m_dtaStream = New FileStream(dtaFilePath, FileMode.Open)
-
-        // End Sub
-
-        // Public Function GetIntensityInfo( _
-        // ByVal ScanNumber As Integer, _
-        // ByVal ChargeState As Integer, _
-        // ByVal PeptideMass As Double) As Double
-
-        // If m_DTAFileIntensities Is Nothing OrElse _
-        // ScanNumber <> m_CurrScanNum OrElse _
-        // ChargeState <> m_CurrCS Then
-
-        // m_DTAFileIntensities = GetDTAFileIntensities(ScanNumber, ChargeState)
-        // m_CurrCS = ChargeState
-        // m_CurrScanNum = ScanNumber
-        // End If
-
-        // Dim pepIntensity As Double
-
-        // If m_DTAFileIntensities.ContainsKey(PeptideMass.ToString("0.0")) Then
-        // pepIntensity = m_DTAFileIntensities.Intensity(PeptideMass.ToString("0.0"))
-        // ElseIf m_DTAFileIntensities.ContainsKey(PeptideMass.ToString("0.00")) Then
-        // pepIntensity = m_DTAFileIntensities.Intensity(PeptideMass.ToString("0.00"))
-        // Else
-        // pepIntensity = 0.0
-        // End If
-
-        // Return pepIntensity
-
-        // End Function
-
-        // Private Function GetDTAFileIntensities( _
-        // ByVal ScanNumber As Integer, _
-        // ByVal ChargeState As Integer) As PeptideIntensities
-
-        // Dim fileOffset As Long = m_Offsets.GetOffset(ScanNumber, ChargeState)
-
-        // Dim PI As New PeptideIntensities(fileOffset, m_dtaStream)
-
-        // Return PI
-
-        // End Function
-
-        // Private Class dtaFileOffsets
-        // Inherits Hashtable
-
-        // Private m_FilePath As String
-
-        // Public ReadOnly Property GetOffset(ByVal ScanNumber As Integer, ByVal ChargeState As Integer) As Long
-        // Get
-        // Return CLng(Me.Item(ScanNumber.ToString() + "." + ChargeState.ToString))
-        // End Get
-        // End Property
-
-        // Sub AddOffset(ByVal StartScanNumber As Integer, ByVal EndScanNumber As Integer, ByVal ChargeState As Integer, ByVal StartOffset As Long)
-        // Dim keyName As String = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString
-        // Me.Add(keyName, StartOffset)
-        // End Sub
-
-        // Function LoadOffsetsFromDTAFile(ByVal dtaFilePath As String) As Integer
-        // Dim fi As System.IO.FileInfo = New FileInfo(dtaFilePath)
-        // Dim tr As System.IO.TextReader
-        // Dim s As String
-        // Dim lineEndCharCount As Integer
-        // Dim currPos As Long
-        // Dim dtaStartPos As Long
-        // Dim lastDTAstartPos As Long
-
-        // Dim recordLength As Integer
-        // Dim dtaCount As Integer
-        // Dim fileLength As Long
 
 
-        // Dim r As New Regex("\=+\s\""\S+\.(?<startscannum>\d+)\.(?<endscannum>\d+)\.(?<chargestate>\d+)\.\S+\""\s\=")
-        // Dim lineMatch As New Regex("^===*")
-        // Dim m As Match
-
-        // If fi.Exists Then
-        // lineEndCharCount = Me.LineEndCharacterCount(fi)
-        // fileLength = fi.Length
-
-        // tr = fi.OpenText()
-        // s = tr.ReadLine
-
-        // While Not s Is Nothing
-        // currPos += s.Length + lineEndCharCount
 
 
-        // If lineMatch.IsMatch(s) Then
-        // dtaStartPos = currPos - s.Length - lineEndCharCount
-        // recordLength = CInt(dtaStartPos - lastDTAstartPos - 1)
-        // lastDTAstartPos = dtaStartPos
-        // m = r.Match(s)
-        // Me.AddOffset(CInt(m.Groups("startscannum").Value), _
-        // CInt(m.Groups("endscannum").Value), _
-        // CInt(m.Groups("chargestate").Value), dtaStartPos)
-        // dtaCount += 1
-        // End If
-        // s = tr.ReadLine
-        // End While
 
-        // tr.Close()
-        // tr = Nothing
-        // fi = Nothing
 
-        // End If
-
-        // Return dtaCount
-
-        // End Function
-
-        // ''' <summary>
-        // ''' This function reads the input file one byte at a time, looking for the first occurence of Chr(10) or Chr(13) (aka vbCR or VBLF)
-        // ''' When found, the next byte is examined
-        // ''' If the next byte is also Chr(10) or Chr(13), then the line terminator is assumed to be 2 bytes; if not found, then it is assumed to be one byte
-        // ''' </summary>
-        // ''' <param name="fi"></param>
-        // ''' <returns>1 if a one-byte line terminator; 2 if a two-byte line terminator</returns>
-        // ''' <remarks></remarks>
-        // Private Function LineEndCharacterCount(ByVal fi As System.IO.FileInfo) As Integer
-        // Dim tr As System.IO.TextReader
-        // Dim testcode As Integer
-        // Dim testcode2 As Integer
-        // Dim counter As Long
-        // Dim endCount As Integer = 1         ' Initially assume a one-byte line terminator
-
-        // If (fi.Exists) Then
-        // tr = fi.OpenText
-        // For counter = 1 To fi.Length
-        // testcode = tr.Read()
-        // If testcode = 10 Or testcode = 13 Then
-        // testcode2 = tr.Read()
-        // If testcode2 = 10 Or testcode2 = 13 Then
-        // endCount = 2
-        // Exit For
-        // Else
-        // endCount = 1
-        // Exit For
-        // End If
-        // End If
-        // Next
-
-        // tr.Close()
-        // End If
-
-        // tr = Nothing
-        // Return endCount
-
-        // End Function
-
-        // Event dtaScanProgress(ByVal fractionDone As Double)
-
-        // End Class
-
-        // Private Class PeptideIntensities
-        // Inherits Hashtable
-
-        // Private m_FileStream As FileStream
-        // Private m_ParentMass As Double
-
-        // Sub New( _
-        // ByVal fileOffset As Long, _
-        // ByRef dtaFileStream As FileStream)
-
-        // Me.m_FileStream = dtaFileStream
-
-        // Me.AddIntensitiesFromDTA(fileOffset)
-        // End Sub
-
-        // Public ReadOnly Property Intensity(ByVal PeptideMass As String) As Double
-        // Get
-        // Return DirectCast(Me.Item(PeptideMass), Double)
-        // End Get
-        // End Property
-
-        // Private Sub AddIntensitiesFromDTA(ByVal startOffset As Long)
-        // Dim s As String
-
-        // Dim tmpMass As String
-        // Dim tmpIntensity As Double
-
-        // Dim sr As New StreamReader(Me.m_FileStream)
-
-        // sr.BaseStream.Seek(startOffset, SeekOrigin.Begin)
-        // s = sr.ReadLine
-
-        // If Regex.IsMatch(s, "^\s+") Then
-        // Me.m_ParentMass = CDbl(Regex.Match(s, _
-        // "^(?<parentmass>\d+\.\d+)").Groups("parentmass").Value)
-        // End If
-
-        // Dim RealLine As Regex = New Regex("^\s+")
-        // Dim LineMatch As Regex = New Regex("^?<mass>\d+\.\d+)\s(?<intensity>\d+\.\d+)")
-        // Dim m As Match
-
-        // s = sr.ReadLine
-
-        // While s.Length > 0
-        // If RealLine.IsMatch(s) Then
-        // m = LineMatch.Match(s)
-        // tmpMass = m.Groups("mass").Value.ToString
-        // tmpIntensity = CDbl(m.Groups("intensity").Value)
-
-        // Me.AddPeptideIntensity(tmpMass, tmpIntensity)
-        // s = sr.ReadLine
-        // End If
-        // End While
-
-        // RealLine = Nothing
-        // LineMatch = Nothing
-        // End Sub
-
-        // Private Sub AddPeptideIntensity(ByVal PeptideMass As String, ByVal Intensity As Double)
-        // Me.Add(PeptideMass, Intensity)
-        // End Sub
-
-        // End Class
-
-        // End Class
 
         public class StartupArguments
         {
@@ -1137,41 +906,5 @@ namespace SequestResultsProcessor
 
             public string LogFileFullPath => Path.Combine(DestinationDirectory, LogFileName);
         }
-
-        // Unused class
-        // Public Class ReverseComparer
-        // Implements IComparer
-
-        // Dim m_Comparer As IComparer
-
-        // ' this constructor is called for the version that uses
-        // ' the IComparable interface of individual items
-        // Public Sub New()
-        // End Sub
-
-        // ' this constructor is called for the version that reverses
-        // ' the result from another comparer
-        // Public Sub New(ByVal comparer As IComparer)
-        // m_Comparer = comparer
-        // End Sub
-
-        // Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer _
-        // Implements IComparer.Compare
-
-        // If Not m_Comparer Is Nothing Then
-        // ' use provided comparer, but reverse arguments to get the reverse effect
-        // Return m_Comparer.Compare(y, x)
-        // ElseIf Not x Is Nothing AndAlso TypeOf x Is IComparable Then
-        // ' use x's IComparable interface, but negates result to get the reverse effect
-        // Return -DirectCast(x, IComparable).CompareTo(y)
-        // ElseIf Not y Is Nothing AndAlso TypeOf y Is IComparable Then
-        // ' use y's IComparable interface - the result is such to obtain the reverse effect
-        // Return DirectCast(y, IComparable).CompareTo(x)
-        // Else
-        // Throw New ArgumentException("Neither argument supports the IComparable interface")
-        // End If
-        // End Function
-        // End Class
-
     }
 }

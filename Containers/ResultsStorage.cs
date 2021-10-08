@@ -436,28 +436,6 @@ namespace SequestResultsProcessor.Containers
         /// <returns></returns>
             public Dictionary<int, int> StatsTable { get; private set; }
 
-            // Private Class XCorrSummaryComparer
-            // Implements IComparer
-
-            // Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements System.Collections.IComparer.Compare
-            // Dim OutputIndex_1 As OutputRecordIndex = DirectCast(x, OutputRecordIndex)
-
-            // Dim XCorr_1 As Double
-            // Dim XCorr_2 As Double = DirectCast(y, Double)
-
-            // XCorr_1 = OutputIndex_1.XCorr
-
-            // If XCorr_1 > XCorr_2 Then
-            // Return 1
-            // ElseIf XCorr_1 < XCorr_2 Then
-            // Return -1
-            // Else
-            // Return 0
-            // End If
-            // End Function
-
-            // End Class
-
         }
     }
 }

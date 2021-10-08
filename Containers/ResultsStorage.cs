@@ -354,7 +354,7 @@ namespace SequestResultsProcessor.Containers
                 {
                     switch (entry.XCorr)
                     {
-                        case var @case when @case > 5.0d:
+                        case > 5.0d:
                             {
                                 GT5 += 1;
                                 GT4 += 1;
@@ -365,7 +365,7 @@ namespace SequestResultsProcessor.Containers
                                 break;
                             }
 
-                        case var case1 when case1 > 4.0d:
+                        case > 4.0d:
                             {
                                 GT4 += 1;
                                 GT3 += 1;
@@ -375,7 +375,7 @@ namespace SequestResultsProcessor.Containers
                                 break;
                             }
 
-                        case var case2 when case2 > 3.0d:
+                        case > 3.0d:
                             {
                                 GT3 += 1;
                                 GT2 += 1;
@@ -384,7 +384,7 @@ namespace SequestResultsProcessor.Containers
                                 break;
                             }
 
-                        case var case3 when case3 > 2.0d:
+                        case > 2.0d:
                             {
                                 GT2 += 1;
                                 GT1 += 1;
@@ -392,7 +392,7 @@ namespace SequestResultsProcessor.Containers
                                 break;
                             }
 
-                        case var case4 when case4 > 1.0d:
+                        case > 1.0d:
                             {
                                 GT1 += 1;
                                 GT0 += 1;

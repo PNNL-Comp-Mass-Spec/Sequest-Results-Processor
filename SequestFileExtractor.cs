@@ -389,12 +389,11 @@ namespace SequestResultsProcessor
                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.FHTXCorrThreshold.ToString() + ")");
 
                 // Keys in these dictionaries are XCorr threshold; values are the number of peptides with an XCorr over the threshold
-                Dictionary<int, int> SynSummaryResults;
                 if (!m_StopProcessing)
                 {
                     StartingNewTask("Sorting results...");
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Syn file");
-                    SynSummaryResults = m_Results.SortPeptides(tmpSynPath, SynOutputIndexList, m_StartupArguments.SynopsisFileFullPath);
+                    var SynSummaryResults = m_Results.SortPeptides(tmpSynPath, SynOutputIndexList, m_StartupArguments.SynopsisFileFullPath);
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Fht file");
                     var FHTSummaryResults = m_Results.SortPeptides(tmpFHTPath, FHTOutputIndexList, m_StartupArguments.FirstHitsFullPath);
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(SynSummaryResults, "all peptides"));

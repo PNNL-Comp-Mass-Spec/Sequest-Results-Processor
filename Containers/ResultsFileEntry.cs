@@ -63,7 +63,7 @@ namespace SequestResultsProcessor.Containers
                 }
             }
 
-            newIndex = m_PeptideHits.Count + 1;
+            var newIndex = m_PeptideHits.Count + 1;
             if (newIndex > 1)
             {
                 m_CachedPreviousHit = m_PeptideHits[newIndex - 1];

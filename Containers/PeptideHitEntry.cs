@@ -172,8 +172,8 @@ namespace SequestResultsProcessor.Containers
             // Tracks protein names:
             // keys are 0, 1, 2, etc.
             // Values are protein names
-            SortedList<int, string> exportList;
-            exportList = new SortedList<int, string>();
+            var exportList = new SortedList<int, string>();
+
             CalculateScoreComponents();
 
             // sbFront and srRear contain the constant parts of the peptide result

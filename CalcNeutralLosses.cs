@@ -1,6 +1,6 @@
 ﻿
 // This class calculates intensities for observed neutral loss species in
-// phosphoproteomic studies
+// phosphoproteomics studies
 //
 // -------------------------------------------------------------------------------
 // Written by Ken Auberry for the Department of Energy (PNNL, Richland, WA)

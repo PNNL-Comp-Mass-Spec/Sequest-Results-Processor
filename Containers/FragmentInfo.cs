@@ -18,7 +18,6 @@ namespace SequestResultsProcessor.Containers
 {
     public class FragmentInfo
     {
-        // Ignore Spelling: Auberry
 
         private readonly List<Fragment> m_FragmentList;
         private double m_MaxIntensity;

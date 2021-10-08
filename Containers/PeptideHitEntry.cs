@@ -91,7 +91,7 @@ namespace SequestResultsProcessor.Containers
             return myScore >= optFilterScore ? 1 : 0;
         }
 
-        private double CalculateFilterScore(double dblXCorr, double deltCn, int intNumTrypticEnds, int intChargeState)
+        private double CalculateFilterScore(double dblXCorr, double deltaCn, int intNumTrypticEnds, int intChargeState)
         {
             double[] trypRelScore;
 
@@ -99,16 +99,16 @@ namespace SequestResultsProcessor.Containers
             {
                 case 1:
                     trypRelScore = new[] { 0.35d, 0.9d, 1.04d };
-                    var myScore = trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((1.49d - dblXCorr) / 0.25d))) * (0.98d / (1d + Math.Exp((0.07d - deltCn) / 0.085d)));
+                    var myScore = trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((1.49d - dblXCorr) / 0.25d))) * (0.98d / (1d + Math.Exp((0.07d - deltaCn) / 0.085d)));
                     return myScore - 0.1d;
 
                 case 2:
                     trypRelScore = new[] { 0.31d, 0.76d, 0.98d };
-                    return trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((2.44d - dblXCorr) / 0.524d))) * (1.02d / (1d + Math.Exp((0.09d - deltCn) / 0.03d)));
+                    return trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((2.44d - dblXCorr) / 0.524d))) * (1.02d / (1d + Math.Exp((0.09d - deltaCn) / 0.03d)));
 
                 case 3:
                     trypRelScore = new[] { 0.21d, 0.62d, 1.04d };
-                    return trypRelScore[intNumTrypticEnds] * (1.01d / (1d + Math.Exp((3.2d - dblXCorr) / 0.48d))) * (1.04d / (1d + Math.Exp((0.11d - deltCn) / 0.06d)));
+                    return trypRelScore[intNumTrypticEnds] * (1.01d / (1d + Math.Exp((3.2d - dblXCorr) / 0.48d))) * (1.04d / (1d + Math.Exp((0.11d - deltaCn) / 0.06d)));
             }
 
             return 0;

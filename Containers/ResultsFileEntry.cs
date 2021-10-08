@@ -89,16 +89,12 @@ namespace SequestResultsProcessor.Containers
 
         private double CalculateDelCN2(double XCorrCurrent, double XCorrNextLowest)
         {
-            double tmpDelCN2;
-            tmpDelCN2 = (XCorrCurrent - XCorrNextLowest) / XCorrCurrent;
-            return tmpDelCN2;
+            return (XCorrCurrent - XCorrNextLowest) / XCorrCurrent;
         }
 
         private double CalculateXCRatio(double XCorrCurrent, double XCorrFirstHit)
         {
-            double tmpXCR;
-            tmpXCR = XCorrCurrent / XCorrFirstHit;
-            return tmpXCR;
+            return XCorrCurrent / XCorrFirstHit;
         }
 
         private double CalculateDelM(double HeaderMass, double PeptideObsMass)

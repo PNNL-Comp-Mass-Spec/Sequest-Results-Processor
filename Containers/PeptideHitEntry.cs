@@ -91,12 +91,7 @@ namespace SequestResultsProcessor.Containers
         {
             var myScore = CalculateFilterScore(XCorr, DelCn2, NumTrypticEnds, ChargeState);
             var optFilterScore = 0.1d + 0.03d * RankXc;
-            if (myScore >= optFilterScore)
-            {
-                return 1;
-            }
-
-            return 0;
+            return myScore >= optFilterScore ? 1 : 0;
         }
 
         private double CalculateFilterScore(double dblXCorr, double deltCn, int intNumTrypticEnds, int intChargeState)

@@ -184,14 +184,10 @@ namespace SequestResultsProcessor
 
             if (noModsInSequence)
             {
-                mScore = Math.Round(10d + match, 2);
-            }
-            else
-            {
-                mScore = 10d;
+                return Math.Round(10d + match, 2);
             }
 
-            return mScore;
+            return 10d;
         }
 
         private double HashScanner(PeptideIntensities peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoFrags, double massTol, int CSToCheck)

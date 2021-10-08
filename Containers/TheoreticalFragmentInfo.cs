@@ -181,8 +181,7 @@ namespace SequestResultsProcessor.Containers
                 }
             }
 
-            tmpMZ = tmpMass / cs;
-            return tmpMZ;
+            return tmpMass / cs;
         }
 
         private double GetIntensity(string LeftResidue, string RightResidue)

@@ -705,15 +705,7 @@ namespace SequestResultsProcessor
             private bool CheckFileExists(string filePath)
             {
                 var fi = new FileInfo(filePath);
-                var exists = fi.Exists;
-                return exists;
-            }
-
-            public string SourceDirectory
-            {
-                get => m_SourceDirectory;
-
-                set => m_SourceDirectory = value;
+                return fi.Exists;
             }
 
             public string DestinationDirectory

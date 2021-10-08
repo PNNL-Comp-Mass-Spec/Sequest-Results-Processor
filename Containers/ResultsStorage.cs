@@ -98,6 +98,7 @@ namespace SequestResultsProcessor.Containers
             SortedList<string, string> proteinExportList = null;
             StreamWriter xrefWriter = null;
             var outputWriter = new StreamWriter(ExportFilePath, true, Encoding.ASCII);
+
             if (outputType == OutputTypeList.FHT)
             {
                 xrefWriter = new StreamWriter(proteinXrefFilePath, true, Encoding.ASCII);

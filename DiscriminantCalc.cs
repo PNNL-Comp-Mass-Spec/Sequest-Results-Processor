@@ -357,8 +357,7 @@ namespace SequestResultsProcessor
                 public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {
                     var keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
-                    long offset;
-                    if (mOffsets.TryGetValue(keyName, out offset))
+                    if (mOffsets.TryGetValue(keyName, out var offset))
                     {
                         return offset;
                     }

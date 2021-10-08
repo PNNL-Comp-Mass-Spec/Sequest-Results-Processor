@@ -65,8 +65,7 @@ namespace SequestResultsProcessor.Containers
                 return;
             }
 
-            ResultsFileEntry cachedResultsFileEntry = null;
-            if (m_Results.TryGetValue(tmpKey, out cachedResultsFileEntry))
+            if (m_Results.TryGetValue(tmpKey, out var cachedResultsFileEntry))
             {
                 // Make sure m_CachedResultsFileEntry is up-to-date
                 if (!ReferenceEquals(m_CachedResultsFileEntry, cachedResultsFileEntry))
@@ -423,8 +422,7 @@ namespace SequestResultsProcessor.Containers
 
             private int GetSummaryTableValue(int xcorrThreshold)
             {
-                int peptideCount;
-                if (StatsTable.TryGetValue(xcorrThreshold, out peptideCount))
+                if (StatsTable.TryGetValue(xcorrThreshold, out var peptideCount))
                 {
                     return peptideCount;
                 }

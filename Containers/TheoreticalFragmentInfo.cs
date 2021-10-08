@@ -178,12 +178,11 @@ namespace SequestResultsProcessor.Containers
         private double GetMass(string sequence, int cs)
         {
             var seq = sequence.ToCharArray();
-            ResidueInfo residue;
             var tmpMass = default(double);
             double tmpMZ;
             foreach (var resChar in seq)
             {
-                if (s_Intensities.TryGetValue(resChar.ToString(), out residue))
+                if (s_Intensities.TryGetValue(resChar.ToString(), out var residue))
                 {
                     tmpMass += residue.Mass;
                 }
@@ -195,9 +194,7 @@ namespace SequestResultsProcessor.Containers
 
         private double GetIntensity(string LeftResidue, string RightResidue)
         {
-            ResidueInfo resLeft;
-            ResidueInfo resRight;
-            if (s_Intensities.TryGetValue(LeftResidue, out resLeft) && s_Intensities.TryGetValue(RightResidue, out resRight))
+            if (s_Intensities.TryGetValue(LeftResidue, out var resLeft) && s_Intensities.TryGetValue(RightResidue, out var resRight))
             {
                 return Math.Round(resLeft.LeftIntensity + resRight.RightIntensity, 2);
             }

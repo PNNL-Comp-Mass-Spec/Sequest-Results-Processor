@@ -340,8 +340,8 @@ namespace SequestResultsProcessor
                     while (!srInFile.EndOfStream)
                     {
                         var dataLine = srInFile.ReadLine();
-                        var matchingLine = "";
-                        var outFileFound = AdvanceReaderUntilMatch(srInFile, r_FileDelimiterMatcher, dataLine, out matchingLine);
+
+                        var outFileFound = AdvanceReaderUntilMatch(srInFile, r_FileDelimiterMatcher, dataLine, out var matchingLine);
                         if (outFileFound)
                         {
                             // Check whether this .out file has already been processed
@@ -501,7 +501,7 @@ namespace SequestResultsProcessor
                 var tmpMultiProteinRefs = new List<string>();
 
                 // Wait until we see the measured mass show up in the header
-                var blnFoundHeaderMass = AdvanceReaderUntilMatch(srInFile, mHeaderMassMatcher, "", out matchingLine);
+                var blnFoundHeaderMass = AdvanceReaderUntilMatch(srInFile, mHeaderMassMatcher, "", out var matchingLine);
                 if (!blnFoundHeaderMass)
                     return;
 

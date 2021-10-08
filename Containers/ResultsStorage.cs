@@ -176,21 +176,18 @@ namespace SequestResultsProcessor.Containers
                 proteinOutputFileInfo.CopyTo(finalProteinOutputPath, true);
             }
 
-            byte[] buffer;
             var fi = new FileInfo(outputFilePath);
-            FileStream fs;
             if (fi.Length == 0L)
             {
-                fs = File.Create(finalOutputPath);
+                var fs = File.Create(finalOutputPath);
                 fs.Close();
             }
             else
             {
                 var rowCount = 1;
                 var reUpdateHitNum = new Regex(@"^\d+");
-                string inputString;
-                string outputString;
                 outputRecordList.Sort(new OutputRecordIndexComparer());
+
                 using (var fsInFile = new FileStream(outputFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     using (var swOutFile = new StreamWriter(new FileStream(finalOutputPath, FileMode.Create, FileAccess.Write, FileShare.Read)))
@@ -198,13 +195,13 @@ namespace SequestResultsProcessor.Containers
                         swOutFile.WriteLine(HEADER);
                         foreach (var entry in outputRecordList)
                         {
-                            buffer = new byte[entry.RecordLength + 1];
+                            var buffer = new byte[entry.RecordLength + 1];
                             fsInFile.Seek(entry.StartOffset, SeekOrigin.Begin);
                             fsInFile.Read(buffer, 0, entry.RecordLength);
-                            inputString = Encoding.Default.GetString(buffer);
+                            var inputString = Encoding.Default.GetString(buffer);
 
                             // Update the the row number (the first number on the line)
-                            outputString = reUpdateHitNum.Replace(inputString, rowCount.ToString());
+                            var outputString = reUpdateHitNum.Replace(inputString, rowCount.ToString());
                             swOutFile.Write(outputString.Trim('\0'));
                             rowCount += 1;
                         }

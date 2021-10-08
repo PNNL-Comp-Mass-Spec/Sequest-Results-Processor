@@ -36,7 +36,7 @@ namespace SequestResultsProcessor
             m_DataList = new List<IRREntry>();
         }
 
-        public void MakeIRREntry(int ScanNum, int ChargeState, int RankXC, int ObsIonCount, int TheoIonCount)
+        public void MakeIRREntry(int ScanNum, int ChargeState, int RankXC, int ObsIonCount, int TheoreticalIonCount)
         {
             if (ChargeState != m_CachedCS)
             {
@@ -49,7 +49,7 @@ namespace SequestResultsProcessor
 
             if (RankXC != m_cachedRankXC)
             {
-                m_DataList.Add(new IRREntry(ScanNum, ChargeState, RankXC, ObsIonCount, TheoIonCount));
+                m_DataList.Add(new IRREntry(ScanNum, ChargeState, RankXC, ObsIonCount, TheoreticalIonCount));
                 m_CachedCS = ChargeState;
                 m_CachedScanNum = ScanNum;
                 m_cachedRankXC = RankXC;

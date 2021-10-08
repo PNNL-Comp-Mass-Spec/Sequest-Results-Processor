@@ -19,8 +19,8 @@ namespace SequestResultsProcessor.Containers
     internal class TheoreticalFragmentInfo
     {
         private static Dictionary<string, ResidueInfo> s_Intensities = new();
-        private List<Fragment> m_TheoYIons;
-        private List<Fragment> m_TheoBIons;
+        private List<Fragment> m_TheoreticalYIons;
+        private List<Fragment> m_TheoreticalBIons;
 
         public struct Fragment
         {
@@ -84,9 +84,9 @@ namespace SequestResultsProcessor.Containers
 
         private const string KNOWN_RESIDUES = "ACDEFGHIKLMNPQRSTVWY";
 
-        public List<Fragment> YIons => m_TheoYIons;
+        public List<Fragment> YIons => m_TheoreticalYIons;
 
-        public List<Fragment> BIons => m_TheoBIons;
+        public List<Fragment> BIons => m_TheoreticalBIons;
 
         public TheoreticalFragmentInfo(string peptideSequence, int chargeState)
         {
@@ -100,15 +100,11 @@ namespace SequestResultsProcessor.Containers
 
         private void SetupResidueHashes()
         {
-            char[] peptideResidues;
-            double[] peptideLeft;
-            double[] peptideRight;
-            double[] peptideMass;
+            var peptideResidues = KNOWN_RESIDUES.ToCharArray();
+            var peptideLeft = new[] { -0.2d, -0.75d, 0.45d, -0.05d, 0.4d, -0.8d, 0.35d, -0.4d, -0.25d, -0.15d, -0.2d, -0.5d, -1.15d, -0.35d, -0.75d, -0.6d, -0.65d, 0d, 0.25d, -0.4d };
+            var peptideRight = new[] { 0.35d, -0.2d, -0.45d, -0.15d, 0.45d, 0.5d, 0.25d, 0.35d, 0.3d, 0.05d, 0.1d, 0.1d, 1.15d, -0.05d, -0.35d, 0.5d, 0.45d, 0.2d, 0.45d, 0.4d };
+            var peptideMass = new[] { 71.037d, 103.009d, 115.027d, 129.043d, 147.068d, 57.022d, 137.059d, 113.084d, 128.095d, 113.084d, 131.04d, 114.043d, 97.053d, 128.059d, 156.101d, 87.032d, 101.048d, 99.068d, 186.08d, 163.063d };
 
-            peptideResidues = KNOWN_RESIDUES.ToCharArray();
-            peptideLeft = new double[] { -0.2d, -0.75d, 0.45d, -0.05d, 0.4d, -0.8d, 0.35d, -0.4d, -0.25d, -0.15d, -0.2d, -0.5d, -1.15d, -0.35d, -0.75d, -0.6d, -0.65d, 0d, 0.25d, -0.4d };
-            peptideRight = new double[] { 0.35d, -0.2d, -0.45d, -0.15d, 0.45d, 0.5d, 0.25d, 0.35d, 0.3d, 0.05d, 0.1d, 0.1d, 1.15d, -0.05d, -0.35d, 0.5d, 0.45d, 0.2d, 0.45d, 0.4d };
-            peptideMass = new double[] { 71.037d, 103.009d, 115.027d, 129.043d, 147.068d, 57.022d, 137.059d, 113.084d, 128.095d, 113.084d, 131.04d, 114.043d, 97.053d, 128.059d, 156.101d, 87.032d, 101.048d, 99.068d, 186.08d, 163.063d };
             var maxIndex = peptideResidues.Length - 1;
             int counter;
             s_Intensities = new Dictionary<string, ResidueInfo>();
@@ -134,15 +130,12 @@ namespace SequestResultsProcessor.Containers
         {
             var cleanSeq = GetCleanSequence(dirtySeq);
             var peptideLength = cleanSeq.Length;
-            double tmpYMass;
-            double tmpBMass;
-            double tmpPepMass;
-            double tmpInt;
-            m_TheoYIons = new List<Fragment>();
-            m_TheoBIons = new List<Fragment>();
+            m_TheoreticalYIons = new List<Fragment>();
+            m_TheoreticalBIons = new List<Fragment>();
             int counter;
-            tmpPepMass = GetMass(cleanSeq, chargeState);
-            tmpBMass = 1.01d;
+
+            var tmpPepMass = GetMass(cleanSeq, chargeState);
+            var tmpBMass = 1.01d;
 
             for (var i = 0; i < peptideLength - 1; i++)
             {
@@ -151,19 +144,19 @@ namespace SequestResultsProcessor.Containers
                 var yFragment = intensityFrag.Substring(1, 1);
 
                 tmpBMass += GetMass(bFragment, chargeState);
-                tmpYMass = tmpPepMass - tmpBMass + 20.02d;
-                tmpInt = GetIntensity(bFragment, yFragment);
-                m_TheoBIons.Add(new Fragment(Math.Round(tmpBMass, 4), tmpInt, FragmentTypes.b, i + 1));
-                m_TheoYIons.Add(new Fragment(Math.Round(tmpYMass, 4), tmpInt, FragmentTypes.y, peptideLength - (i + 1)));
+                var tmpYMass = tmpPepMass - tmpBMass + 20.02d;
+                var tmpInt = GetIntensity(bFragment, yFragment);
+                m_TheoreticalBIons.Add(new Fragment(Math.Round(tmpBMass, 4), tmpInt, FragmentTypes.b, i + 1));
+                m_TheoreticalYIons.Add(new Fragment(Math.Round(tmpYMass, 4), tmpInt, FragmentTypes.y, peptideLength - (i + 1)));
             }
 
-            var sorter = new TheoIonComparer();
-            m_TheoBIons.Sort(sorter);
-            m_TheoYIons.Sort(sorter);
-            if (m_TheoBIons.Count > 0)
-                m_TheoBIons.RemoveAt(m_TheoBIons.Count - 1);
-            if (m_TheoYIons.Count > 0)
-                m_TheoYIons.RemoveAt(m_TheoYIons.Count - 1);
+            var sorter = new TheoreticalIonComparer();
+            m_TheoreticalBIons.Sort(sorter);
+            m_TheoreticalYIons.Sort(sorter);
+            if (m_TheoreticalBIons.Count > 0)
+                m_TheoreticalBIons.RemoveAt(m_TheoreticalBIons.Count - 1);
+            if (m_TheoreticalYIons.Count > 0)
+                m_TheoreticalYIons.RemoveAt(m_TheoreticalYIons.Count - 1);
         }
 
         private string GetCleanSequence(string rawPeptideSeq)
@@ -202,7 +195,7 @@ namespace SequestResultsProcessor.Containers
             return 0d;
         }
 
-        private class TheoIonComparer : IComparer<Fragment>
+        private class TheoreticalIonComparer : IComparer<Fragment>
         {
             public int Compare(Fragment x, Fragment y)
             {

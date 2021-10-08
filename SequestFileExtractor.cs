@@ -389,7 +389,6 @@ namespace SequestResultsProcessor
                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.FHTXCorrThreshold.ToString() + ")");
 
                 // Keys in these dictionaries are XCorr threshold; values are the number of peptides with an XCorr over the threshold
-                Dictionary<int, int> FHTSummaryResults;
                 Dictionary<int, int> SynSummaryResults;
                 if (!m_StopProcessing)
                 {
@@ -397,7 +396,7 @@ namespace SequestResultsProcessor
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Syn file");
                     SynSummaryResults = m_Results.SortPeptides(tmpSynPath, SynOutputIndexList, m_StartupArguments.SynopsisFileFullPath);
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Fht file");
-                    FHTSummaryResults = m_Results.SortPeptides(tmpFHTPath, FHTOutputIndexList, m_StartupArguments.FirstHitsFullPath);
+                    var FHTSummaryResults = m_Results.SortPeptides(tmpFHTPath, FHTOutputIndexList, m_StartupArguments.FirstHitsFullPath);
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(SynSummaryResults, "all peptides"));
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(FHTSummaryResults, "first hits only"));
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Synopsis File   '" + Path.GetFileName(m_StartupArguments.SynopsisFileFullPath) + "' was generated");
@@ -439,33 +438,31 @@ namespace SequestResultsProcessor
             private int CountOutFiles()
             {
                 var fi = new FileInfo(m_SourceFileFullPath);
-                TextReader tr;
-                string s;
-                var outFileCount = default(int);
-                var currPos = default(long);
-                var lineCount = default(long);
+                var outFileCount = 0;
+                long currentPosition = 0;
+                long lineCount = 0;
                 var lineEndCharCount = LineEndCharacterCount(fi);
                 var r = new Regex("^===*", RegexOptions.Compiled);
                 if (fi.Exists)
                 {
-                    tr = fi.OpenText();
-                    s = tr.ReadLine();
-                    while (s is object)
+                    TextReader tr = fi.OpenText();
+                    var s = tr.ReadLine();
+                    while (s != null)
                     {
                         lineCount += 1L;
-                        currPos += s.Length + lineEndCharCount;
+                        currentPosition += s.Length + lineEndCharCount;
                         if (r.IsMatch(s))
                             outFileCount += 1;
                         s = tr.ReadLine();
                         if (lineCount % 500L == 0L)
                         {
-                            UpdateProgressCountingOuts(currPos, fi.Length);
+                            UpdateProgressCountingOuts(currentPosition, fi.Length);
                             if (m_StopProcessing)
                                 break;
                         }
                     }
 
-                    UpdateProgressCountingOuts(currPos, fi.Length);
+                    UpdateProgressCountingOuts(currentPosition, fi.Length);
                     tr.Close();
                     return outFileCount;
                 }

@@ -36,13 +36,13 @@ namespace SequestResultsProcessor
             {
                 if (_m_dtaFileInfo != null)
                 {
-                    _m_dtaFileInfo.OffsetProgress -= OffsetLoadingProgHandler;
+                    _m_dtaFileInfo.OffsetProgress -= OffsetLoadingProgressHandler;
                 }
 
                 _m_dtaFileInfo = value;
                 if (_m_dtaFileInfo != null)
                 {
-                    _m_dtaFileInfo.OffsetProgress += OffsetLoadingProgHandler;
+                    _m_dtaFileInfo.OffsetProgress += OffsetLoadingProgressHandler;
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace SequestResultsProcessor
             ProgressUpdate?.Invoke(taskDescription, fractionDone);
         }
 
-        private void OffsetLoadingProgHandler(double fractionDone)
+        private void OffsetLoadingProgressHandler(double fractionDone)
         {
             OnProgressUpdate("Loading .dta File Locations (" + (fractionDone * 100d).ToString("0.0") + "% Completed)", fractionDone);
         }
@@ -73,8 +73,7 @@ namespace SequestResultsProcessor
         public DiscriminantCalc(string dtaFilePath)
         {
             var fi = new FileInfo(dtaFilePath);
-            string rootFileName;
-            rootFileName = fi.Name;
+            var rootFileName = fi.Name;
             rootFileName = Regex.Replace(rootFileName, "_dta.txt", "");
             m_dtaFilepath = dtaFilePath;
             if (fi.Exists)
@@ -144,10 +143,8 @@ namespace SequestResultsProcessor
 
         private double CalculateMScore(string peptideSequence, int peptideChargeState, PeptideIntensities scanIntensities)
         {
-            var match = default(double);
-            double mScore;
-            bool noModsInSequence;
-            TheoreticalFragmentInfo theoFrags;
+            var match = 0.0;
+
             var mTol = m_MassTol;
             if (scanIntensities.FragmentList.Count == 0)
             {
@@ -163,26 +160,26 @@ namespace SequestResultsProcessor
             {
                 return 10d;
             }
-            noModsInSequence = true;
+            var noModsInSequence = true;
 
             // Get values for +1 charge state
-            theoFrags = new TheoreticalFragmentInfo(peptideSequence, 1);
+            var theoreticalFragments = new TheoreticalFragmentInfo(peptideSequence, 1);
 
             // Check and score +1 possibilities for B-Ions
-            match += HashScanner(scanIntensities, theoFrags.BIons, mTol, 1);
+            match += HashScanner(scanIntensities, theoreticalFragments.BIons, mTol, 1);
 
             // Check and score +1 possibilities for Y-Ions
-            match += HashScanner(scanIntensities, theoFrags.YIons, mTol, 1);
+            match += HashScanner(scanIntensities, theoreticalFragments.YIons, mTol, 1);
             if (peptideChargeState > 2)
             {
                 // get values for +2 charge state
-                theoFrags = new TheoreticalFragmentInfo(peptideSequence, 2);
+                theoreticalFragments = new TheoreticalFragmentInfo(peptideSequence, 2);
 
                 // Check and score +2 possibilities for B-Ions
-                match += HashScanner(scanIntensities, theoFrags.BIons, mTol, 2);
+                match += HashScanner(scanIntensities, theoreticalFragments.BIons, mTol, 2);
 
                 // Check and score +2 possibilities for Y-Ions
-                match += HashScanner(scanIntensities, theoFrags.YIons, mTol, 2);
+                match += HashScanner(scanIntensities, theoreticalFragments.YIons, mTol, 2);
             }
 
             if (noModsInSequence)
@@ -199,7 +196,6 @@ namespace SequestResultsProcessor
 
         private double HashScanner(PeptideIntensities peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoFrags, double massTol, int CSToCheck)
         {
-            double tmpObsMass;
             var maxObsRecord = peptideRecord.FragmentList.Count;
             if (maxObsRecord == 0)
             {
@@ -207,26 +203,25 @@ namespace SequestResultsProcessor
             }
 
             var maxObsIndex = maxObsRecord - 1;
-            double match;
 
             var obsCount = 0;
-            match = 0d;
-            tmpObsMass = peptideRecord.GetMass(obsCount);
-            foreach (var theoFrag in theoFrags)
+            var match = 0d;
+            var tmpObsMass = peptideRecord.GetMass(obsCount);
+            foreach (var fragment in theoreticalFragments)
             {
-                var tmpTheoMass = theoFrag.Mass;
-                if (tmpObsMass > tmpTheoMass + massTol & obsCount <= maxObsIndex)
+                var theoreticalMass = fragment.Mass;
+                if (tmpObsMass > theoreticalMass + massTol && obsCount <= maxObsIndex)
                 {
                 }
                 else
                 {
-                    while (tmpObsMass < tmpTheoMass - massTol & obsCount < maxObsIndex)
+                    while (tmpObsMass < theoreticalMass - massTol && obsCount < maxObsIndex)
                     {
                         obsCount += 1;
                         tmpObsMass = peptideRecord.GetMass(obsCount);
                     }
 
-                    if (tmpObsMass < tmpTheoMass + massTol & !(tmpTheoMass > tmpObsMass + massTol) & obsCount <= maxObsIndex)
+                    if (tmpObsMass < theoreticalMass + massTol && !(theoreticalMass > tmpObsMass + massTol) && obsCount <= maxObsIndex)
 
                     {
                         if (CSToCheck >= 2)
@@ -235,7 +230,7 @@ namespace SequestResultsProcessor
                         }
                         else
                         {
-                            match += peptideRecord.GetNormalizedIntensity(obsCount) * theoFrag.Intensity;
+                            match += peptideRecord.GetNormalizedIntensity(obsCount) * fragment.Intensity;
                         }
                     }
                 }
@@ -352,62 +347,56 @@ namespace SequestResultsProcessor
                     mOffsets.Add(keyName, StartOffset);
                 }
 
-                public int LoadOffsetsFromDTAFile(string dtaFilePath)
+                public void LoadOffsetsFromDTAFile(string dtaFilePath)
                 {
                     var fi = new FileInfo(dtaFilePath);
-                    TextReader tr;
-                    string s;
-                    int lineEndCharCount;
-                    var currPos = default(long);
-                    long dtaStartPos;
-                    string chargeExtra;
-                    var dtaCount = default(int);
-                    long fileLength;
+                    long currentPosition = 0;
+                    var dtaCount = 0;
                     var r = new Regex(@"^\s*[=]{5,}\s+\""(?<rootname>.+)\.(?<StartScan>\d+)\.(?<EndScan>\d+)\.(?<ChargeBlock>(?<ChargeState>\d+)[^0-9]?(?<ChargeExtra>\S*))\.(?<FileType>.+)\""\s+[=]{5,}\s*$", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
                     var lineMatch = new Regex("^===*");
-                    Match m;
-                    if (fi.Exists)
+                    if (!fi.Exists)
                     {
-                        lineEndCharCount = SequestFileExtractor.LineEndCharacterCount(fi);
-                        fileLength = fi.Length;
-                        tr = fi.OpenText();
-                        s = tr.ReadLine();
-                        while (s is object)
-                        {
-                            currPos += s.Length + lineEndCharCount;
-                            if (lineMatch.IsMatch(s))
-                            {
-                                dtaStartPos = currPos - s.Length - lineEndCharCount;
-                                m = r.Match(s);
-                                if (m.Groups["ChargeExtra"].Length > 0)
-                                {
-                                    chargeExtra = m.Groups["ChargeExtra"].Value;
-                                }
-                                else
-                                {
-                                    chargeExtra = "";
-                                }
-
-                                AddOffset(
-                                    int.Parse(m.Groups["StartScan"].Value),
-                                    int.Parse(m.Groups["EndScan"].Value),
-                                    int.Parse(m.Groups["ChargeState"].Value), dtaStartPos, chargeExtra);
-                                dtaCount += 1;
-                                if (dtaCount % 3000 == 0)
-                                {
-                                    Debug.WriteLine(dtaCount);
-                                    OnDTAScanUpdate(currPos / (double)fileLength);
-                                }
-                            }
-
-                            s = tr.ReadLine();
-                        }
-
-                        tr.Close();
+                        return;
                     }
 
-                    return dtaCount;
+                    var lineEndCharCount = SequestFileExtractor.LineEndCharacterCount(fi);
+                    var fileLength = fi.Length;
+                    TextReader tr = fi.OpenText();
+
+                    var dataLine = tr.ReadLine();
+                    while (dataLine != null)
+                    {
+                        currentPosition += dataLine.Length + lineEndCharCount;
+                        if (lineMatch.IsMatch(dataLine))
+                        {
+                            var dtaStartPos = currentPosition - dataLine.Length - lineEndCharCount;
+                            var m = r.Match(dataLine);
+                            string chargeExtra;
+                            if (m.Groups["ChargeExtra"].Length > 0)
+                            {
+                                chargeExtra = m.Groups["ChargeExtra"].Value;
+                            }
+                            else
+                            {
+                                chargeExtra = "";
+                            }
+
+                            AddOffset(
+                                int.Parse(m.Groups["StartScan"].Value),
+                                int.Parse(m.Groups["EndScan"].Value),
+                                int.Parse(m.Groups["ChargeState"].Value), dtaStartPos, chargeExtra);
+                            dtaCount += 1;
+                            if (dtaCount % 3000 == 0)
+                            {
+                                OnDTAScanUpdate(currentPosition / (double)fileLength);
+                            }
+                        }
+
+                        dataLine = tr.ReadLine();
+                    }
+
+                    tr.Close();
                 }
 
                 public event dtaScanProgressEventHandler dtaScanProgress;
@@ -455,10 +444,7 @@ namespace SequestResultsProcessor
 
             public void GetIntensitiesFromDTA(long startOffset)
             {
-                string s;
-                double tmpMass;
-                double tmpIntensity;
-                var maxIntensity = default(double);
+                var maxIntensity = 0.0;
                 var sr = new StreamReader(m_FileStream);
                 Clear();
                 sr.BaseStream.Seek(startOffset, SeekOrigin.Begin);
@@ -471,32 +457,31 @@ namespace SequestResultsProcessor
                 }
 
                 s = sr.ReadLine();
+                var precursorLine = sr.ReadLine();
                 var ParentLine = new Regex(@"^(?<ParentMass>\d+\.*\d*)\s+(?<ChargeState>\d+)");
-                Match parentLineMatch;
-                if (Regex.IsMatch(s, @"^\S+"))
+                if (Regex.IsMatch(precursorLine, @"^\S+"))
                 {
-                    parentLineMatch = ParentLine.Match(s);
+                    var parentLineMatch = ParentLine.Match(precursorLine);
                     m_ParentMH = double.Parse(parentLineMatch.Groups["ParentMass"].Value);
                     m_ParentCS = int.Parse(parentLineMatch.Groups["ChargeState"].Value);
                 }
 
                 var LineMatch = new Regex(@"^(?<Mass>\d+\.\d+)\s(?<Intensity>\d+\.\d+)");
-                Match m;
-                s = sr.ReadLine();
-                while (LineMatch.IsMatch(s))
+
+                var dataLine = sr.ReadLine();
+                while (dataLine != null && LineMatch.IsMatch(dataLine))
                 {
-                    m = LineMatch.Match(s);
-                    tmpMass = double.Parse(m.Groups["Mass"].Value);
-                    tmpIntensity = double.Parse(m.Groups["Intensity"].Value);
+                    var m = LineMatch.Match(dataLine);
+                    var tmpMass = double.Parse(m.Groups["Mass"].Value);
+                    var tmpIntensity = double.Parse(m.Groups["Intensity"].Value);
                     if (tmpIntensity > maxIntensity)
                     {
                         maxIntensity = tmpIntensity;
                     }
 
                     Add(tmpMass, tmpIntensity);
-                    s = sr.ReadLine();
-                    if (s is null)
-                        break;
+
+                    dataLine = sr.ReadLine();
                 }
 
                 NormalizeIntensities();
@@ -506,6 +491,6 @@ namespace SequestResultsProcessor
             {
                 m_NeutralLoss = NLCalc.CalculateNeutralLosses(this, massTol);
             }
-            }
+        }
     }
 }

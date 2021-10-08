@@ -10,12 +10,9 @@ namespace SequestResultsProcessor
 
         public double ComputeDelMCorrected(double dblPrecursorMassMH, double dblPeptideTheoreticalMH)
         {
-            double dblDelM;
-            double dblPrecursorMonoMass;
-            double dblPeptideMonoisotopicMass;
-            dblDelM = dblPrecursorMassMH - dblPeptideTheoreticalMH;
-            dblPrecursorMonoMass = dblPrecursorMassMH - MASS_PROTON;
-            dblPeptideMonoisotopicMass = dblPeptideTheoreticalMH - MASS_PROTON;
+            var dblDelM = dblPrecursorMassMH - dblPeptideTheoreticalMH;
+            var dblPrecursorMonoMass = dblPrecursorMassMH - MASS_PROTON;
+            var dblPeptideMonoisotopicMass = dblPeptideTheoreticalMH - MASS_PROTON;
             return ComputeDelMCorrected(dblDelM, dblPrecursorMonoMass, true, dblPeptideMonoisotopicMass);
         }
 

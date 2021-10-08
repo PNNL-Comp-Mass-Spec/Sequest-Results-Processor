@@ -41,9 +41,12 @@ namespace SequestResultsProcessor.Containers
 
         public virtual void Add(double mZ, double intensity)
         {
-            var f = new Fragment();
-            f.MZ = mZ;
-            f.Intensity = intensity;
+            var f = new Fragment
+            {
+                MZ = mZ,
+                Intensity = intensity
+            };
+
             m_FragmentList.Add(f);
             if (intensity > m_MaxIntensity)
             {

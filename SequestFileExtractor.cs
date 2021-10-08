@@ -545,12 +545,15 @@ namespace SequestResultsProcessor
 
                     if (eMatchType != eHitMatchType.NoMatch)
                     {
-                        var currentPeptide = new PeptideHitEntry();
-                        currentPeptide.HitNum = int.Parse(dataLineMatch.Groups["hitnum"].Value);
-                        currentPeptide.MH = Math.Round(double.Parse(dataLineMatch.Groups["mhmass"].Value), 5);
-                        currentPeptide.DelCn = double.Parse(dataLineMatch.Groups["delcn"].Value);
-                        currentPeptide.XCorr = double.Parse(dataLineMatch.Groups["xcorr"].Value);
-                        currentPeptide.Sp = double.Parse(dataLineMatch.Groups["sp"].Value);
+                        var currentPeptide = new PeptideHitEntry
+                        {
+                            HitNum = int.Parse(dataLineMatch.Groups["hitnum"].Value),
+                            MH = Math.Round(double.Parse(dataLineMatch.Groups["mhmass"].Value), 5),
+                            DelCn = double.Parse(dataLineMatch.Groups["delcn"].Value),
+                            XCorr = double.Parse(dataLineMatch.Groups["xcorr"].Value),
+                            Sp = double.Parse(dataLineMatch.Groups["sp"].Value)
+                        };
+
                         if (eMatchType == eHitMatchType.MatchWithProtein)
                         {
                             currentPeptide.Reference = dataLineMatch.Groups["reference"].Value;

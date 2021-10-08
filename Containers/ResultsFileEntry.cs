@@ -106,9 +106,9 @@ namespace SequestResultsProcessor.Containers
 
         #region  Properties
 
-        public int StartScanNumber { get; private set; }
-        public int EndScanNumber { get; private set; }
-        public int ChargeState { get; private set; }
+        public int StartScanNumber { get; }
+        public int EndScanNumber { get; }
+        public int ChargeState { get; }
 
         public SortedList<int, PeptideHitEntry> PeptideHits => m_PeptideHits;
 

@@ -419,7 +419,7 @@ namespace SequestResultsProcessor.Containers
             /// Keys in this dictionary are XCorr threshold; values are the number of peptides with an XCorr over the threshold
             /// </summary>
             /// <returns></returns>
-            public Dictionary<int, int> StatsTable { get; private set; }
+            public Dictionary<int, int> StatsTable { get; }
         }
     }
 }

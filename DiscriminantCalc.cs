@@ -527,9 +527,9 @@ namespace SequestResultsProcessor
                 NormalizeIntensities();
             }
 
-            public void GetNeutralLosses(double MassTol)
+            public void GetNeutralLosses(double massTol = 0.7)
             {
-                m_NeutralLoss = NLCalc.CalculateNeutralLosses(this, 0.7d);
+                m_NeutralLoss = NLCalc.CalculateNeutralLosses(this, massTol);
             }
             }
     }

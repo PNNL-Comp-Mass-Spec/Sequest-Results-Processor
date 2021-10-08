@@ -18,8 +18,6 @@ namespace SequestResultsProcessor.Containers
 {
     public class FragmentInfo
     {
-
-        private readonly List<Fragment> m_FragmentList;
         private double m_MaxIntensity;
 
         public struct Fragment
@@ -31,10 +29,10 @@ namespace SequestResultsProcessor.Containers
 
         public FragmentInfo()
         {
-            m_FragmentList = new List<Fragment>();
+            FragmentList = new List<Fragment>();
         }
 
-        public List<Fragment> FragmentList => m_FragmentList;
+        public List<Fragment> FragmentList { get; }
 
         public virtual void Add(double mZ, double intensity)
         {
@@ -44,7 +42,7 @@ namespace SequestResultsProcessor.Containers
                 Intensity = intensity
             };
 
-            m_FragmentList.Add(f);
+            FragmentList.Add(f);
             if (intensity > m_MaxIntensity)
             {
                 m_MaxIntensity = intensity;
@@ -53,25 +51,26 @@ namespace SequestResultsProcessor.Containers
 
         public void Clear()
         {
-            m_FragmentList.Clear();
+            FragmentList.Clear();
             m_MaxIntensity = 0d;
         }
 
         public double GetMass(int index)
         {
-            return m_FragmentList[index].MZ;
+            return FragmentList[index].MZ;
         }
 
+        // ReSharper disable once UnusedMember.Global
         public double GetIntensity(int index)
         {
-            return m_FragmentList[index].Intensity;
+            return FragmentList[index].Intensity;
         }
 
         public double GetNormalizedIntensity(int index)
         {
             if (Math.Abs(m_MaxIntensity) < float.Epsilon)
                 return 0d;
-            return m_FragmentList[index].Intensity / m_MaxIntensity;
+            return FragmentList[index].Intensity / m_MaxIntensity;
         }
 
         public double GetNormalizedIntensity(Fragment f)
@@ -84,7 +83,7 @@ namespace SequestResultsProcessor.Containers
         protected void NormalizeIntensities()
         {
             m_MaxIntensity = 0d;
-            foreach (var f in m_FragmentList)
+            foreach (var f in FragmentList)
             {
                 if (f.Intensity > m_MaxIntensity)
                 {
@@ -95,7 +94,7 @@ namespace SequestResultsProcessor.Containers
             if (Math.Abs(m_MaxIntensity) < float.Epsilon)
                 return;
 
-            foreach (var item in m_FragmentList)
+            foreach (var item in FragmentList)
             {
                 var fragment = item;
                 fragment.NormIntensity = fragment.Intensity / m_MaxIntensity;

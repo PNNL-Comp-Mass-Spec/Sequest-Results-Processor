@@ -27,7 +27,7 @@ namespace SequestResultsProcessor
                 while (dblDelM > 0.5d)
                 {
                     dblDelM -= MASS_C13;
-                    intCorrectionCount += 1;
+                    intCorrectionCount++;
                 }
             }
             else
@@ -37,7 +37,7 @@ namespace SequestResultsProcessor
                 while (dblDelM < -0.5d)
                 {
                     dblDelM += MASS_C13;
-                    intCorrectionCount -= 1;
+                    intCorrectionCount--;
                 }
             }
 

@@ -136,7 +136,7 @@ namespace SequestResultsProcessor.Containers
                             var tmpLength = peptideLine.Length + outputWriter.NewLine.Length;
                             outputRecordIndexList.Add(new OutputRecordIndex(peptideHit.XCorr, peptideHit.StartScanNum, peptideHit.EndScanNum, peptideHit.ChargeState, peptideHit.HitNum, currentMultiProteinID, currentPosition, tmpLength));
                             currentPosition += tmpLength;
-                            currentMultiProteinID += 1;
+                            currentMultiProteinID++;
                         }
 
                         if (outputType == OutputTypeList.FHT && proteinExportList != null && xrefWriter != null)
@@ -201,7 +201,7 @@ namespace SequestResultsProcessor.Containers
                             // Update the the row number (the first number on the line)
                             var outputString = reUpdateHitNum.Replace(inputString, rowCount.ToString());
                             swOutFile.Write(outputString.Trim('\0'));
-                            rowCount += 1;
+                            rowCount++;
                         }
                     }
                 }
@@ -357,52 +357,52 @@ namespace SequestResultsProcessor.Containers
                     {
                         case > 5.0d:
                             {
-                                GT5 += 1;
-                                GT4 += 1;
-                                GT3 += 1;
-                                GT2 += 1;
-                                GT1 += 1;
-                                GT0 += 1;
+                                GT5++;
+                                GT4++;
+                                GT3++;
+                                GT2++;
+                                GT1++;
+                                GT0++;
                                 break;
                             }
 
                         case > 4.0d:
                             {
-                                GT4 += 1;
-                                GT3 += 1;
-                                GT2 += 1;
-                                GT1 += 1;
-                                GT0 += 1;
+                                GT4++;
+                                GT3++;
+                                GT2++;
+                                GT1++;
+                                GT0++;
                                 break;
                             }
 
                         case > 3.0d:
                             {
-                                GT3 += 1;
-                                GT2 += 1;
-                                GT1 += 1;
-                                GT0 += 1;
+                                GT3++;
+                                GT2++;
+                                GT1++;
+                                GT0++;
                                 break;
                             }
 
                         case > 2.0d:
                             {
-                                GT2 += 1;
-                                GT1 += 1;
-                                GT0 += 1;
+                                GT2++;
+                                GT1++;
+                                GT0++;
                                 break;
                             }
 
                         case > 1.0d:
                             {
-                                GT1 += 1;
-                                GT0 += 1;
+                                GT1++;
+                                GT0++;
                                 break;
                             }
 
                         default:
                             {
-                                GT0 += 1;
+                                GT0++;
                                 break;
                             }
                     }

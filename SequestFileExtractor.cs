@@ -354,7 +354,7 @@ namespace SequestResultsProcessor
                         if (outFileFound)
                         {
                             // Increment the currentOutFile counter
-                            currentOutFileCount += 1;
+                            currentOutFileCount++;
                             if (currentOutFileCount % 1000 == 0)
                             {
                                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, " ... " + currentOutFileCount.ToString().PadLeft(5) + " spectra processed");
@@ -444,10 +444,10 @@ namespace SequestResultsProcessor
                     var s = tr.ReadLine();
                     while (s != null)
                     {
-                        lineCount += 1L;
+                        lineCount++;
                         currentPosition += s.Length + lineEndCharCount;
                         if (r.IsMatch(s))
-                            outFileCount += 1;
+                            outFileCount++;
                         s = tr.ReadLine();
                         if (lineCount % 500L == 0L)
                         {

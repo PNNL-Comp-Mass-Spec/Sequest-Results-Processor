@@ -73,7 +73,7 @@ namespace SequestResultsProcessor.Containers
         {
             m_MultiProteinEntries ??= new SortedList<int, string>();
 
-            m_MultiProteinID += 1;
+            m_MultiProteinID++;
             m_MultiProteinEntries.Add(m_MultiProteinID, refName);
         }
 

@@ -207,7 +207,7 @@ namespace SequestResultsProcessor
                 {
                     while (tmpObsMass < theoreticalMass - massTol && obsCount < maxObsIndex)
                     {
-                        obsCount += 1;
+                        obsCount++;
                         tmpObsMass = peptideRecord.GetMass(obsCount);
                     }
 
@@ -375,7 +375,7 @@ namespace SequestResultsProcessor
                                 int.Parse(m.Groups["StartScan"].Value),
                                 int.Parse(m.Groups["EndScan"].Value),
                                 int.Parse(m.Groups["ChargeState"].Value), dtaStartPos, chargeExtra);
-                            dtaCount += 1;
+                            dtaCount++;
                             if (dtaCount % 3000 == 0)
                             {
                                 OnDTAScanUpdate(currentPosition / (double)fileLength);

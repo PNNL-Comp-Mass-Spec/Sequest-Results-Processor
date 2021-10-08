@@ -55,12 +55,6 @@ namespace SequestResultsProcessor
 
             return nll;
         }
-
-        public NeutralLossList GetFillerNeutralLosses()
-        {
-            var nll = new NeutralLossList();
-            return nll;
-        }
     }
 
     internal class NeutralLossList

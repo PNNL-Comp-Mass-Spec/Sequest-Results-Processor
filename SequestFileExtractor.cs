@@ -193,7 +193,7 @@ namespace SequestResultsProcessor
 
             private void UpdateProgressCountingOuts(long currentFilePos, long totalFileSize)
             {
-                var statusString = "Counting .out Files... ";
+                const string statusString = "Counting .out Files... ";
                 ProgressReport?.Invoke(statusString, currentFilePos, totalFileSize);
             }
 

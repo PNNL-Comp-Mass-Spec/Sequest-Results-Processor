@@ -21,9 +21,9 @@ namespace SequestResultsProcessor
         {
             var nll = new NeutralLossList();
 
-            var tmpNeuLoss1 = 0.0;
-            var tmpNeuLoss2 = 0.0;
-            var tmpNeuLoss3 = 0.0;
+            const double tmpNeuLoss1 = 0.0;
+            const double tmpNeuLoss2 = 0.0;
+            const double tmpNeuLoss3 = 0.0;
 
             var parentMZ = scan.ParentMZ;
 

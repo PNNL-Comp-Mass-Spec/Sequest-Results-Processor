@@ -154,7 +154,8 @@ namespace SequestResultsProcessor
             {
                 return 10d;
             }
-            var noModsInSequence = true;
+
+            const bool noModsInSequence = true;
 
             // Get values for +1 charge state
             var theoreticalFragments = new TheoreticalFragmentInfo(peptideSequence, 1);

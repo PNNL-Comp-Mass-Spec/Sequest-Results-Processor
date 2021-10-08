@@ -688,15 +688,24 @@ namespace SequestResultsProcessor
             private string m_LogFileName;
             private string m_RootFileName;
 
+            /// <summary>
+            /// Parameterless constructor
+            /// </summary>
+            // ReSharper disable once UnusedMember.Global
+            public StartupArguments()
+            {
+            }
 
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            /// <param name="SourceDirectory"></param>
+            /// <param name="RootFileName"></param>
+            // ReSharper disable once UnusedMember.Global
             public StartupArguments(string SourceDirectory, string RootFileName)
             {
                 m_SourceDirectory = SourceDirectory;
                 m_RootFileName = RootFileName;
-            }
-
-            public StartupArguments()
-            {
             }
 
             private bool CheckFileExists(string filePath)

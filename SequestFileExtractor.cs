@@ -11,7 +11,6 @@ using SequestResultsProcessor.Containers;
 
 namespace SequestResultsProcessor
 {
-
     // This class extracts peptide hit information from Sequest .out files and stores
     // it in synopsis (rootname_syn.txt) files that contain all the observed hits
     // (subject to an XCorr cutoff value), and first hits (rootname_fht.txt) files
@@ -31,7 +30,6 @@ namespace SequestResultsProcessor
     // ReSharper disable once CheckNamespace
     public class SequestFileExtractor
     {
-
         // Const DEBUG_FLAG As Boolean = True
 
         private ConcatenatedOutFileProcessor _m_parser;
@@ -93,7 +91,7 @@ namespace SequestResultsProcessor
             // Sequest hit on a scale of 0 to 1. The number is created by running
             // Sequest Utilities -> Spectra (DTA) Tools -> Final Score.
             // Numbers above 0.7 are considered "good"
-            // The multiorf column is only present when a peptide is in multiple proteins; thus hte use of * in <?<multiorfblock>...)*
+            // The multiorf column is only present when a peptide is in multiple proteins; thus the use of * in <?<multiorfblock>...)*
             if (mHitLineMatcher is null)
             {
                 mHitLineMatcher = new Regex(@"^\s*(?<hitnum>\d+)\.\s+" + @"(?<rankxc>\d+)\s*\/\s*" + @"(?<ranksp>\d+)\s+" + @"(?<idblock>(?<id>\d+)\s+)*" + @"(?<mhmass>\d+\.\d+)\s+" + @"(?<delcn>\d+\.\d+)\s+" + @"(?<xcorr>\d+\.\d+)\s+" + @"(?<sp>\d+\.\d+)\s+" + @"(?<sfblock>(?<sf>[0-9.]+)\s+)*" + @"(?<obsions>\d+)\s*\/\s*" + @"(?<theoions>\d+)\s+" + @"(?<reference>\S+)\s+" + @"(?<multiorfblock>\+(?<multiorf>\d+)\s+)*" + @"(?<sequence>\S+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -270,9 +268,9 @@ namespace SequestResultsProcessor
             }
 
             /// <summary>
-        /// Open a _out.txt file and extract the peptide info
-        /// </summary>
-        /// <remarks></remarks>
+            /// Open a _out.txt file and extract the peptide info
+            /// </summary>
+            /// <remarks></remarks>
             public void ProcessInputFile()
             {
                 bool makeIRRFile = false;
@@ -423,7 +421,6 @@ namespace SequestResultsProcessor
 
             private string GetScoreSummary(Dictionary<int, int> peptideCountsByXCorr, string statsDescription)
             {
-
                 // "Scores (all peptides)     -> "
                 // "Scores (first hits only)  -> "
 
@@ -583,7 +580,7 @@ namespace SequestResultsProcessor
                         currentPeptide.ObsIons = int.Parse(dataLineMatch.Groups["obsions"].Value);
                         currentPeptide.PossIons = int.Parse(dataLineMatch.Groups["theoions"].Value);
                         currentPeptide.XcRatio = 1d;
-                        
+
                         currentPeptide.StartScanNum = currentStartScan;
                         currentPeptide.EndScanNum = currentEndScan;
                         currentPeptide.ScanCount = currentEndScan - currentStartScan + 1;

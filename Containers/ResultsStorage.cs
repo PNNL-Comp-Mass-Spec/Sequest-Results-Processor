@@ -19,11 +19,10 @@ using System.Text.RegularExpressions;
 
 namespace SequestResultsProcessor.Containers
 {
-
     /// <summary>
-/// Tracks peptide results from several .Out files
-/// </summary>
-/// <remarks></remarks>
+    /// Tracks peptide results from several .Out files
+    /// </summary>
+    /// <remarks></remarks>
     internal class ResultsStorage
     {
         public enum OutputTypeList
@@ -168,12 +167,12 @@ namespace SequestResultsProcessor.Containers
         }
 
         /// <summary>
-    /// Sorts the peptides and writes them to disk
-    /// </summary>
-    /// <param name="outputFilePath"></param>
-    /// <param name="outputRecordList"></param>
-    /// <param name="finalOutputPath"></param>
-    /// <returns>Dictionary where keys are XCorr threshold and values are the number of peptides with an XCorr over the threshold</returns>
+        /// Sorts the peptides and writes them to disk
+        /// </summary>
+        /// <param name="outputFilePath"></param>
+        /// <param name="outputRecordList"></param>
+        /// <param name="finalOutputPath"></param>
+        /// <returns>Dictionary where keys are XCorr threshold and values are the number of peptides with an XCorr over the threshold</returns>
         public Dictionary<int, int> SortPeptides(string outputFilePath, List<OutputRecordIndex> outputRecordList, string finalOutputPath)
         {
             string proteinOutputPath = MakeProteinXrefOutputPath(outputFilePath);
@@ -431,11 +430,10 @@ namespace SequestResultsProcessor.Containers
             }
 
             /// <summary>
-        /// Keys in this dictionary are XCorr threshold; values are the number of peptides with an XCorr over the threshold
-        /// </summary>
-        /// <returns></returns>
+            /// Keys in this dictionary are XCorr threshold; values are the number of peptides with an XCorr over the threshold
+            /// </summary>
+            /// <returns></returns>
             public Dictionary<int, int> StatsTable { get; private set; }
-
         }
     }
 }

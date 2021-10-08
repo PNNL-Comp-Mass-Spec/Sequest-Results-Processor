@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 
 namespace SequestResultsProcessor.Containers
 {
-
     // This class stores information about theoretical peptide fragments and is used by
     // clsDiscriminantCalc
     //

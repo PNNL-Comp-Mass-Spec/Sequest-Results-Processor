@@ -9,7 +9,6 @@ using SequestResultsProcessor.Containers;
 
 namespace SequestResultsProcessor
 {
-
     // This class calculates the M-Score component of the discriminant score that was
     // originally designed to support the AMT Tag approach to proteomics studies
     //

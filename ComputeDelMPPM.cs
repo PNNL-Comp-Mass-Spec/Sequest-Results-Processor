@@ -3,12 +3,10 @@ namespace SequestResultsProcessor
 {
     public class ComputeDelMPPM
     {
-
         #region Constants
         public const double MASS_C13 = 1.00335483d;
         public const double MASS_PROTON = 1.00727649d;               // Note that this is the mass of hydrogen minus the mass of one electron
         #endregion
-
 
         public double ComputeDelMCorrected(double dblPrecursorMassMH, double dblPeptideTheoreticalMH)
         {

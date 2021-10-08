@@ -4,7 +4,6 @@ using System.Text;
 
 namespace SequestResultsProcessor.Containers
 {
-
     // This class stores information on individual peptide hits and is used in conjunction
     // with the SequestFileExtractor
     //
@@ -269,7 +268,6 @@ namespace SequestResultsProcessor.Containers
             exportList.Add(0, sbFront.ToString() + Reference + delim.ToString() + sbRear.ToString());
             if (ExpandMultiProteinEntries && m_MultiProteinEntries is object)
             {
-
                 // Keys in m_MultiProteinEntries are MultiProteinID #, values are protein names
                 foreach (KeyValuePair<int, string> objEntry in m_MultiProteinEntries)
                 {

@@ -31,7 +31,6 @@ namespace SequestResultsProcessor
 
         public int CountTrypticEnds(string peptideSeq)
         {
-
             // Fully Tryptic
             if (m_reFullyTryptic.IsMatch(peptideSeq) && !m_reFullyTrypticProlineCheck.IsMatch(peptideSeq))
             {

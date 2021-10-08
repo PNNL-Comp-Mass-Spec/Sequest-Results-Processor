@@ -15,11 +15,10 @@ using System.Collections.Generic;
 
 namespace SequestResultsProcessor.Containers
 {
-
     /// <summary>
-/// Tracks the peptides listed in a single .Out file
-/// </summary>
-/// <remarks></remarks>
+    /// Tracks the peptides listed in a single .Out file
+    /// </summary>
+    /// <remarks></remarks>
     internal class ResultsFileEntry
     {
         private double m_HeaderMass;
@@ -90,8 +89,7 @@ namespace SequestResultsProcessor.Containers
             m_PeptideHits.Add(newIndex, peptideResults);
         }
 
-
-        #region  Calculate Differences
+        #region Calculate Differences
 
         private double CalculateDelCN2(double XCorrCurrent, double XCorrNextLowest)
         {
@@ -118,7 +116,6 @@ namespace SequestResultsProcessor.Containers
         }
 
         #endregion
-
 
         #region  Properties
 

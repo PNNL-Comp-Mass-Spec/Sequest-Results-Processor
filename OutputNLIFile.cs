@@ -12,6 +12,7 @@
 // http://www.apache.org/licenses/LICENSE-2.0
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 namespace SequestResultsProcessor
@@ -72,7 +73,7 @@ namespace SequestResultsProcessor
             public NLIEntry(int ScanNumber, NeutralLossList NeutralLosses)
             {
                 this.ScanNumber = ScanNumber;
-                NeutralLossTxt = NeutralLosses.NL1Intensity.ToString() + '\t' + NeutralLosses.NL2Intensity.ToString() + '\t' + NeutralLosses.NL3Intensity.ToString() + '\t';
+                NeutralLossTxt = NeutralLosses.NL1Intensity.ToString(CultureInfo.InvariantCulture) + '\t' + NeutralLosses.NL2Intensity + '\t' + NeutralLosses.NL3Intensity + '\t';
             }
 
             public int ScanNumber;

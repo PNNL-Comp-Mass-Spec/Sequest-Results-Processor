@@ -287,7 +287,7 @@ namespace SequestResultsProcessor
                 }
 
                 var fi = new FileInfo(m_SourceFileFullPath);
-                var removeDupMultiProtRefs = m_StartupArguments.RemoveDuplicatedMultiProtRefs;
+                var removeDupMultiProteinRefs = m_StartupArguments.RemoveDuplicatedMultiProteinRefs;
                 var tmpFHTPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT.txt");
                 var tmpSynPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn.txt");
                 var tmpFHTProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT_Prot.txt");
@@ -367,7 +367,7 @@ namespace SequestResultsProcessor
                                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, " ... " + currentOutFileCount.ToString().PadLeft(5) + " spectra processed");
                             }
 
-                            ReadAndStoreOutFileResults(srInFile, matchingLine, r_FileDelimiterMatcher, makeIRRFile, removeDupMultiProtRefs);
+                            ReadAndStoreOutFileResults(srInFile, matchingLine, r_FileDelimiterMatcher, makeIRRFile, removeDupMultiProteinRefs);
                         }
 
                         if (currentOutFileCount % RESULTS_DUMPING_INTERVAL == 0 | currentOutFileCount >= totalOutFileCount)
@@ -476,7 +476,7 @@ namespace SequestResultsProcessor
                 return default;
             }
 
-            private void ReadAndStoreOutFileResults(StreamReader srInFile, string fileHeaderLine, Regex fileDelimiterMatcher, bool makeIRRFile, bool removeDupMultiProtRefs)
+            private void ReadAndStoreOutFileResults(StreamReader srInFile, string fileHeaderLine, Regex fileDelimiterMatcher, bool makeIRRFile, bool removeDupMultiProteinRefs)
             {
                 int currentStartScan;
                 int currentEndScan;
@@ -498,8 +498,7 @@ namespace SequestResultsProcessor
                     currentCS = 0;
                 }
 
-                var tmpMultiProtRefs = new List<string>();
-                var matchingLine = "";
+                var tmpMultiProteinRefs = new List<string>();
 
                 // Wait until we see the measured mass show up in the header
                 var blnFoundHeaderMass = AdvanceReaderUntilMatch(srInFile, mHeaderMassMatcher, "", out matchingLine);
@@ -600,9 +599,9 @@ namespace SequestResultsProcessor
                                 var extraProteinLineMatch = mExtraProteinLineMatcher.Match(dataLine);
                                 if (extraProteinLineMatch.Success && !mTopProteinsMatcher.IsMatch(dataLine))
                                 {
-                                    var tmpMultiProtRef = extraProteinLineMatch.Groups["reference"].Value;
+                                    var tmpMultiProteinRef = extraProteinLineMatch.Groups["reference"].Value;
 
-                                    if (tmpMultiProtRefs.Contains(tmpMultiProtRef) && removeDupMultiProtRefs && !string.Equals(tmpMultiProtRef, currentPeptide.Reference, StringComparison.OrdinalIgnoreCase))
+                                    if (tmpMultiProteinRefs.Contains(tmpMultiProteinRef) && removeDupMultiProteinRefs && !string.Equals(tmpMultiProteinRef, currentPeptide.Reference, StringComparison.OrdinalIgnoreCase))
 
                                     {
                                     }
@@ -610,8 +609,8 @@ namespace SequestResultsProcessor
                                     else
                                     {
                                         // Store this protein name
-                                        currentPeptide.AddMultiProteinRef(tmpMultiProtRef);
-                                        tmpMultiProtRefs.Add(tmpMultiProtRef);
+                                        currentPeptide.AddMultiProteinRef(tmpMultiProteinRef);
+                                        tmpMultiProteinRefs.Add(tmpMultiProteinRef);
                                     }
 
                                     if (!srInFile.EndOfStream)
@@ -632,11 +631,11 @@ namespace SequestResultsProcessor
                             while (true);
                         }
 
-                        currentPeptide.MultiProteinCount = tmpMultiProtRefs.Count;
+                        currentPeptide.MultiProteinCount = tmpMultiProteinRefs.Count;
 
                         // Store the results for this peptide
                         m_Results.AddPeptideResults(currentHeaderMass, currentPeptide);
-                        tmpMultiProtRefs.Clear();
+                        tmpMultiProteinRefs.Clear();
                     }
                 }
             }
@@ -831,7 +830,7 @@ namespace SequestResultsProcessor
             public bool ExpandMultiORF { get; set; } = true;
             public double FHTXCorrThreshold { get; set; } = 0.0d;
             public double SynXCorrThreshold { get; set; } = 1.5d;
-            public bool RemoveDuplicatedMultiProtRefs { get; set; }
+            public bool RemoveDuplicatedMultiProteinRefs { get; set; }
 
             public string InputFileFullPath => Path.Combine(DestinationDirectory, InputFileName);
 

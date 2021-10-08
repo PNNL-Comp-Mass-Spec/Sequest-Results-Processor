@@ -83,35 +83,48 @@ namespace SequestResultsProcessor
             // The ID column is not always present; thus the use of * in (?<idblock>...)*
             // The sf column is present in Bioworks 3.3.x, which has SEQUEST v.28 (rev. 13)
             // Sf stands for "Final Score" and is a number meant to reflect the strength of the
-            // Sequest hit on a scale of 0 to 1. The number is created by running
-            // Sequest Utilities -> Spectra (DTA) Tools -> Final Score.
+            // SEQUEST hit on a scale of 0 to 1. The number is created by running
+            // SEQUEST Utilities -> Spectra (DTA) Tools -> Final Score.
             // Numbers above 0.7 are considered "good"
             // The multiorf column is only present when a peptide is in multiple proteins; thus the use of * in <?<multiorfblock>...)*
-            if (mHitLineMatcher is null)
-            {
-                mHitLineMatcher = new Regex(@"^\s*(?<hitnum>\d+)\.\s+" + @"(?<rankxc>\d+)\s*\/\s*" + @"(?<ranksp>\d+)\s+" + @"(?<idblock>(?<id>\d+)\s+)*" + @"(?<mhmass>\d+\.\d+)\s+" + @"(?<delcn>\d+\.\d+)\s+" + @"(?<xcorr>\d+\.\d+)\s+" + @"(?<sp>\d+\.\d+)\s+" + @"(?<sfblock>(?<sf>[0-9.]+)\s+)*" + @"(?<obsions>\d+)\s*\/\s*" + @"(?<theoions>\d+)\s+" + @"(?<reference>\S+)\s+" + @"(?<multiorfblock>\+(?<multiorf>\d+)\s+)*" + @"(?<sequence>\S+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            }
+            mHitLineMatcher ??= new Regex(
+                @"^\s*(?<hitnum>\d+)\.\s+" +
+                @"(?<rankxc>\d+)\s*\/\s*" + @"(?<ranksp>\d+)\s+" +
+                @"(?<idblock>(?<id>\d+)\s+)*" +
+                @"(?<mhmass>\d+\.\d+)\s+" +
+                @"(?<delcn>\d+\.\d+)\s+" +
+                @"(?<xcorr>\d+\.\d+)\s+" +
+                @"(?<sp>\d+\.\d+)\s+" +
+                @"(?<sfblock>(?<sf>[0-9.]+)\s+)*" +
+                @"(?<obsions>\d+)\s*\/\s*" +
+                @"(?<theoions>\d+)\s+" +
+                @"(?<reference>\S+)\s+" +
+                @"(?<multiorfblock>\+(?<multiorf>\d+)\s+)*" +
+                @"(?<sequence>\S+)",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
             // The following is used to match lines that do not have any text in the Reference (protein name) column
-            if (mHitLineMatcherNoReference is null)
-            {
-                mHitLineMatcherNoReference = new Regex(@"^\s*(?<hitnum>\d+)\.\s+" + @"(?<rankxc>\d+)\s*\/\s*" + @"(?<ranksp>\d+)\s+" + @"(?<idblock>(?<id>\d+)\s+)*" + @"(?<mhmass>\d+\.\d+)\s+" + @"(?<delcn>\d+\.\d+)\s+" + @"(?<xcorr>\d+\.\d+)\s+" + @"(?<sp>\d+\.\d+)\s+" + @"(?<sfblock>(?<sf>[0-9.]+)\s+)*" + @"(?<obsions>\d+)\s*\/\s*" + @"(?<theoions>\d+)\s+" + @"(?<sequence>\S+)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            }
+            mHitLineMatcherNoReference ??= new Regex(
+                @"^\s*(?<hitnum>\d+)\.\s+" +
+                @"(?<rankxc>\d+)\s*\/\s*" +
+                @"(?<ranksp>\d+)\s+" +
+                @"(?<idblock>(?<id>\d+)\s+)*" +
+                @"(?<mhmass>\d+\.\d+)\s+" +
+                @"(?<delcn>\d+\.\d+)\s+" +
+                @"(?<xcorr>\d+\.\d+)\s+" +
+                @"(?<sp>\d+\.\d+)\s+" +
+                @"(?<sfblock>(?<sf>[0-9.]+)\s+)*" +
+                @"(?<obsions>\d+)\s*\/\s*" +
+                @"(?<theoions>\d+)\s+" +
+                @"(?<sequence>\S+)",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-            if (mTopProteinsMatcher is null)
-            {
-                mTopProteinsMatcher = new Regex(@"^\s+\d+\.\s+\d*\s+(?<reference>\S+)\s+(?<description>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
-            }
+            mTopProteinsMatcher ??= new Regex(@"^\s+\d+\.\s+\d*\s+(?<reference>\S+)\s+(?<description>.+)$",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-            if (mHeaderMassMatcher is null)
-            {
-                mHeaderMassMatcher = new Regex(@"mass\s+=\s+(?<HeaderMass>\d+\.\d+)", RegexOptions.Compiled);
-            }
+            mHeaderMassMatcher ??= new Regex(@"mass\s+=\s+(?<HeaderMass>\d+\.\d+)", RegexOptions.Compiled);
 
-            if (mDataBlockDelimiterMatcher is null)
-            {
-                mDataBlockDelimiterMatcher = new Regex(@"^\s+---\s+-{3,}", RegexOptions.Compiled);
-            }
+            mDataBlockDelimiterMatcher ??= new Regex(@"^\s+---\s+-{3,}", RegexOptions.Compiled);
         }
 
         public void ProcessInputFile()

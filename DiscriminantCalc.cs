@@ -27,7 +27,7 @@ namespace SequestResultsProcessor
     {
         private DTAFileInformation _m_dtaFileInfo;
 
-        protected DTAFileInformation m_dtaFileInfo
+        private DTAFileInformation m_dtaFileInfo
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get => _m_dtaFileInfo;
@@ -48,26 +48,26 @@ namespace SequestResultsProcessor
             }
         }
 
-        protected PeptideIntensities m_CachedScanInfo;
-        protected int m_CachedScanNum;
-        protected string m_CachedScanKey;
-        protected int m_CachedCS;
-        protected OutputNLIFile m_NLIDumper;
-        protected double m_MassTol;
-        protected string m_dtaFilepath;
-        protected string m_Version;
-        protected bool m_NoDTAs;
+        private PeptideIntensities m_CachedScanInfo;
+        private int m_CachedScanNum;
+        private string m_CachedScanKey;
+        private int m_CachedCS;
+        private OutputNLIFile m_NLIDumper;
+        private double m_MassTol;
+        private string m_dtaFilepath;
+        private string m_Version;
+        private bool m_NoDTAs;
 
         public event ProgressUpdateEventHandler ProgressUpdate;
 
         public delegate void ProgressUpdateEventHandler(string TaskDescription, double fractionDone);
 
-        protected void OnProgressUpdate(string taskDescription, double fractionDone)
+        private void OnProgressUpdate(string taskDescription, double fractionDone)
         {
             ProgressUpdate?.Invoke(taskDescription, fractionDone);
         }
 
-        protected void OffsetLoadingProgHandler(double fractionDone)
+        private void OffsetLoadingProgHandler(double fractionDone)
         {
             OnProgressUpdate("Loading .dta File Locations (" + (fractionDone * 100d).ToString("0.0") + "% Completed)", fractionDone);
         }
@@ -93,7 +93,7 @@ namespace SequestResultsProcessor
             m_Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         }
 
-        protected void ConfigureDiscriminantCalc()
+        private void ConfigureDiscriminantCalc()
         {
             if (!m_NoDTAs)
             {
@@ -101,12 +101,12 @@ namespace SequestResultsProcessor
             }
         }
 
-        protected string GetVersionString()
+        private string GetVersionString()
         {
             return m_Version;
         }
 
-        protected void CloseOut()
+        private void CloseOut()
         {
             if (m_dtaFileInfo is object)
             {
@@ -133,7 +133,7 @@ namespace SequestResultsProcessor
         // using fragment intensities from
         // concatenated dta file
         //
-        protected double GetPeptideMScore(string PeptideSeq, int StartScanNumber, int EndScanNumber, int ChargeState)
+        private double GetPeptideMScore(string PeptideSeq, int StartScanNumber, int EndScanNumber, int ChargeState)
         {
             string ScanKey = StartScanNumber.ToString() + "." + EndScanNumber.ToString();
             if (m_NoDTAs)
@@ -168,7 +168,7 @@ namespace SequestResultsProcessor
             return mscore;
         }
 
-        protected double CalculateMScore(string peptideSequence, int peptideChargeState, PeptideIntensities scanIntensities)
+        private double CalculateMScore(string peptideSequence, int peptideChargeState, PeptideIntensities scanIntensities)
         {
             var match = default(double);
             double mScore;
@@ -225,7 +225,7 @@ namespace SequestResultsProcessor
             return mScore;
         }
 
-        protected virtual double HashScanner(PeptideIntensities peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoFrags, double massTol, int CSToCheck)
+        private double HashScanner(PeptideIntensities peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoFrags, double massTol, int CSToCheck)
         {
             double tmpObsMass;
             int maxObsRecord = peptideRecord.FragmentList.Count;
@@ -278,11 +278,11 @@ namespace SequestResultsProcessor
             return match;
         }
 
-        protected class DTAFileInformation
+        private class DTAFileInformation
         {
             private dtaFileOffsets _m_Offsets;
 
-            protected dtaFileOffsets m_Offsets
+            private dtaFileOffsets m_Offsets
             {
                 [MethodImpl(MethodImplOptions.Synchronized)]
                 get => _m_Offsets;
@@ -303,9 +303,9 @@ namespace SequestResultsProcessor
                 }
             }
 
-            protected PeptideIntensities m_DTAFileIntensities;
-            protected FileStream m_dtaStream;
-            protected string m_dtaFilePath;
+            private PeptideIntensities m_DTAFileIntensities;
+            private FileStream m_dtaStream;
+            private string m_dtaFilePath;
 
             public event OffsetProgressEventHandler OffsetProgress;
 
@@ -332,7 +332,7 @@ namespace SequestResultsProcessor
 
             public PeptideIntensities DTAScanInfo => m_DTAFileIntensities;
 
-            protected void OffsetLoadingProgressHandler(double fractionDone)
+            private void OffsetLoadingProgressHandler(double fractionDone)
             {
                 OffsetProgress?.Invoke(fractionDone);
             }
@@ -357,10 +357,10 @@ namespace SequestResultsProcessor
                 }
             }
 
-            protected class dtaFileOffsets
+            private class dtaFileOffsets
             {
                 private Dictionary<string, long> mOffsets = new Dictionary<string, long>();
-                protected string m_FilePath;
+                private string m_FilePath;
 
                 public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {
@@ -444,7 +444,7 @@ namespace SequestResultsProcessor
 
                 public delegate void dtaScanProgressEventHandler(double fractionDone);
 
-                protected void OnDTAScanUpdate(double fractionDone)
+                private void OnDTAScanUpdate(double fractionDone)
                 {
                     dtaScanProgress?.Invoke(fractionDone);
                 }
@@ -459,12 +459,12 @@ namespace SequestResultsProcessor
         internal class PeptideIntensities : FragmentInfo
         {
             private static FileStream m_FileStream;
-            protected NeutralLossList m_NeutralLoss;
-            protected double m_BFNLT;
-            protected int m_IsPoorSpec;
-            protected double m_ParentMH;
-            protected int m_ScanNum;
-            protected int m_ParentCS;
+            private NeutralLossList m_NeutralLoss;
+            private double m_BFNLT;
+            private int m_IsPoorSpec;
+            private double m_ParentMH;
+            private int m_ScanNum;
+            private int m_ParentCS;
             private static CalcNeutralLosses NLCalc;
 
             public PeptideIntensities(FileStream dtaFileStream) : base()

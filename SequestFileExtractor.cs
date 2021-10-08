@@ -147,13 +147,13 @@ namespace SequestResultsProcessor
 
         public delegate void EndTaskEventHandler();
 
-        protected void UpdateProgress(string currentTask, double fractionDone)
+        private void UpdateProgress(string currentTask, double fractionDone)
         {
             StatusReport?.Invoke(currentTask);
             ProgressReport?.Invoke(fractionDone);
         }
 
-        protected void UpdateProgress(string currentTask, long currentFileCount, long totalFileCount)
+        private void UpdateProgress(string currentTask, long currentFileCount, long totalFileCount)
         {
             clsUserProgressState state;
             double fractionDone;
@@ -177,7 +177,7 @@ namespace SequestResultsProcessor
             }
         }
 
-        protected void TaskEndHandler()
+        private void TaskEndHandler()
         {
             EndTask?.Invoke();
         }
@@ -190,7 +190,7 @@ namespace SequestResultsProcessor
             }
         }
 
-        protected void ImportProgressHandler(string currentTask, long currentPosition, long totalSize)
+        private void ImportProgressHandler(string currentTask, long currentPosition, long totalSize)
         {
             UpdateProgress(currentTask, currentPosition, totalSize);
         }

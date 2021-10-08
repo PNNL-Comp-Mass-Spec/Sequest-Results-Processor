@@ -20,8 +20,10 @@ namespace SequestResultsProcessor.Containers
     // ReSharper disable once InconsistentNaming
     public class FragmentInfo
     {
-        protected List<Fragment> m_FragmentList;
-        protected double m_MaxIntensity;
+        // Ignore Spelling: Auberry
+
+        private readonly List<Fragment> m_FragmentList;
+        private double m_MaxIntensity;
 
         public struct Fragment
         {
@@ -81,7 +83,7 @@ namespace SequestResultsProcessor.Containers
             return f.Intensity / m_MaxIntensity;
         }
 
-        protected virtual void NormalizeIntensities()
+        protected void NormalizeIntensities()
         {
             m_MaxIntensity = 0d;
             foreach (var f in m_FragmentList)

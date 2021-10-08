@@ -23,10 +23,10 @@ namespace SequestResultsProcessor.Containers
         private string m_Reference;
         private SortedList<int, string> m_MultiProteinEntries;
         private int m_MultiProteinID = 0;
-        protected static CleavageStateCalculator m_CleavageStateCalculator = new CleavageStateCalculator();
+        private static CleavageStateCalculator m_CleavageStateCalculator = new CleavageStateCalculator();
         private static DiscriminantCalc _s_DiscriminantCalc;
 
-        protected static DiscriminantCalc s_DiscriminantCalc
+        private static DiscriminantCalc s_DiscriminantCalc
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get => _s_DiscriminantCalc;

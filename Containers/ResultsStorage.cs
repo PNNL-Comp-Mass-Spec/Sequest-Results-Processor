@@ -33,8 +33,8 @@ namespace SequestResultsProcessor.Containers
         }
 
         // Keys in this dictionary are StartScan.EndScan.Charge
-        protected Dictionary<string, ResultsFileEntry> m_Results;
-        protected ResultsFileEntry m_CachedResultsFileEntry;
+        private Dictionary<string, ResultsFileEntry> m_Results;
+        private ResultsFileEntry m_CachedResultsFileEntry;
         private const string HEADER = "HitNum\tScanNum\tScanCount\tChargeState\tMH\tXCorr\tDelCn\tSp\tReference\tMultiProtein\tPeptide\tDelCn2\tRankSp\tRankXc\tDelM\tXcRatio\tIons_Observed\tIons_Expected\tNumTrypticEnds\tDelM_PPM";
 
         public int Count

@@ -32,7 +32,7 @@ namespace SequestResultsProcessor
             m_DataList = new List<NLIEntry>();
         }
 
-        protected void WriteEntries(List<NLIEntry> dataList)
+        private void WriteEntries(List<NLIEntry> dataList)
         {
             dataList.Sort(new NLIIndexComparer());
             var fi = new FileInfo(OutputFilePath);

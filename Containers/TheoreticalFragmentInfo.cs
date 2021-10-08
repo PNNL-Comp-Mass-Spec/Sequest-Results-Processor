@@ -20,9 +20,9 @@ namespace SequestResultsProcessor.Containers
     internal class TheoreticalFragmentInfo
     {
         private static Dictionary<string, ResidueInfo> s_Intensities = new Dictionary<string, ResidueInfo>();
-        protected List<Fragment> m_TheoYIons;
-        protected List<Fragment> m_TheoBIons;
-        protected string m_Sequence;
+        private List<Fragment> m_TheoYIons;
+        private List<Fragment> m_TheoBIons;
+        private string m_Sequence;
 
         public struct Fragment
         {
@@ -82,7 +82,7 @@ namespace SequestResultsProcessor.Containers
             // z
         }
 
-        protected const string KNOWN_RESIDUES = "ACDEFGHIKLMNPQRSTVWY";
+        private const string KNOWN_RESIDUES = "ACDEFGHIKLMNPQRSTVWY";
 
         public List<Fragment> YIons => m_TheoYIons;
 
@@ -99,9 +99,8 @@ namespace SequestResultsProcessor.Containers
             CalculateTheoreticalIonHashes(peptideSequence, chargeState);
         }
 
-        protected void SetupResidueHashes()
+        private void SetupResidueHashes()
         {
-            string residue;
             char[] peptideResidues;
             double[] peptideLeft;
             double[] peptideRight;
@@ -127,7 +126,7 @@ namespace SequestResultsProcessor.Containers
             }
         }
 
-        protected void CalculateTheoreticalIonHashes(string dirtySeq, int chargeState)
+        private void CalculateTheoreticalIonHashes(string dirtySeq, int chargeState)
         {
             string cleanSeq = GetCleanSequence(dirtySeq);
             int peptideLength = cleanSeq.Length;
@@ -165,7 +164,7 @@ namespace SequestResultsProcessor.Containers
                 m_TheoYIons.RemoveAt(m_TheoYIons.Count - 1);
         }
 
-        protected string GetCleanSequence(string rawPeptideSeq)
+        private string GetCleanSequence(string rawPeptideSeq)
         {
             var r = new Regex(@"^*.\.(?<cleanseq>\S+)\..*$");
             var m = r.Match(rawPeptideSeq);
@@ -174,7 +173,7 @@ namespace SequestResultsProcessor.Containers
             return cleanSeq.ToUpper();
         }
 
-        protected double GetMass(string sequence, int cs)
+        private double GetMass(string sequence, int cs)
         {
             var seq = sequence.ToCharArray();
             ResidueInfo residue;
@@ -192,7 +191,7 @@ namespace SequestResultsProcessor.Containers
             return tmpMZ;
         }
 
-        protected double GetIntensity(string LeftResidue, string RightResidue)
+        private double GetIntensity(string LeftResidue, string RightResidue)
         {
             ResidueInfo resLeft;
             ResidueInfo resRight;

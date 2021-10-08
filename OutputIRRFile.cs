@@ -56,7 +56,7 @@ namespace SequestResultsProcessor
             }
         }
 
-        protected void WriteEntries(List<IRREntry> dataList)
+        private void WriteEntries(List<IRREntry> dataList)
         {
             dataList.Sort(new RecordIndexComparer());
             var fi = new FileInfo(OutputFilePath);

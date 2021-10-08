@@ -657,10 +657,10 @@ namespace SequestResultsProcessor
             for (var counter = 1; counter <= fi.Length; counter++)
             {
                 var testCode = tr.Read();
-                if (testCode == 10 || testCode == 13)
+                if (testCode is 10 or 13)
                 {
                     var testCode2 = tr.Read();
-                    if (testCode2 == 10 || testCode2 == 13)
+                    if (testCode2 is 10 or 13)
                     {
                         endCount = 2;
                         break;

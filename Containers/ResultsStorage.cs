@@ -143,20 +143,16 @@ namespace SequestResultsProcessor.Containers
                             foreach (var proteinLine in proteinExportList.Values)
                             {
                                 xrefWriter.WriteLine(proteinLine);
+                            }
                         }
                     }
                 }
             }
 
-            if (outputWriter is object)
-            {
-                outputWriter.Close();
-            }
 
-            if (xrefWriter is object)
-            {
-                xrefWriter.Close();
-            }
+            outputWriter.Close();
+
+            xrefWriter?.Close();
         }
 
         /// <summary>

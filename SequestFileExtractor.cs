@@ -481,7 +481,6 @@ namespace SequestResultsProcessor
                 int currentStartScan;
                 int currentEndScan;
                 int currentCS;
-                double currentHeaderMass;
 
                 // Extract File Header info
                 var fileHeaderMatch = fileDelimiterMatcher.Match(fileHeaderLine);
@@ -507,7 +506,7 @@ namespace SequestResultsProcessor
 
                 // grab the header mass value
                 var headerMassMatch = mHeaderMassMatcher.Match(matchingLine);
-                currentHeaderMass = double.Parse(headerMassMatch.Groups["HeaderMass"].Value);
+                var currentHeaderMass = double.Parse(headerMassMatch.Groups["HeaderMass"].Value);
 
                 // Wait until we see the dashed line underneath the headings for the data block
 

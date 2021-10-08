@@ -20,30 +20,32 @@ namespace SequestResultsProcessor
         public NeutralLossList CalculateNeutralLosses(DiscriminantCalc.PeptideIntensities scan, double massTolerance)
         {
             var nll = new NeutralLossList();
+
             var tmpNeuLoss1 = default(double);
             var tmpNeuLoss2 = default(double);
             var tmpNeuLoss3 = default(double);
-            double tmpMass;
-            double tmpAbun;
+
             var parentMZ = scan.ParentMZ;
+
             var NLPeak1MZ = parentMZ - 32.7d;
             var NLPeak2MZ = parentMZ - 49.0d;
             var NLPeak3MZ = parentMZ - 98.0d;
+
             foreach (var f in scan.FragmentList)
             {
-                tmpMass = f.MZ;
-                tmpAbun = scan.GetNormalizedIntensity(f);
-                if (Math.Abs(tmpMass - NLPeak1MZ) <= massTolerance & tmpAbun > tmpNeuLoss1)
+                var tmpMass = f.MZ;
+                var tmpAbundance = scan.GetNormalizedIntensity(f);
+                if (Math.Abs(tmpMass - NLPeak1MZ) <= massTolerance & tmpAbundance > tmpNeuLoss1)
                 {
-                    nll.NL1Intensity = Math.Round(tmpAbun, 2);
+                    nll.NL1Intensity = Math.Round(tmpAbundance, 2);
                 }
-                else if (Math.Abs(tmpMass - NLPeak2MZ) <= massTolerance & tmpAbun > tmpNeuLoss2)
+                else if (Math.Abs(tmpMass - NLPeak2MZ) <= massTolerance & tmpAbundance > tmpNeuLoss2)
                 {
-                    nll.NL2Intensity = Math.Round(tmpAbun, 2);
+                    nll.NL2Intensity = Math.Round(tmpAbundance, 2);
                 }
-                else if (Math.Abs(tmpMass - NLPeak3MZ) <= massTolerance & tmpAbun > tmpNeuLoss3)
+                else if (Math.Abs(tmpMass - NLPeak3MZ) <= massTolerance & tmpAbundance > tmpNeuLoss3)
                 {
-                    nll.NL3Intensity = Math.Round(tmpAbun, 2);
+                    nll.NL3Intensity = Math.Round(tmpAbundance, 2);
                 }
                 else if (tmpMass > parentMZ + massTolerance)
                 {

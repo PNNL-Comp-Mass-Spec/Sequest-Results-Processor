@@ -103,7 +103,7 @@ namespace SequestResultsProcessor
         // Calculates MScore for given peptide record
         // using fragment intensities from
         // concatenated dta file
-        //
+        [Obsolete("Unused")]
         private double GetPeptideMScore(string PeptideSeq, int StartScanNumber, int EndScanNumber, int ChargeState)
         {
             var ScanKey = StartScanNumber + "." + EndScanNumber;

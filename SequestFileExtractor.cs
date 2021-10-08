@@ -367,7 +367,7 @@ namespace SequestResultsProcessor
                             ReadAndStoreOutFileResults(srInFile, matchingLine, r_FileDelimiterMatcher, makeIRRFile, removeDupMultiProteinRefs);
                         }
 
-                        if (currentOutFileCount % RESULTS_DUMPING_INTERVAL == 0 | currentOutFileCount >= totalOutFileCount)
+                        if (currentOutFileCount % RESULTS_DUMPING_INTERVAL == 0 || currentOutFileCount >= totalOutFileCount)
                         {
                             DumpCachedResults(tmpFHTPath, tmpSynPath, FHTOutputIndexList, SynOutputIndexList);
                             UpdateProgressExtracting(currentOutFileCount, totalOutFileCount);

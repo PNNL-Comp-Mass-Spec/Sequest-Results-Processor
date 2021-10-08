@@ -35,15 +35,15 @@ namespace SequestResultsProcessor
             {
                 var tmpMass = f.MZ;
                 var tmpAbundance = scan.GetNormalizedIntensity(f);
-                if (Math.Abs(tmpMass - NLPeak1MZ) <= massTolerance & tmpAbundance > tmpNeuLoss1)
+                if (Math.Abs(tmpMass - NLPeak1MZ) <= massTolerance && tmpAbundance > tmpNeuLoss1)
                 {
                     nll.NL1Intensity = Math.Round(tmpAbundance, 2);
                 }
-                else if (Math.Abs(tmpMass - NLPeak2MZ) <= massTolerance & tmpAbundance > tmpNeuLoss2)
+                else if (Math.Abs(tmpMass - NLPeak2MZ) <= massTolerance && tmpAbundance > tmpNeuLoss2)
                 {
                     nll.NL2Intensity = Math.Round(tmpAbundance, 2);
                 }
-                else if (Math.Abs(tmpMass - NLPeak3MZ) <= massTolerance & tmpAbundance > tmpNeuLoss3)
+                else if (Math.Abs(tmpMass - NLPeak3MZ) <= massTolerance && tmpAbundance > tmpNeuLoss3)
                 {
                     nll.NL3Intensity = Math.Round(tmpAbundance, 2);
                 }

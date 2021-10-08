@@ -114,7 +114,7 @@ namespace SequestResultsProcessor.Containers
             {
                 foreach (var peptideHit in resultsFile.PeptideHits.Values)
                 {
-                    if (outputType == OutputTypeList.FHT & peptideHit.HitNum > 1)
+                    if (outputType == OutputTypeList.FHT && peptideHit.HitNum > 1)
                     {
                         break;
                     }

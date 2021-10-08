@@ -134,7 +134,7 @@ namespace SequestResultsProcessor
         //
         private double GetPeptideMScore(string PeptideSeq, int StartScanNumber, int EndScanNumber, int ChargeState)
         {
-            string ScanKey = StartScanNumber.ToString() + "." + EndScanNumber.ToString();
+            var ScanKey = StartScanNumber.ToString() + "." + EndScanNumber.ToString();
             if (m_NoDTAs)
                 return 10d;
             if (m_dtaFileInfo is null)
@@ -172,7 +172,7 @@ namespace SequestResultsProcessor
             double mScore;
             bool noModsInSequence;
             TheoreticalFragmentInfo theoFrags;
-            double mTol = m_MassTol;
+            var mTol = m_MassTol;
             if (scanIntensities.FragmentList.Count == 0)
             {
                 return 10d;
@@ -224,21 +224,21 @@ namespace SequestResultsProcessor
         private double HashScanner(PeptideIntensities peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoFrags, double massTol, int CSToCheck)
         {
             double tmpObsMass;
-            int maxObsRecord = peptideRecord.FragmentList.Count;
+            var maxObsRecord = peptideRecord.FragmentList.Count;
             if (maxObsRecord == 0)
             {
                 return 0.0d;
             }
 
-            int maxObsIndex = maxObsRecord - 1;
+            var maxObsIndex = maxObsRecord - 1;
             double match;
 
-            int obsCount = 0;
+            var obsCount = 0;
             match = 0d;
             tmpObsMass = peptideRecord.GetMass(obsCount);
             foreach (var theoFrag in theoFrags)
             {
-                double tmpTheoMass = theoFrag.Mass;
+                var tmpTheoMass = theoFrag.Mass;
                 if (tmpObsMass > tmpTheoMass + massTol & obsCount <= maxObsIndex)
                 {
                 }
@@ -331,7 +331,7 @@ namespace SequestResultsProcessor
 
             public void GetDTAFileIntensities(int StartScanNumber, int EndScanNumber, int ChargeState)
             {
-                long fileOffset = m_Offsets.get_GetOffset(StartScanNumber, EndScanNumber, ChargeState);
+                var fileOffset = m_Offsets.get_GetOffset(StartScanNumber, EndScanNumber, ChargeState);
                 if (fileOffset > 0L)
                 {
                     {
@@ -356,7 +356,7 @@ namespace SequestResultsProcessor
 
                 public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {
-                    string keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
+                    var keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
                     long offset;
                     if (mOffsets.TryGetValue(keyName, out offset))
                     {
@@ -368,7 +368,7 @@ namespace SequestResultsProcessor
 
                 public void AddOffset(int StartScanNumber, int EndScanNumber, int ChargeState, long StartOffset, string ChargeExtra = "")
                 {
-                    string keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
+                    var keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
                     if (ChargeExtra.Length > 0)
                     {
                         keyName += "_" + ChargeExtra;

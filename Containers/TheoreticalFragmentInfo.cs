@@ -109,7 +109,7 @@ namespace SequestResultsProcessor.Containers
             peptideLeft = new double[] { -0.2d, -0.75d, 0.45d, -0.05d, 0.4d, -0.8d, 0.35d, -0.4d, -0.25d, -0.15d, -0.2d, -0.5d, -1.15d, -0.35d, -0.75d, -0.6d, -0.65d, 0d, 0.25d, -0.4d };
             peptideRight = new double[] { 0.35d, -0.2d, -0.45d, -0.15d, 0.45d, 0.5d, 0.25d, 0.35d, 0.3d, 0.05d, 0.1d, 0.1d, 1.15d, -0.05d, -0.35d, 0.5d, 0.45d, 0.2d, 0.45d, 0.4d };
             peptideMass = new double[] { 71.037d, 103.009d, 115.027d, 129.043d, 147.068d, 57.022d, 137.059d, 113.084d, 128.095d, 113.084d, 131.04d, 114.043d, 97.053d, 128.059d, 156.101d, 87.032d, 101.048d, 99.068d, 186.08d, 163.063d };
-            int maxIndex = peptideResidues.Length - 1;
+            var maxIndex = peptideResidues.Length - 1;
             int counter;
             s_Intensities = new Dictionary<string, ResidueInfo>();
             var loopTo = maxIndex;
@@ -132,8 +132,8 @@ namespace SequestResultsProcessor.Containers
 
         private void CalculateTheoreticalIonHashes(string dirtySeq, int chargeState)
         {
-            string cleanSeq = GetCleanSequence(dirtySeq);
-            int peptideLength = cleanSeq.Length;
+            var cleanSeq = GetCleanSequence(dirtySeq);
+            var peptideLength = cleanSeq.Length;
             double tmpYMass;
             double tmpBMass;
             double tmpPepMass;
@@ -170,7 +170,7 @@ namespace SequestResultsProcessor.Containers
         {
             var r = new Regex(@"^*.\.(?<cleanseq>\S+)\..*$");
             var m = r.Match(rawPeptideSeq);
-            string cleanSeq = m.Groups["cleanseq"].Value.ToString();
+            var cleanSeq = m.Groups["cleanseq"].Value.ToString();
             cleanSeq = Regex.Replace(cleanSeq, "[^" + KNOWN_RESIDUES + "]", "");
             return cleanSeq.ToUpper();
         }

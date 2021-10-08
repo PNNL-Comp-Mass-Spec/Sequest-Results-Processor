@@ -196,7 +196,7 @@ namespace SequestResultsProcessor
 
             private void UpdateProgressCountingOuts(long currentFilePos, long totalFileSize)
             {
-                string statusString = "Counting .out Files... ";
+                var statusString = "Counting .out Files... ";
                 ProgressReport?.Invoke(statusString, currentFilePos, totalFileSize);
                 // If DEBUG_FLAG Then
                 // Debug.WriteLine(DateTime.Now.ToString() + ", Status: '" + statusString + "' ; currentPos: " + currentFilePos.ToString() + " / " + totalFileSize.ToString() + "(" + (Math.Round(currentFilePos / totalFileSize, 1) * 100.0).ToString() + "%)")
@@ -205,7 +205,7 @@ namespace SequestResultsProcessor
 
             private void UpdateProgressExtracting(int currentOutFileCount, int totalOutFileCount)
             {
-                string statusString = "Extracting from " + Path.GetFileNameWithoutExtension(m_SourceFileFullPath) + " (File " + currentOutFileCount.ToString() + " of " + totalOutFileCount.ToString() + ")";
+                var statusString = "Extracting from " + Path.GetFileNameWithoutExtension(m_SourceFileFullPath) + " (File " + currentOutFileCount.ToString() + " of " + totalOutFileCount.ToString() + ")";
                 ProgressReport?.Invoke(statusString, currentOutFileCount, totalOutFileCount);
             }
 
@@ -233,8 +233,8 @@ namespace SequestResultsProcessor
                 {
                     if (!srInFile.EndOfStream)
                     {
-                        string nextLine = srInFile.ReadLine();
-                        bool matchFound = reMatcher.IsMatch(nextLine);
+                        var nextLine = srInFile.ReadLine();
+                        var matchFound = reMatcher.IsMatch(nextLine);
                         if (matchFound)
                         {
                             matchingLine = nextLine;
@@ -271,8 +271,8 @@ namespace SequestResultsProcessor
             /// <remarks></remarks>
             public void ProcessInputFile()
             {
-                bool makeIRRFile = false;
-                string extractorVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var makeIRRFile = false;
+                var extractorVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "------ Peptide File Extractor, " + Path.GetFileName(Assembly.GetExecutingAssembly().Location) + " v" + extractorVersion);
                 ProgressReport?.Invoke("Initializing", 0L, 0L);
                 m_Results = new ResultsStorage();
@@ -287,11 +287,11 @@ namespace SequestResultsProcessor
                 }
 
                 var fi = new FileInfo(m_SourceFileFullPath);
-                bool removeDupMultiProtRefs = m_StartupArguments.RemoveDuplicatedMultiProtRefs;
-                string tmpFHTPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT.txt");
-                string tmpSynPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn.txt");
-                string tmpFHTProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT_Prot.txt");
-                string tmpSynProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn_Prot.txt");
+                var removeDupMultiProtRefs = m_StartupArguments.RemoveDuplicatedMultiProtRefs;
+                var tmpFHTPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT.txt");
+                var tmpSynPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn.txt");
+                var tmpFHTProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT_Prot.txt");
+                var tmpSynProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn_Prot.txt");
                 var tmpFHTFI = new FileInfo(tmpFHTPath);
                 var tmpSynFI = new FileInfo(tmpSynPath);
                 var tmpFHTProtFI = new FileInfo(tmpFHTProtPath);
@@ -324,8 +324,8 @@ namespace SequestResultsProcessor
                     return;
                 }
 
-                int totalOutFileCount = CountOutFiles();
-                int currentOutFileCount = 0;
+                var totalOutFileCount = CountOutFiles();
+                var currentOutFileCount = 0;
                 if (totalOutFileCount == 0)
                 {
                     m_Logger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- ERROR: '" + m_StartupArguments.InputFileName + "' contained no concatenated .out files");
@@ -339,9 +339,9 @@ namespace SequestResultsProcessor
                     m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Processing '" + m_StartupArguments.InputFileName + "'");
                     while (!srInFile.EndOfStream)
                     {
-                        string dataLine = srInFile.ReadLine();
-                        string matchingLine = "";
-                        bool outFileFound = AdvanceReaderUntilMatch(srInFile, r_FileDelimiterMatcher, dataLine, out matchingLine);
+                        var dataLine = srInFile.ReadLine();
+                        var matchingLine = "";
+                        var outFileFound = AdvanceReaderUntilMatch(srInFile, r_FileDelimiterMatcher, dataLine, out matchingLine);
                         if (outFileFound)
                         {
                             // Check whether this .out file has already been processed
@@ -422,7 +422,7 @@ namespace SequestResultsProcessor
                 // "Scores (all peptides)     -> "
                 // "Scores (first hits only)  -> "
 
-                string msg = string.Format("Scores {0,-18} -> ", "(" + statsDescription + ")");
+                var msg = string.Format("Scores {0,-18} -> ", "(" + statsDescription + ")");
                 var query = from item in peptideCountsByXCorr.Keys
                             orderby item
                             select item;
@@ -430,7 +430,7 @@ namespace SequestResultsProcessor
                     msg += string.Format("{0,7} peptides above {1}, ", peptideCountsByXCorr[scoreThreshold], scoreThreshold);
 
                 // Remove the trailing comma and space
-                string trimmedMsg = msg.Trim();
+                var trimmedMsg = msg.Trim();
                 if (trimmedMsg.EndsWith(","))
                 {
                     return trimmedMsg.Substring(0, trimmedMsg.Length - 1);
@@ -447,7 +447,7 @@ namespace SequestResultsProcessor
                 var outFileCount = default(int);
                 var currPos = default(long);
                 var lineCount = default(long);
-                int lineEndCharCount = LineEndCharacterCount(fi);
+                var lineEndCharCount = LineEndCharacterCount(fi);
                 var r = new Regex("^===*", RegexOptions.Compiled);
                 if (fi.Exists)
                 {
@@ -499,10 +499,10 @@ namespace SequestResultsProcessor
                 }
 
                 var tmpMultiProtRefs = new List<string>();
-                string matchingLine = "";
+                var matchingLine = "";
 
                 // Wait until we see the measured mass show up in the header
-                bool blnFoundHeaderMass = AdvanceReaderUntilMatch(srInFile, mHeaderMassMatcher, "", out matchingLine);
+                var blnFoundHeaderMass = AdvanceReaderUntilMatch(srInFile, mHeaderMassMatcher, "", out matchingLine);
                 if (!blnFoundHeaderMass)
                     return;
 
@@ -512,12 +512,12 @@ namespace SequestResultsProcessor
 
                 // Wait until we see the dashed line underneath the headings for the data block
 
-                bool foundDataBlock = AdvanceReaderUntilMatch(srInFile, mDataBlockDelimiterMatcher, "", out matchingLine);
+                var foundDataBlock = AdvanceReaderUntilMatch(srInFile, mDataBlockDelimiterMatcher, "", out matchingLine);
                 if (!foundDataBlock || srInFile.EndOfStream)
                     return;
 
                 // Read the first line of the data block
-                string dataLine = srInFile.ReadLine();
+                var dataLine = srInFile.ReadLine();
 
                 // As long as we keep seeing hit lines, keep grabbing them (also, allow one blank line)
                 // (to separate that VERY last hit that creeps in)
@@ -597,7 +597,8 @@ namespace SequestResultsProcessor
                                 var extraProteinLineMatch = mExtraProteinLineMatcher.Match(dataLine);
                                 if (extraProteinLineMatch.Success && !mTopProteinsMatcher.IsMatch(dataLine))
                                 {
-                                    string tmpMultiProtRef = extraProteinLineMatch.Groups["reference"].Value.ToString();
+                                    var tmpMultiProtRef = extraProteinLineMatch.Groups["reference"].Value.ToString();
+
                                     if (tmpMultiProtRefs.Contains(tmpMultiProtRef) && removeDupMultiProtRefs && !string.Equals(tmpMultiProtRef, currentPeptide.Reference, StringComparison.OrdinalIgnoreCase))
 
                                     {
@@ -709,7 +710,7 @@ namespace SequestResultsProcessor
             private bool CheckFileExists(string filePath)
             {
                 var fi = new FileInfo(filePath);
-                bool exists = fi.Exists;
+                var exists = fi.Exists;
                 return exists;
             }
 

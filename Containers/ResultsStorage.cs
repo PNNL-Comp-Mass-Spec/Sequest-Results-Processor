@@ -59,7 +59,7 @@ namespace SequestResultsProcessor.Containers
 
         public void AddPeptideResults(double HeaderMass, PeptideHitEntry peptideResults)
         {
-            string tmpKey = GetKey(peptideResults.StartScanNum, peptideResults.EndScanNum, peptideResults.ChargeState);
+            var tmpKey = GetKey(peptideResults.StartScanNum, peptideResults.EndScanNum, peptideResults.ChargeState);
             if (Math.Abs(peptideResults.XCorr) < float.Epsilon)
             {
                 return;
@@ -91,7 +91,7 @@ namespace SequestResultsProcessor.Containers
 
         public void ExportContents(OutputTypeList outputType, double XCorrCutoff, bool ExpandMultiProtein, string ExportFilePath, List<OutputRecordIndex> outputRecordIndexList)
         {
-            string proteinXrefFilePath = Path.Combine(Path.GetDirectoryName(ExportFilePath), Path.GetFileNameWithoutExtension(ExportFilePath) + "_prot" + Path.GetExtension(ExportFilePath));
+            var proteinXrefFilePath = Path.Combine(Path.GetDirectoryName(ExportFilePath), Path.GetFileNameWithoutExtension(ExportFilePath) + "_prot" + Path.GetExtension(ExportFilePath));
             // two loops
             // outer: each result file in the set
             // inner: each peptide result in a result file
@@ -110,7 +110,7 @@ namespace SequestResultsProcessor.Containers
             }
 
             var outputFileInfo = new FileInfo(ExportFilePath);
-            long currentPosition = outputFileInfo.Length;
+            var currentPosition = outputFileInfo.Length;
             foreach (var resultsFile in m_Results.Values)
             {
                 foreach (var peptideHit in resultsFile.PeptideHits.Values)
@@ -126,7 +126,7 @@ namespace SequestResultsProcessor.Containers
                         proteinExportList = peptideHit.ExportMultiProteinXref(outputType);
                     }
 
-                    int currentMultiProteinID = 0;
+                    var currentMultiProteinID = 0;
 
                     // Old test (deprecated in Fall 2011)
                     // If peptideHit.XCorr > XCorrCutoff Or peptideHit.PassFilt > 0 Then
@@ -136,7 +136,7 @@ namespace SequestResultsProcessor.Containers
                         foreach (var peptideLine in exportList.Values)
                         {
                             outputWriter.WriteLine(peptideLine);
-                            int tmpLength = peptideLine.Length + outputWriter.NewLine.Length;
+                            var tmpLength = peptideLine.Length + outputWriter.NewLine.Length;
                             outputRecordIndexList.Add(new OutputRecordIndex(peptideHit.XCorr, peptideHit.StartScanNum, peptideHit.EndScanNum, peptideHit.ChargeState, peptideHit.HitNum, currentMultiProteinID, currentPosition, tmpLength));
                             currentPosition += tmpLength;
                             currentMultiProteinID += 1;
@@ -171,8 +171,8 @@ namespace SequestResultsProcessor.Containers
         /// <returns>Dictionary where keys are XCorr threshold and values are the number of peptides with an XCorr over the threshold</returns>
         public Dictionary<int, int> SortPeptides(string outputFilePath, List<OutputRecordIndex> outputRecordList, string finalOutputPath)
         {
-            string proteinOutputPath = MakeProteinXrefOutputPath(outputFilePath);
-            string finalProteinOutputPath = MakeProteinXrefOutputPath(finalOutputPath);
+            var proteinOutputPath = MakeProteinXrefOutputPath(outputFilePath);
+            var finalProteinOutputPath = MakeProteinXrefOutputPath(finalOutputPath);
             var proteinOutputFileInfo = new FileInfo(proteinOutputPath);
             var outputFileInfo = new FileInfo(outputFilePath);
             if (proteinOutputFileInfo.Exists)
@@ -190,7 +190,7 @@ namespace SequestResultsProcessor.Containers
             }
             else
             {
-                int rowCount = 1;
+                var rowCount = 1;
                 var reUpdateHitNum = new Regex(@"^\d+");
                 string inputString;
                 string outputString;

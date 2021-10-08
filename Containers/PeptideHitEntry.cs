@@ -99,8 +99,8 @@ namespace SequestResultsProcessor.Containers
         // ReSharper disable once UnusedMember.Global
         public int CalculatePassFilt()
         {
-            double myScore = CalculateFilterScore(XCorr, DelCn2, NumTrypticEnds, ChargeState);
-            double optFilterScore = 0.1d + 0.03d * RankXc;
+            var myScore = CalculateFilterScore(XCorr, DelCn2, NumTrypticEnds, ChargeState);
+            var optFilterScore = 0.1d + 0.03d * RankXc;
             if (myScore >= optFilterScore)
             {
                 return 1;
@@ -149,7 +149,7 @@ namespace SequestResultsProcessor.Containers
                 if (ResultsType == ResultsStorage.OutputTypeList.Syn || ResultsType == ResultsStorage.OutputTypeList.FHT && RankXc == 1)
                 {
                     proteinList = new SortedList<string, string>();
-                    foreach (KeyValuePair<int, string> objEntry in m_MultiProteinEntries)
+                    foreach (var objEntry in m_MultiProteinEntries)
                     {
                         identifierSB.Clear();
                         identifierSB.Append(StartScanNum.ToString("##0000"));
@@ -262,7 +262,7 @@ namespace SequestResultsProcessor.Containers
             if (ExpandMultiProteinEntries && m_MultiProteinEntries is object)
             {
                 // Keys in m_MultiProteinEntries are MultiProteinID #, values are protein names
-                foreach (KeyValuePair<int, string> objEntry in m_MultiProteinEntries)
+                foreach (var objEntry in m_MultiProteinEntries)
                 {
                     if ((Reference ?? "") != (objEntry.Value ?? ""))
                     {

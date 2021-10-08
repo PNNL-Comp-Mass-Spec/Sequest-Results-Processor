@@ -40,11 +40,11 @@ namespace SequestResultsProcessor
                 fi.Delete();
             m_FileStream = new FileStream(OutputFilePath, FileMode.CreateNew);
             m_StreamWriter = new StreamWriter(m_FileStream);
-            string headerLine = "Scannum" + '\t' + "NL1_Intensity" + '\t' + "NL2_Intensity" + '\t' + "NL3_Intensity" + '\t';
+            var headerLine = "Scannum" + '\t' + "NL1_Intensity" + '\t' + "NL2_Intensity" + '\t' + "NL3_Intensity" + '\t';
             m_StreamWriter.WriteLine(headerLine);
             foreach (var entry in dataList)
             {
-                string outputLine = entry.ScanNumber.ToString() + '\t' + entry.NeutralLossTxt;
+                var outputLine = entry.ScanNumber.ToString() + '\t' + entry.NeutralLossTxt;
                 m_StreamWriter.WriteLine(outputLine);
             }
 

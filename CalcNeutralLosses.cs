@@ -25,10 +25,10 @@ namespace SequestResultsProcessor
             var tmpNeuLoss3 = default(double);
             double tmpMass;
             double tmpAbun;
-            double parentMZ = scan.ParentMZ;
-            double NLPeak1MZ = parentMZ - 32.7d;
-            double NLPeak2MZ = parentMZ - 49.0d;
-            double NLPeak3MZ = parentMZ - 98.0d;
+            var parentMZ = scan.ParentMZ;
+            var NLPeak1MZ = parentMZ - 32.7d;
+            var NLPeak2MZ = parentMZ - 49.0d;
+            var NLPeak3MZ = parentMZ - 98.0d;
             foreach (var f in scan.FragmentList)
             {
                 tmpMass = f.MZ;

@@ -64,11 +64,11 @@ namespace SequestResultsProcessor
                 fi.Delete();
             m_FileStream = new FileStream(OutputFilePath, FileMode.CreateNew);
             m_StreamWriter = new StreamWriter(m_FileStream);
-            string headerLine = "Scannum" + '\t' + "CS" + '\t' + "RankXc" + '\t' + "ObservedIons" + '\t' + "PossibleIons" + '\t';
+            var headerLine = "Scannum" + '\t' + "CS" + '\t' + "RankXc" + '\t' + "ObservedIons" + '\t' + "PossibleIons" + '\t';
             m_StreamWriter.WriteLine(headerLine);
             foreach (var entry in dataList)
             {
-                string outputLine = entry.ScanNumber.ToString() + '\t' + entry.ChargeState.ToString() + '\t' + entry.RankXc.ToString() + '\t' + entry.ObsIons.ToString() + '\t' + entry.PossIons.ToString() + '\t';
+                var outputLine = entry.ScanNumber.ToString() + '\t' + entry.ChargeState.ToString() + '\t' + entry.RankXc.ToString() + '\t' + entry.ObsIons.ToString() + '\t' + entry.PossIons.ToString() + '\t';
                 m_StreamWriter.WriteLine(outputLine);
             }
 

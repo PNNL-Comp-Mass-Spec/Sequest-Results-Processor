@@ -54,7 +54,7 @@ namespace SequestResultsProcessor.Containers
             int newIndex;
 
             // See if peptideResults is already present in m_PeptideHits
-            foreach (KeyValuePair<int, PeptideHitEntry> objItem in m_PeptideHits)
+            foreach (var objItem in m_PeptideHits)
             {
                 if (peptideResults.StartScanNum == objItem.Value.StartScanNum && peptideResults.ChargeState == objItem.Value.ChargeState && (peptideResults.Peptide ?? "") == (objItem.Value.Peptide ?? ""))
                 {

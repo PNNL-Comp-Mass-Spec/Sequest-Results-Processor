@@ -21,7 +21,7 @@ namespace SequestResultsProcessor
 
         public double ComputeDelMCorrected(double dblDelM, double dblPrecursorMonoMass, bool blnAdjustPrecursorMassForC13, double dblPeptideMonoisotopicMass)
         {
-            int intCorrectionCount = 0;
+            var intCorrectionCount = 0;
 
             // Examine dblDelM to determine which isotope was chosen
             if (dblDelM >= -0.5d)

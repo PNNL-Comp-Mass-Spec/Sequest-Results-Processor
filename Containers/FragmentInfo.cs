@@ -3,8 +3,8 @@
 // by class DiscriminantCalc
 //
 // -------------------------------------------------------------------------------
-// Written by Ken Auberry for the Department of Energy (PNNL, Richland, WA)
-// Coding for this class began on 10 October 2005
+// Written by Ken Auberry for the Department of Energy (PNNL, Richland, WA) in 2005
+// Converted to C# in 2021
 // -------------------------------------------------------------------------------
 //
 // Licensed under the Apache License, Version 2.0; you may not use this file except
@@ -16,8 +16,6 @@ using System.Collections.Generic;
 
 namespace SequestResultsProcessor.Containers
 {
-
-    // ReSharper disable once InconsistentNaming
     public class FragmentInfo
     {
         // Ignore Spelling: Auberry

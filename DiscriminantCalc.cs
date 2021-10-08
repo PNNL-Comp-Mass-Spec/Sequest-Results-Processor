@@ -48,7 +48,6 @@ namespace SequestResultsProcessor
         }
 
         private PeptideIntensities m_CachedScanInfo;
-        private int m_CachedScanNum;
         private string m_CachedScanKey;
         private int m_CachedCS;
         private readonly OutputNLIFile m_NLIDumper;
@@ -92,32 +91,10 @@ namespace SequestResultsProcessor
             m_Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         }
 
-        private void ConfigureDiscriminantCalc()
-        {
-            if (!m_NoDTAs)
-            {
-                m_dtaFileInfo.Configure();
-            }
-        }
-
-        private string GetVersionString()
         {
             return m_Version;
         }
 
-        private void CloseOut()
-        {
-            if (m_dtaFileInfo is object)
-            {
-                m_dtaFileInfo.Close();
-                // m_dtaFileInfo = Nothing
-            }
-
-            if (m_NLIDumper is object)
-            {
-                m_NLIDumper.CloseNLIWriter();
-            }
-        }
 
         // --------------------
         // Version of the module (be sure to update)
@@ -158,7 +135,6 @@ namespace SequestResultsProcessor
                 }
 
                 m_CachedScanInfo = m_dtaFileInfo.DTAScanInfo;
-                m_CachedScanNum = StartScanNumber;
                 m_CachedScanKey = ScanKey;
                 m_CachedCS = ChargeState;
             }
@@ -454,10 +430,8 @@ namespace SequestResultsProcessor
         {
             private static FileStream m_FileStream;
             private NeutralLossList m_NeutralLoss;
-            private readonly double m_BFNLT;
-            private readonly int m_IsPoorSpec;
+
             private double m_ParentMH;
-            private int m_ScanNum;
             private int m_ParentCS;
             private static CalcNeutralLosses NLCalc;
 

@@ -198,9 +198,6 @@ namespace SequestResultsProcessor
             {
                 var statusString = "Counting .out Files... ";
                 ProgressReport?.Invoke(statusString, currentFilePos, totalFileSize);
-                // If DEBUG_FLAG Then
-                // Debug.WriteLine(DateTime.Now.ToString() + ", Status: '" + statusString + "' ; currentPos: " + currentFilePos.ToString() + " / " + totalFileSize.ToString() + "(" + (Math.Round(currentFilePos / totalFileSize, 1) * 100.0).ToString() + "%)")
-                // End If
             }
 
             private void UpdateProgressExtracting(int currentOutFileCount, int totalOutFileCount)

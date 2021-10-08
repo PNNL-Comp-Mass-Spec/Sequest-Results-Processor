@@ -127,9 +127,6 @@ namespace SequestResultsProcessor.Containers
 
                     var currentMultiProteinID = 0;
 
-                    // Old test (deprecated in Fall 2011)
-                    // If peptideHit.XCorr > XCorrCutoff Or peptideHit.PassFilt > 0 Then
-
                     if (peptideHit.XCorr > XCorrCutoff)
                     {
                         foreach (var peptideLine in exportList.Values)
@@ -418,16 +415,6 @@ namespace SequestResultsProcessor.Containers
                 }
 
                 return StatsTable;
-            }
-
-            private int GetSummaryTableValue(int xcorrThreshold)
-            {
-                if (StatsTable.TryGetValue(xcorrThreshold, out var peptideCount))
-                {
-                    return peptideCount;
-                }
-
-                return 0;
             }
 
             /// <summary>

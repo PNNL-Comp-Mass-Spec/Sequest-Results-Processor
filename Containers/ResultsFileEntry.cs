@@ -40,10 +40,6 @@ namespace SequestResultsProcessor.Containers
             m_HeaderMass = HeaderMass;
         }
 
-        public void AddTotalIntensity(double HeaderIntensity)
-        {
-        }
-
         public void AddPeptideResults(PeptideHitEntry peptideResults)
         {
             if (m_PeptideHits is null)

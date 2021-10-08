@@ -203,27 +203,27 @@ namespace SequestResultsProcessor
                 var theoreticalMass = fragment.Mass;
                 if (tmpObsMass > theoreticalMass + massTol && obsCount <= maxObsIndex)
                 {
+                    continue;
+                }
+
+                while (tmpObsMass < theoreticalMass - massTol && obsCount < maxObsIndex)
+                {
+                    obsCount++;
+                    tmpObsMass = peptideRecord.GetMass(obsCount);
+                }
+
+                if (tmpObsMass >= theoreticalMass + massTol || theoreticalMass > tmpObsMass + massTol || obsCount > maxObsIndex)
+                {
+                    continue;
+                }
+
+                if (CSToCheck >= 2)
+                {
+                    match += peptideRecord.GetNormalizedIntensity(obsCount);
                 }
                 else
                 {
-                    while (tmpObsMass < theoreticalMass - massTol && obsCount < maxObsIndex)
-                    {
-                        obsCount++;
-                        tmpObsMass = peptideRecord.GetMass(obsCount);
-                    }
-
-                    if (tmpObsMass < theoreticalMass + massTol && !(theoreticalMass > tmpObsMass + massTol) && obsCount <= maxObsIndex)
-
-                    {
-                        if (CSToCheck >= 2)
-                        {
-                            match += peptideRecord.GetNormalizedIntensity(obsCount);
-                        }
-                        else
-                        {
-                            match += peptideRecord.GetNormalizedIntensity(obsCount) * fragment.Intensity;
-                        }
-                    }
+                    match += peptideRecord.GetNormalizedIntensity(obsCount) * fragment.Intensity;
                 }
             }
 

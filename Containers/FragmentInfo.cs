@@ -96,8 +96,12 @@ namespace SequestResultsProcessor.Containers
 
             if (Math.Abs(m_MaxIntensity) < float.Epsilon)
                 return;
-            foreach (var f in m_FragmentList)
-                f.NormIntensity = f.Intensity / m_MaxIntensity;
+
+            foreach (var item in m_FragmentList)
+            {
+                var fragment = item;
+                fragment.NormIntensity = fragment.Intensity / m_MaxIntensity;
+            }
         }
     }
 }

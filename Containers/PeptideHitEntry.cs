@@ -119,8 +119,6 @@ namespace SequestResultsProcessor.Containers
             return m_CleavageStateCalculator.CountTrypticEnds(peptideSeq);
         }
 
-        public int ExportLength { get; private set; } = 0;
-
         public SortedList<string, string> ExportMultiProteinXref(ResultsStorage.OutputTypeList ResultsType)
         {
             SortedList<string, string> proteinList = null;

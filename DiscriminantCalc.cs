@@ -313,7 +313,6 @@ namespace SequestResultsProcessor
             private class dtaFileOffsets
             {
                 private readonly Dictionary<string, long> mOffsets = new();
-                private readonly string m_FilePath;
 
                 public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {

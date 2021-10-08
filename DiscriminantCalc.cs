@@ -413,7 +413,7 @@ namespace SequestResultsProcessor
             private int m_ParentCS;
             private static CalcNeutralLosses NLCalc;
 
-            public PeptideIntensities(FileStream dtaFileStream) : base()
+            public PeptideIntensities(FileStream dtaFileStream)
             {
                 if (m_FileStream is null)
                 {

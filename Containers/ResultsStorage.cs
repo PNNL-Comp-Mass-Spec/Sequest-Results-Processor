@@ -150,7 +150,6 @@ namespace SequestResultsProcessor.Containers
                 }
             }
 
-
             outputWriter.Close();
 
             xrefWriter?.Close();

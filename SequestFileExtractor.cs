@@ -617,7 +617,6 @@ namespace SequestResultsProcessor
                                     break;
                                 }
                             }
-
                         }
 
                         currentPeptide.MultiProteinCount = tmpMultiProteinRefs.Count;

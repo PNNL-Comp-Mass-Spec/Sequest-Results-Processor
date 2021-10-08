@@ -18,7 +18,7 @@ namespace SequestResultsProcessor.Containers
 
     internal class TheoreticalFragmentInfo
     {
-        private static Dictionary<string, ResidueInfo> s_Intensities = new Dictionary<string, ResidueInfo>();
+        private static Dictionary<string, ResidueInfo> s_Intensities = new();
         private List<Fragment> m_TheoYIons;
         private List<Fragment> m_TheoBIons;
 

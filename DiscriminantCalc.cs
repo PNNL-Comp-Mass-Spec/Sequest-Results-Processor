@@ -90,17 +90,13 @@ namespace SequestResultsProcessor
             m_Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         }
 
+        /// <summary>
+        /// Version of the module
+        /// </summary>
+        // ReSharper disable once UnusedMember.Global
+        public string Version()
         {
             return m_Version;
-        }
-
-
-        // --------------------
-        // Version of the module (be sure to update)
-        //
-        public string version()
-        {
-            return "1.2";
         }
 
         // --------------------

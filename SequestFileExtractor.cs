@@ -523,48 +523,6 @@ namespace SequestResultsProcessor
                 return default;
             }
 
-            /// <summary>
-        /// This function reads the input file one byte at a time, looking for the first occurence of Chr(10) or Chr(13) (aka vbCR or VBLF)
-        /// When found, the next byte is examined
-        /// If the next byte is also Chr(10) or Chr(13), then the line terminator is assumed to be 2 bytes; if not found, then it is assumed to be one byte
-        /// </summary>
-        /// <param name="fi"></param>
-        /// <returns>1 if a one-byte line terminator; 2 if a two-byte line terminator</returns>
-        /// <remarks></remarks>
-            private int LineEndCharacterCount(FileInfo fi)
-            {
-                TextReader tr;
-                int testcode;
-                int testcode2;
-                int endCount = 1;         // Initially assume a one-byte line terminator
-                if (fi.Exists)
-                {
-                    tr = fi.OpenText();
-                    for (long counter = 1L, loopTo = fi.Length; counter <= loopTo; counter++)
-                    {
-                        testcode = tr.Read();
-                        if (testcode == 10 | testcode == 13)
-                        {
-                            testcode2 = tr.Read();
-                            if (testcode2 == 10 | testcode2 == 13)
-                            {
-                                endCount = 2;
-                                break;
-                            }
-                            else
-                            {
-                                endCount = 1;
-                                break;
-                            }
-                        }
-                    }
-
-                    tr.Close();
-                }
-
-                return endCount;
-            }
-
             private void ReadAndStoreOutFileResults(StreamReader srInFile, string fileHeaderLine, Regex fileDelimiterMatcher, bool makeIRRFile, bool removeDupMultiProtRefs)
             {
                 int currentStartScan;
@@ -727,12 +685,42 @@ namespace SequestResultsProcessor
             }
         }
 
+        /// <summary>
+        /// This method reads the input file one byte at a time, looking for the first occurrence of character code 10 or 13 (aka CR or LF)
+        /// When found, the next byte is examined
+        /// If the next byte is also character code 10 or 13, the line terminator is assumed to be 2 bytes; if not found, it is assumed to be one byte
+        /// </summary>
+        /// <param name="fi"></param>
+        /// <returns>1 if a one-byte line terminator; 2 if a two-byte line terminator</returns>
+        internal static int LineEndCharacterCount(FileInfo fi)
+        {
+            var endCount = 1; // Initially assume a one-byte line terminator
 
+            if (!fi.Exists)
+                return endCount;
 
+            TextReader tr = fi.OpenText();
+            for (var counter = 1; counter <= fi.Length; counter++)
+            {
+                var testCode = tr.Read();
+                if (testCode == 10 || testCode == 13)
+                {
+                    var testCode2 = tr.Read();
+                    if (testCode2 == 10 || testCode2 == 13)
+                    {
+                        endCount = 2;
+                        break;
+                    }
 
+                    endCount = 1;
+                    break;
+                }
+            }
 
+            tr.Close();
 
-
+            return endCount;
+        }
 
         public class StartupArguments
         {

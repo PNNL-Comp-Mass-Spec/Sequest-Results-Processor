@@ -667,7 +667,7 @@ namespace SequestResultsProcessor
 
         public class StartupArguments
         {
-            private string m_SourceDirectory;
+            private readonly string m_SourceDirectory;
             private string m_DestinationDirectory;
             private string m_InputFileName;
             private string m_SynopsisFileName;

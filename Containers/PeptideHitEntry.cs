@@ -71,10 +71,7 @@ namespace SequestResultsProcessor.Containers
 
         public void AddMultiProteinRef(string refName)
         {
-            if (m_MultiProteinEntries is null)
-            {
-                m_MultiProteinEntries = new SortedList<int, string>();
-            }
+            m_MultiProteinEntries ??= new SortedList<int, string>();
 
             m_MultiProteinID += 1;
             m_MultiProteinEntries.Add(m_MultiProteinID, refName);

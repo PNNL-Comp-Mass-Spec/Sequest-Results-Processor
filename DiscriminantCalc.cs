@@ -113,13 +113,11 @@ namespace SequestResultsProcessor
             var ScanKey = StartScanNumber.ToString() + "." + EndScanNumber.ToString();
             if (m_NoDTAs)
                 return 10d;
-            if (m_dtaFileInfo is null)
-            {
-                m_dtaFileInfo = new DTAFileInformation(m_dtaFilepath);
-            }
+
+            m_dtaFileInfo ??= new DTAFileInformation(m_dtaFilepath);
 
             m_MassTol = 0.7d;
-            if (ChargeState != m_CachedCS | (ScanKey ?? "") != (m_CachedScanKey ?? ""))
+            if (ChargeState != m_CachedCS || ScanKey != (m_CachedScanKey ?? string.Empty))
             {
                 m_dtaFileInfo.GetDTAFileIntensities(StartScanNumber, EndScanNumber, ChargeState);
                 if (m_dtaFileInfo.DTAScanInfo.FragmentList.Count == 0)
@@ -127,7 +125,7 @@ namespace SequestResultsProcessor
                     return 10d;
                 }
 
-                if ((ScanKey ?? "") != (m_CachedScanKey ?? ""))
+                if (ScanKey != (m_CachedScanKey ?? string.Empty))
                 {
                     m_dtaFileInfo.DTAScanInfo.GetNeutralLosses(m_MassTol);
                     m_NLIDumper.MakeNLIEntry(StartScanNumber, m_dtaFileInfo.DTAScanInfo.NeutralLosses);

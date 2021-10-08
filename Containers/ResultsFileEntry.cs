@@ -42,12 +42,7 @@ namespace SequestResultsProcessor.Containers
 
         public void AddPeptideResults(PeptideHitEntry peptideResults)
         {
-            if (m_PeptideHits is null)
-            {
-                m_PeptideHits = new SortedList<int, PeptideHitEntry>();
-            }
-
-            int newIndex;
+            m_PeptideHits ??= new SortedList<int, PeptideHitEntry>();
 
             // See if peptideResults is already present in m_PeptideHits
             foreach (var objItem in m_PeptideHits)

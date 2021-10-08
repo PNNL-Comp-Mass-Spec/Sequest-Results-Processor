@@ -135,9 +135,6 @@ namespace SequestResultsProcessor.Containers
         {
             string cleanSeq = GetCleanSequence(dirtySeq);
             int peptideLength = cleanSeq.Length;
-            string IntensityFrag;
-            string BFragment;
-            string YFragment;
             double tmpYMass;
             double tmpBMass;
             double tmpPepMass;
@@ -147,17 +144,18 @@ namespace SequestResultsProcessor.Containers
             int counter;
             tmpPepMass = GetMass(cleanSeq, chargeState);
             tmpBMass = 1.01d;
-            var loopTo = peptideLength - 1;
-            for (counter = 1; counter <= loopTo; counter++)
+
+            for (var i = 0; i < peptideLength - 1; i++)
             {
-                IntensityFrag = Strings.Mid(cleanSeq, counter, 2);
-                BFragment = Strings.Left(IntensityFrag, 1);
-                YFragment = Strings.Right(IntensityFrag, 1);
-                tmpBMass += GetMass(BFragment, chargeState);
+                var intensityFrag = cleanSeq.Substring(i, 2);
+                var bFragment = intensityFrag.Substring(0, 1);
+                var yFragment = intensityFrag.Substring(1, 1);
+
+                tmpBMass += GetMass(bFragment, chargeState);
                 tmpYMass = tmpPepMass - tmpBMass + 20.02d;
-                tmpInt = GetIntensity(BFragment, YFragment);
-                m_TheoBIons.Add(new Fragment(Math.Round(tmpBMass, 4), tmpInt, FragmentTypes.b, counter));
-                m_TheoYIons.Add(new Fragment(Math.Round(tmpYMass, 4), tmpInt, FragmentTypes.y, peptideLength - counter));
+                tmpInt = GetIntensity(bFragment, yFragment);
+                m_TheoBIons.Add(new Fragment(Math.Round(tmpBMass, 4), tmpInt, FragmentTypes.b, i + 1));
+                m_TheoYIons.Add(new Fragment(Math.Round(tmpYMass, 4), tmpInt, FragmentTypes.y, peptideLength - (i + 1)));
             }
 
             var sorter = new TheoIonComparer();

@@ -170,7 +170,7 @@ namespace SequestResultsProcessor.Containers
         {
             var r = new Regex(@"^*.\.(?<cleanseq>\S+)\..*$");
             var m = r.Match(rawPeptideSeq);
-            var cleanSeq = m.Groups["cleanseq"].Value.ToString();
+            var cleanSeq = m.Groups["cleanseq"].Value;
             cleanSeq = Regex.Replace(cleanSeq, "[^" + KNOWN_RESIDUES + "]", "");
             return cleanSeq.ToUpper();
         }

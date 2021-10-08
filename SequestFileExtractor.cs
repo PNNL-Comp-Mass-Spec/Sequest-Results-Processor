@@ -553,7 +553,7 @@ namespace SequestResultsProcessor
                         currentPeptide.Sp = double.Parse(dataLineMatch.Groups["sp"].Value);
                         if (eMatchType == eHitMatchType.MatchWithProtein)
                         {
-                            currentPeptide.Reference = dataLineMatch.Groups["reference"].Value.ToString();
+                            currentPeptide.Reference = dataLineMatch.Groups["reference"].Value;
                             if (dataLineMatch.Groups["multiorf"].Length > 0)
                             {
                                 currentPeptide.MultiProteinCount = int.Parse(dataLineMatch.Groups["multiorf"].Value);
@@ -569,7 +569,7 @@ namespace SequestResultsProcessor
                             currentPeptide.MultiProteinCount = 0;
                         }
 
-                        currentPeptide.Peptide = dataLineMatch.Groups["sequence"].Value.ToString();
+                        currentPeptide.Peptide = dataLineMatch.Groups["sequence"].Value;
                         currentPeptide.RankSp = int.Parse(dataLineMatch.Groups["ranksp"].Value);
                         currentPeptide.RankXc = int.Parse(dataLineMatch.Groups["rankxc"].Value);
 
@@ -591,13 +591,13 @@ namespace SequestResultsProcessor
                         {
                             dataLine = srInFile.ReadLine();
 
-                            // Look for multiprotein hit lines, but make sure to exclude those top scoring protein lines underneath them
+                            // Look for multi-protein hit lines, but make sure to exclude those top scoring protein lines underneath them
                             do
                             {
                                 var extraProteinLineMatch = mExtraProteinLineMatcher.Match(dataLine);
                                 if (extraProteinLineMatch.Success && !mTopProteinsMatcher.IsMatch(dataLine))
                                 {
-                                    var tmpMultiProtRef = extraProteinLineMatch.Groups["reference"].Value.ToString();
+                                    var tmpMultiProtRef = extraProteinLineMatch.Groups["reference"].Value;
 
                                     if (tmpMultiProtRefs.Contains(tmpMultiProtRef) && removeDupMultiProtRefs && !string.Equals(tmpMultiProtRef, currentPeptide.Reference, StringComparison.OrdinalIgnoreCase))
 

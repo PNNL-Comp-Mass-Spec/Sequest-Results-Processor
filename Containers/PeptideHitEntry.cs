@@ -266,7 +266,7 @@ namespace SequestResultsProcessor.Containers
                 {
                     if ((Reference ?? "") != (objEntry.Value ?? ""))
                     {
-                        exportList.Add(objEntry.Key, sbFront.ToString() + objEntry.Value.ToString() + delim.ToString() + sbRear.ToString());
+                        exportList.Add(objEntry.Key, sbFront.ToString() + objEntry.Value + delim.ToString() + sbRear.ToString());
                     }
                 }
             }

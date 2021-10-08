@@ -111,30 +111,33 @@ namespace SequestResultsProcessor
                 {
                     return 1;
                 }
-                else if (x.ScanNumber < y.ScanNumber)
+
+                if (x.ScanNumber < y.ScanNumber)
                 {
                     return -1;
                 }
-                else if (x.ChargeState > y.ChargeState)
+
+                if (x.ChargeState > y.ChargeState)
                 {
                     return 1;
                 }
-                else if (x.ChargeState < y.ChargeState)
+
+                if (x.ChargeState < y.ChargeState)
                 {
                     return -1;
                 }
-                else if (x.RankXc > y.RankXc)
+
+                if (x.RankXc > y.RankXc)
                 {
                     return 1;
                 }
-                else if (x.RankXc < y.RankXc)
+
+                if (x.RankXc < y.RankXc)
                 {
                     return -1;
                 }
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
         }
     }

@@ -437,10 +437,8 @@ namespace SequestResultsProcessor
                 {
                     return trimmedMsg.Substring(0, trimmedMsg.Length - 1);
                 }
-                else
-                {
-                    return trimmedMsg;
-                }
+
+                return trimmedMsg;
             }
 
             private int CountOutFiles()
@@ -723,10 +721,8 @@ namespace SequestResultsProcessor
                     {
                         return m_SourceDirectory;
                     }
-                    else
-                    {
-                        return m_DestinationDirectory;
-                    }
+
+                    return m_DestinationDirectory;
                 }
 
                 set => m_DestinationDirectory = value;
@@ -751,10 +747,8 @@ namespace SequestResultsProcessor
                     {
                         return m_RootFileName + "_out.txt";
                     }
-                    else
-                    {
-                        return m_InputFileName;
-                    }
+
+                    return m_InputFileName;
                 }
 
                 set => m_InputFileName = value;
@@ -768,10 +762,8 @@ namespace SequestResultsProcessor
                     {
                         return m_RootFileName + "_syn.txt";
                     }
-                    else
-                    {
-                        return m_SynopsisFileName;
-                    }
+
+                    return m_SynopsisFileName;
                 }
 
                 set => m_SynopsisFileName = value;
@@ -785,10 +777,8 @@ namespace SequestResultsProcessor
                     {
                         return m_RootFileName + "_fht.txt";
                     }
-                    else
-                    {
-                        return m_FirstHitsFileName;
-                    }
+
+                    return m_FirstHitsFileName;
                 }
 
                 set => m_FirstHitsFileName = value;
@@ -802,10 +792,8 @@ namespace SequestResultsProcessor
                     {
                         return m_RootFileName + "_dta.txt";
                     }
-                    else
-                    {
-                        return m_DTAFileName;
-                    }
+
+                    return m_DTAFileName;
                 }
 
                 set => m_DTAFileName = value;
@@ -819,10 +807,8 @@ namespace SequestResultsProcessor
                     {
                         return m_RootFileName + "_log.txt";
                     }
-                    else
-                    {
-                        return m_LogFileName;
-                    }
+
+                    return m_LogFileName;
                 }
 
                 set => m_LogFileName = value;

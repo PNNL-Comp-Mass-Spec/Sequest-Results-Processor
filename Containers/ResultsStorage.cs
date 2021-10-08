@@ -44,10 +44,8 @@ namespace SequestResultsProcessor.Containers
                 {
                     return 0;
                 }
-                else
-                {
-                    return m_Results.Count;
-                }
+
+                return m_Results.Count;
             }
         }
 
@@ -121,35 +119,33 @@ namespace SequestResultsProcessor.Containers
                     {
                         break;
                     }
-                    else
+
+                    var exportList = peptideHit.ExportContents(ExpandMultiProtein);
+                    if (outputType == OutputTypeList.FHT)
                     {
-                        var exportList = peptideHit.ExportContents(ExpandMultiProtein);
-                        if (outputType == OutputTypeList.FHT)
+                        proteinExportList = peptideHit.ExportMultiProteinXref(outputType);
+                    }
+
+                    int currentMultiProteinID = 0;
+
+                    // Old test (deprecated in Fall 2011)
+                    // If peptideHit.XCorr > XCorrCutoff Or peptideHit.PassFilt > 0 Then
+
+                    if (peptideHit.XCorr > XCorrCutoff)
+                    {
+                        foreach (var peptideLine in exportList.Values)
                         {
-                            proteinExportList = peptideHit.ExportMultiProteinXref(outputType);
+                            outputWriter.WriteLine(peptideLine);
+                            int tmpLength = peptideLine.Length + outputWriter.NewLine.Length;
+                            outputRecordIndexList.Add(new OutputRecordIndex(peptideHit.XCorr, peptideHit.StartScanNum, peptideHit.EndScanNum, peptideHit.ChargeState, peptideHit.HitNum, currentMultiProteinID, currentPosition, tmpLength));
+                            currentPosition += tmpLength;
+                            currentMultiProteinID += 1;
                         }
 
-                        int currentMultiProteinID = 0;
-
-                        // Old test (deprecated in Fall 2011)
-                        // If peptideHit.XCorr > XCorrCutoff Or peptideHit.PassFilt > 0 Then
-
-                        if (peptideHit.XCorr > XCorrCutoff)
+                        if (outputType == OutputTypeList.FHT && proteinExportList is object)
                         {
-                            foreach (var peptideLine in exportList.Values)
-                            {
-                                outputWriter.WriteLine(peptideLine);
-                                int tmpLength = peptideLine.Length + outputWriter.NewLine.Length;
-                                outputRecordIndexList.Add(new OutputRecordIndex(peptideHit.XCorr, peptideHit.StartScanNum, peptideHit.EndScanNum, peptideHit.ChargeState, peptideHit.HitNum, currentMultiProteinID, currentPosition, tmpLength));
-                                currentPosition += tmpLength;
-                                currentMultiProteinID += 1;
-                            }
-
-                            if (outputType == OutputTypeList.FHT && proteinExportList is object)
-                            {
-                                foreach (var proteinLine in proteinExportList.Values)
-                                    xrefWriter.WriteLine(proteinLine);
-                            }
+                            foreach (var proteinLine in proteinExportList.Values)
+                                xrefWriter.WriteLine(proteinLine);
                         }
                     }
                 }
@@ -277,54 +273,63 @@ namespace SequestResultsProcessor.Containers
                 {
                     return -1;
                 }
-                else if (x.XCorr < y.XCorr)
+
+                if (x.XCorr < y.XCorr)
                 {
                     return 1;
                 }
-                else if (x.StartScanNum > y.StartScanNum)
+
+                if (x.StartScanNum > y.StartScanNum)
                 {
                     return 1;
                 }
-                else if (x.StartScanNum < y.StartScanNum)
+
+                if (x.StartScanNum < y.StartScanNum)
                 {
                     return -1;
                 }
-                else if (x.EndScanNum > y.EndScanNum)
+
+                if (x.EndScanNum > y.EndScanNum)
                 {
                     return 1;
                 }
-                else if (x.EndScanNum < y.EndScanNum)
+
+                if (x.EndScanNum < y.EndScanNum)
                 {
                     return -1;
                 }
-                else if (x.ChargeState > y.ChargeState)
+
+                if (x.ChargeState > y.ChargeState)
                 {
                     return 1;
                 }
-                else if (x.ChargeState < y.ChargeState)
+
+                if (x.ChargeState < y.ChargeState)
                 {
                     return -1;
                 }
-                else if (x.HitNum > y.HitNum)
+
+                if (x.HitNum > y.HitNum)
                 {
                     return 1;
                 }
-                else if (x.HitNum < y.HitNum)
+
+                if (x.HitNum < y.HitNum)
                 {
                     return -1;
                 }
-                else if (x.MultiProteinID > y.MultiProteinID)
+
+                if (x.MultiProteinID > y.MultiProteinID)
                 {
                     return 1;
                 }
-                else if (x.MultiProteinID < y.MultiProteinID)
+
+                if (x.MultiProteinID < y.MultiProteinID)
                 {
                     return -1;
                 }
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
         }
 
@@ -423,10 +428,8 @@ namespace SequestResultsProcessor.Containers
                 {
                     return peptideCount;
                 }
-                else
-                {
-                    return 0;
-                }
+
+                return 0;
             }
 
             /// <summary>

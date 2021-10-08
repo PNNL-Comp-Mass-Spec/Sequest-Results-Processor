@@ -101,10 +101,8 @@ namespace SequestResultsProcessor.Containers
             {
                 return 1;
             }
-            else
-            {
-                return 0;
-            }
+
+            return 0;
         }
 
         private double CalculateFilterScore(double dblXCorr, double deltCn, int intNumTrypticEnds, int intChargeState)
@@ -311,7 +309,7 @@ namespace SequestResultsProcessor.Containers
         public int RankXc { get; set; }
         public double DelM { get; set; } = 0.0d;
         public double XcRatio { get; set; } = 1.0d;
-        
+
         public int ObsIons { get; set; }
         public int PossIons { get; set; }
         public int NumTrypticEnds { get; set; }

@@ -38,56 +38,54 @@ namespace SequestResultsProcessor
             }
 
             // Fully Tryptic, allowing modified K or R
-            else if (m_reFullyTrypticModKR.IsMatch(peptideSeq) && !m_reFullyTrypticProlineCheck.IsMatch(peptideSeq))
+
+            if (m_reFullyTrypticModKR.IsMatch(peptideSeq) && !m_reFullyTrypticProlineCheck.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Label sequences spanning the entire protein as fully tryptic
-            else if (m_rePeptideSpanningProtein.IsMatch(peptideSeq))
+            if (m_rePeptideSpanningProtein.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully tryptic at N-Terminus
-            else if (m_reFullyTrypticAtNTerm.IsMatch(peptideSeq))
+            if (m_reFullyTrypticAtNTerm.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully tryptic at N-Terminus, allowing modified K or R
-            else if (m_reFullyTrypticAtNTermModKR.IsMatch(peptideSeq))
+            if (m_reFullyTrypticAtNTermModKR.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully tryptic at C-Terminus
-            else if (m_reFullyTrypticAtCTerm.IsMatch(peptideSeq))
+            if (m_reFullyTrypticAtCTerm.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Partially tryptic
-            else if (m_rePartiallyTryptic1.IsMatch(peptideSeq))
+            if (m_rePartiallyTryptic1.IsMatch(peptideSeq))
             {
                 return 1;
             }
 
             // Partially tryptic
-            else if (m_rePartiallyTryptic2.IsMatch(peptideSeq))
+            if (m_rePartiallyTryptic2.IsMatch(peptideSeq))
             {
                 return 1;
             }
 
             // Partially tryptic, allowing modified K or R
-            else if (m_rePartiallyTrypticModKR.IsMatch(peptideSeq))
+            if (m_rePartiallyTrypticModKR.IsMatch(peptideSeq))
             {
                 return 1;
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
     }
 }

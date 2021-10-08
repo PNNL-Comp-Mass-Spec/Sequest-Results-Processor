@@ -183,14 +183,12 @@ namespace SequestResultsProcessor
             {
                 return 10d;
             }
-            else if (peptideSequence.Length <= 5)
+
+            if (peptideSequence.Length <= 5)
             {
                 return 10d;
             }
-            else
-            {
-                noModsInSequence = true;
-            }
+            noModsInSequence = true;
 
             // Get values for +1 charge state
             theoFrags = new TheoreticalFragmentInfo(peptideSequence, 1);

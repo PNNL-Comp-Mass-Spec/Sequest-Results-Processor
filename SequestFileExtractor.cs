@@ -202,7 +202,7 @@ namespace SequestResultsProcessor
 
             private void UpdateProgressExtracting(int currentOutFileCount, int totalOutFileCount)
             {
-                var statusString = "Extracting from " + Path.GetFileNameWithoutExtension(m_SourceFileFullPath) + " (File " + currentOutFileCount.ToString() + " of " + totalOutFileCount.ToString() + ")";
+                var statusString = "Extracting from " + Path.GetFileNameWithoutExtension(m_SourceFileFullPath) + " (File " + currentOutFileCount + " of " + totalOutFileCount + ")";
                 ProgressReport?.Invoke(statusString, currentOutFileCount, totalOutFileCount);
             }
 
@@ -385,8 +385,8 @@ namespace SequestResultsProcessor
 
                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' was generated");
                 m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' was generated");
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' contains " + SynOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.SynXCorrThreshold.ToString() + " and subsequently filtered)");
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.FHTXCorrThreshold.ToString() + ")");
+                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' contains " + SynOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.SynXCorrThreshold + " and subsequently filtered)");
+                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.FHTXCorrThreshold + ")");
 
                 // Keys in these dictionaries are XCorr threshold; values are the number of peptides with an XCorr over the threshold
                 if (!m_StopProcessing)

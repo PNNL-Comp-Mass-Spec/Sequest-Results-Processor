@@ -240,7 +240,7 @@ namespace SequestResultsProcessor.Containers
                 sbRear.Append(withBlock.DelMPPM.ToString("##0.0000"));
             }
 
-            exportList.Add(0, sbFront.ToString() + Reference + delim.ToString() + sbRear.ToString());
+            exportList.Add(0, sbFront + Reference + delim + sbRear);
             if (ExpandMultiProteinEntries && m_MultiProteinEntries != null)
             {
                 // Keys in m_MultiProteinEntries are MultiProteinID #, values are protein names
@@ -248,7 +248,7 @@ namespace SequestResultsProcessor.Containers
                 {
                     if ((Reference ?? "") != (objEntry.Value ?? ""))
                     {
-                        exportList.Add(objEntry.Key, sbFront.ToString() + objEntry.Value + delim.ToString() + sbRear.ToString());
+                        exportList.Add(objEntry.Key, sbFront + objEntry.Value + delim + sbRear);
                     }
                 }
             }

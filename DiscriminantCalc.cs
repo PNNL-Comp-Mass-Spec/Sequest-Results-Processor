@@ -110,7 +110,7 @@ namespace SequestResultsProcessor
         //
         private double GetPeptideMScore(string PeptideSeq, int StartScanNumber, int EndScanNumber, int ChargeState)
         {
-            var ScanKey = StartScanNumber.ToString() + "." + EndScanNumber.ToString();
+            var ScanKey = StartScanNumber + "." + EndScanNumber;
             if (m_NoDTAs)
                 return 10d;
 
@@ -321,7 +321,7 @@ namespace SequestResultsProcessor
 
                 public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {
-                    var keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
+                    var keyName = StartScanNumber + "." + EndScanNumber + "." + ChargeState;
                     if (mOffsets.TryGetValue(keyName, out var offset))
                     {
                         return offset;
@@ -332,7 +332,7 @@ namespace SequestResultsProcessor
 
                 public void AddOffset(int StartScanNumber, int EndScanNumber, int ChargeState, long StartOffset, string ChargeExtra = "")
                 {
-                    var keyName = StartScanNumber.ToString() + "." + EndScanNumber.ToString() + "." + ChargeState.ToString();
+                    var keyName = StartScanNumber + "." + EndScanNumber + "." + ChargeState;
                     if (ChargeExtra.Length > 0)
                     {
                         keyName += "_" + ChargeExtra;

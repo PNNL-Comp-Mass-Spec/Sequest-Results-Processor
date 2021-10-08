@@ -68,7 +68,7 @@ namespace SequestResultsProcessor
             m_StreamWriter.WriteLine(headerLine);
             foreach (var entry in dataList)
             {
-                var outputLine = entry.ScanNumber.ToString() + '\t' + entry.ChargeState.ToString() + '\t' + entry.RankXc.ToString() + '\t' + entry.ObsIons.ToString() + '\t' + entry.PossIons.ToString() + '\t';
+                var outputLine = entry.ScanNumber.ToString() + '\t' + entry.ChargeState + '\t' + entry.RankXc + '\t' + entry.ObsIons + '\t' + entry.PossIons + '\t';
                 m_StreamWriter.WriteLine(outputLine);
             }
 

@@ -61,7 +61,7 @@ namespace SequestResultsProcessor
         private static Regex mHeaderMassMatcher;
         private static Regex mDataBlockDelimiterMatcher;
 
-        private enum eHitMatchType
+        private enum HitMatchType
         {
             NoMatch = 0,
             MatchWithProtein = 1,
@@ -525,28 +525,28 @@ namespace SequestResultsProcessor
                 // As long as we keep seeing hit lines, keep grabbing them (also, allow one blank line)
                 // (to separate that VERY last hit that creeps in)
 
-                var matchType = eHitMatchType.MatchWithProtein;
-                while (matchType != eHitMatchType.NoMatch && dataLine != null)
+                var matchType = HitMatchType.MatchWithProtein;
+                while (matchType != HitMatchType.NoMatch && dataLine != null)
                 {
                     var dataLineMatch = mHitLineMatcher.Match(dataLine);
                     if (dataLineMatch.Success)
                     {
-                        matchType = eHitMatchType.MatchWithProtein;
+                        matchType = HitMatchType.MatchWithProtein;
                     }
                     else
                     {
                         dataLineMatch = mHitLineMatcherNoReference.Match(dataLine);
                         if (dataLineMatch.Success)
                         {
-                            matchType = eHitMatchType.MatchWithoutProtein;
+                            matchType = HitMatchType.MatchWithoutProtein;
                         }
                         else
                         {
-                            matchType = eHitMatchType.NoMatch;
+                            matchType = HitMatchType.NoMatch;
                         }
                     }
 
-                    if (matchType != eHitMatchType.NoMatch)
+                    if (matchType != HitMatchType.NoMatch)
                     {
                         var currentPeptide = new PeptideHitEntry
                         {
@@ -557,7 +557,7 @@ namespace SequestResultsProcessor
                             Sp = double.Parse(dataLineMatch.Groups["sp"].Value)
                         };
 
-                        if (matchType == eHitMatchType.MatchWithProtein)
+                        if (matchType == HitMatchType.MatchWithProtein)
                         {
                             currentPeptide.Reference = dataLineMatch.Groups["reference"].Value;
                             if (dataLineMatch.Groups["multiorf"].Length > 0)

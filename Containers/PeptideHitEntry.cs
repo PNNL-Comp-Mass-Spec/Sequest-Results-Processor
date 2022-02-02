@@ -253,8 +253,6 @@ namespace SequestResultsProcessor.Containers
             return exportList;
         }
 
-        #region  Properties
-
         public int HitNum { get; set; }
         public int EndScanNum { get; set; }
         public int StartScanNum { get; set; }
@@ -288,8 +286,5 @@ namespace SequestResultsProcessor.Containers
         public int PossIons { get; set; }
         public int NumTrypticEnds { get; set; }
         public double DelMPPM { get; set; }
-
-        #endregion
-
     }
 }

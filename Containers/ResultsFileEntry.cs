@@ -80,7 +80,6 @@ namespace SequestResultsProcessor.Containers
             mPeptideHits.Add(newIndex, peptideResults);
         }
 
-        #region Calculate Differences
         private double CalculateDelCN2(double xcorrCurrent, double xcorrNextLowest)
         {
             return (xcorrCurrent - xcorrNextLowest) / xcorrCurrent;
@@ -101,16 +100,10 @@ namespace SequestResultsProcessor.Containers
             return mComputeDelMPPM.ComputeDelMCorrected(precursorMassMH, peptideTheoreticalMH);
         }
 
-        #endregion
-
-        #region  Properties
-
         public int StartScanNumber { get; }
         public int EndScanNumber { get; }
         public int ChargeState { get; }
 
         public SortedList<int, PeptideHitEntry> PeptideHits => mPeptideHits;
-
-        #endregion
     }
 }

@@ -185,7 +185,6 @@ namespace SequestResultsProcessor
             private bool mStopProcessing;
             private const int RESULTS_DUMPING_INTERVAL = 200;
 
-            #region  Progress Update Events
             internal event ProgressReportEventHandler ProgressReport;
 
             internal delegate void ProgressReportEventHandler(string currentTask, long currentPosition, long totalSize);
@@ -215,8 +214,6 @@ namespace SequestResultsProcessor
                 var statusString = "Extracting from " + Path.GetFileNameWithoutExtension(mSourceFileFullPath) + " (File " + currentOutFileCount + " of " + totalOutFileCount + ")";
                 ProgressReport?.Invoke(statusString, currentOutFileCount, totalOutFileCount);
             }
-
-            #endregion
 
             public ConcatenatedOutFileProcessor(StartupArguments ProcessSettings)
             {

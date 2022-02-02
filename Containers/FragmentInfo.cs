@@ -18,7 +18,7 @@ namespace SequestResultsProcessor.Containers
 {
     public class FragmentInfo
     {
-        private double m_MaxIntensity;
+        private double mMaxIntensity;
 
         public struct Fragment
         {
@@ -43,16 +43,16 @@ namespace SequestResultsProcessor.Containers
             };
 
             FragmentList.Add(f);
-            if (intensity > m_MaxIntensity)
+            if (intensity > mMaxIntensity)
             {
-                m_MaxIntensity = intensity;
+                mMaxIntensity = intensity;
             }
         }
 
         public void Clear()
         {
             FragmentList.Clear();
-            m_MaxIntensity = 0d;
+            mMaxIntensity = 0d;
         }
 
         public double GetMass(int index)
@@ -68,36 +68,36 @@ namespace SequestResultsProcessor.Containers
 
         public double GetNormalizedIntensity(int index)
         {
-            if (Math.Abs(m_MaxIntensity) < float.Epsilon)
+            if (Math.Abs(mMaxIntensity) < float.Epsilon)
                 return 0d;
-            return FragmentList[index].Intensity / m_MaxIntensity;
+            return FragmentList[index].Intensity / mMaxIntensity;
         }
 
         public double GetNormalizedIntensity(Fragment f)
         {
-            if (Math.Abs(m_MaxIntensity) < float.Epsilon)
+            if (Math.Abs(mMaxIntensity) < float.Epsilon)
                 return 0d;
-            return f.Intensity / m_MaxIntensity;
+            return f.Intensity / mMaxIntensity;
         }
 
         protected void NormalizeIntensities()
         {
-            m_MaxIntensity = 0d;
+            mMaxIntensity = 0d;
             foreach (var f in FragmentList)
             {
-                if (f.Intensity > m_MaxIntensity)
+                if (f.Intensity > mMaxIntensity)
                 {
-                    m_MaxIntensity = f.Intensity;
+                    mMaxIntensity = f.Intensity;
                 }
             }
 
-            if (Math.Abs(m_MaxIntensity) < float.Epsilon)
+            if (Math.Abs(mMaxIntensity) < float.Epsilon)
                 return;
 
             foreach (var item in FragmentList)
             {
                 var fragment = item;
-                fragment.NormIntensity = fragment.Intensity / m_MaxIntensity;
+                fragment.NormIntensity = fragment.Intensity / mMaxIntensity;
             }
         }
     }

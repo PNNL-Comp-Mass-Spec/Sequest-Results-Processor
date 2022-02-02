@@ -19,18 +19,18 @@ namespace SequestResultsProcessor
 {
     internal class OutputNLIFile
     {
-        private readonly string m_RootName;
-        private readonly string m_OutputDirectory;
-        private FileStream m_FileStream;
-        private StreamWriter m_StreamWriter;
-        private readonly List<NLIEntry> m_DataList;
-        private readonly string m_Ext = "_NLI.txt";
+        private readonly string mRootName;
+        private readonly string mOutputDirectory;
+        private FileStream mFileStream;
+        private StreamWriter mStreamWriter;
+        private readonly List<NLIEntry> mDataList;
+        private readonly string mExt = "_NLI.txt";
 
         public OutputNLIFile(string rootFileName, string OutputDirectory)
         {
-            m_RootName = rootFileName;
-            m_OutputDirectory = OutputDirectory;
-            m_DataList = new List<NLIEntry>();
+            mRootName = rootFileName;
+            mOutputDirectory = OutputDirectory;
+            mDataList = new List<NLIEntry>();
         }
 
         private void WriteEntries(List<NLIEntry> dataList)
@@ -39,34 +39,34 @@ namespace SequestResultsProcessor
             var fi = new FileInfo(OutputFilePath);
             if (fi.Exists)
                 fi.Delete();
-            m_FileStream = new FileStream(OutputFilePath, FileMode.CreateNew);
-            m_StreamWriter = new StreamWriter(m_FileStream);
+            mFileStream = new FileStream(OutputFilePath, FileMode.CreateNew);
+            mStreamWriter = new StreamWriter(mFileStream);
             var headerLine = "Scannum" + '\t' + "NL1_Intensity" + '\t' + "NL2_Intensity" + '\t' + "NL3_Intensity" + '\t';
-            m_StreamWriter.WriteLine(headerLine);
+            mStreamWriter.WriteLine(headerLine);
             foreach (var entry in dataList)
             {
                 var outputLine = entry.ScanNumber.ToString() + '\t' + entry.NeutralLossTxt;
-                m_StreamWriter.WriteLine(outputLine);
+                mStreamWriter.WriteLine(outputLine);
             }
 
-            m_StreamWriter.Close();
-            m_StreamWriter = null;
-            m_FileStream.Close();
-            m_FileStream = null;
+            mStreamWriter.Close();
+            mStreamWriter = null;
+            mFileStream.Close();
+            mFileStream = null;
         }
 
         public void MakeNLIEntry(int ScanNum, NeutralLossList NeutralLosses)
         {
-            m_DataList.Add(new NLIEntry(ScanNum, NeutralLosses));
+            mDataList.Add(new NLIEntry(ScanNum, NeutralLosses));
         }
 
         // ReSharper disable once UnusedMember.Global
         public void CloseNLIWriter()
         {
-            WriteEntries(m_DataList);
+            WriteEntries(mDataList);
         }
 
-        public string OutputFilePath => Path.Combine(m_OutputDirectory, m_RootName + m_Ext);
+        public string OutputFilePath => Path.Combine(mOutputDirectory, mRootName + mExt);
 
         public struct NLIEntry
         {

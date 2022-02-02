@@ -18,10 +18,10 @@ namespace SequestResultsProcessor.Containers
 
     internal class PeptideHitEntry
     {
-        private string m_Reference;
-        private SortedList<int, string> m_MultiProteinEntries;
-        private int m_MultiProteinID;
-        private static readonly CleavageStateCalculator m_CleavageStateCalculator = new();
+        private string mReference;
+        private SortedList<int, string> mMultiProteinEntries;
+        private int mMultiProteinID;
+        private static readonly CleavageStateCalculator mCleavageStateCalculator = new();
 
         // ReSharper disable once UnusedMember.Global
         public void Clear()
@@ -31,7 +31,7 @@ namespace SequestResultsProcessor.Containers
             XCorr = 0.0d;
             DelCn = 0.0d;
             Sp = 0.0d;
-            m_Reference = "";
+            mReference = "";
             MultiProteinCount = 0;
             Peptide = "";
             DelCn2 = 0.0d;
@@ -39,8 +39,8 @@ namespace SequestResultsProcessor.Containers
             RankXc = 0;
             DelM = 0.0d;
             XcRatio = 0.0d;
-            // m_PassFilt = 0
-            // m_MScore = 0.0
+            // mPassFilt = 0
+            // mMScore = 0.0
             NumTrypticEnds = 0;
             ObsIons = 0;
             PossIons = 0;
@@ -48,9 +48,9 @@ namespace SequestResultsProcessor.Containers
             ScanCount = 0;
             StartScanNum = 0;
             EndScanNum = 0;
-            // m_ObsMH = 0.0
+            // mObsMH = 0.0
 
-            m_MultiProteinEntries.Clear();
+            mMultiProteinEntries.Clear();
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -58,23 +58,25 @@ namespace SequestResultsProcessor.Containers
 
         private string GetIDKey()
         {
-            var sb = new StringBuilder();
-            sb.Append(StartScanNum.ToString("000000"));
-            sb.Append(".");
-            sb.Append(EndScanNum.ToString("000000"));
-            sb.Append(".");
-            sb.Append(ChargeState.ToString("00"));
-            sb.Append(".");
-            sb.Append(HitNum.ToString("000"));
-            return sb.ToString();
+            var idKey = new StringBuilder();
+
+            idKey.Append(StartScanNum.ToString("000000"));
+            idKey.Append(".");
+            idKey.Append(EndScanNum.ToString("000000"));
+            idKey.Append(".");
+            idKey.Append(ChargeState.ToString("00"));
+            idKey.Append(".");
+            idKey.Append(HitNum.ToString("000"));
+
+            return idKey.ToString();
         }
 
         public void AddMultiProteinRef(string refName)
         {
-            m_MultiProteinEntries ??= new SortedList<int, string>();
+            mMultiProteinEntries ??= new SortedList<int, string>();
 
-            m_MultiProteinID++;
-            m_MultiProteinEntries.Add(m_MultiProteinID, refName);
+            mMultiProteinID++;
+            mMultiProteinEntries.Add(mMultiProteinID, refName);
         }
 
         public void CalculateScoreComponents()
@@ -91,24 +93,24 @@ namespace SequestResultsProcessor.Containers
             return myScore >= optFilterScore ? 1 : 0;
         }
 
-        private double CalculateFilterScore(double dblXCorr, double deltaCn, int intNumTrypticEnds, int intChargeState)
+        private double CalculateFilterScore(double xcorr, double deltaCn, int numTrypticEnds, int chargeState)
         {
             double[] trypRelScore;
 
-            switch (intChargeState)
+            switch (chargeState)
             {
                 case 1:
                     trypRelScore = new[] { 0.35d, 0.9d, 1.04d };
-                    var myScore = trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((1.49d - dblXCorr) / 0.25d))) * (0.98d / (1d + Math.Exp((0.07d - deltaCn) / 0.085d)));
+                    var myScore = trypRelScore[numTrypticEnds] * (1.03d / (1d + Math.Exp((1.49d - xcorr) / 0.25d))) * (0.98d / (1d + Math.Exp((0.07d - deltaCn) / 0.085d)));
                     return myScore - 0.1d;
 
                 case 2:
                     trypRelScore = new[] { 0.31d, 0.76d, 0.98d };
-                    return trypRelScore[intNumTrypticEnds] * (1.03d / (1d + Math.Exp((2.44d - dblXCorr) / 0.524d))) * (1.02d / (1d + Math.Exp((0.09d - deltaCn) / 0.03d)));
+                    return trypRelScore[numTrypticEnds] * (1.03d / (1d + Math.Exp((2.44d - xcorr) / 0.524d))) * (1.02d / (1d + Math.Exp((0.09d - deltaCn) / 0.03d)));
 
                 case 3:
                     trypRelScore = new[] { 0.21d, 0.62d, 1.04d };
-                    return trypRelScore[intNumTrypticEnds] * (1.01d / (1d + Math.Exp((3.2d - dblXCorr) / 0.48d))) * (1.04d / (1d + Math.Exp((0.11d - deltaCn) / 0.06d)));
+                    return trypRelScore[numTrypticEnds] * (1.01d / (1d + Math.Exp((3.2d - xcorr) / 0.48d))) * (1.04d / (1d + Math.Exp((0.11d - deltaCn) / 0.06d)));
             }
 
             return 0;
@@ -116,7 +118,7 @@ namespace SequestResultsProcessor.Containers
 
         private int CountTrypticEnds(string peptideSeq)
         {
-            return m_CleavageStateCalculator.CountTrypticEnds(peptideSeq);
+            return mCleavageStateCalculator.CountTrypticEnds(peptideSeq);
         }
 
         public SortedList<string, string> ExportMultiProteinXref(ResultsStorage.OutputTypeList ResultsType)
@@ -129,7 +131,7 @@ namespace SequestResultsProcessor.Containers
                 if (ResultsType == ResultsStorage.OutputTypeList.Syn || ResultsType == ResultsStorage.OutputTypeList.FHT && RankXc == 1)
                 {
                     proteinList = new SortedList<string, string>();
-                    foreach (var objEntry in m_MultiProteinEntries)
+                    foreach (var objEntry in mMultiProteinEntries)
                     {
                         identifierSB.Clear();
                         identifierSB.Append(StartScanNum.ToString("##0000"));
@@ -159,13 +161,12 @@ namespace SequestResultsProcessor.Containers
             return proteinList;
         }
 
-        public SortedList<int, string> ExportContents(bool ExpandMultiProteinEntries)
+        public SortedList<int, string> ExportContents(bool expandMultiProteinEntries)
         {
-            StringBuilder sbFront;
-            StringBuilder sbRear;
-            sbFront = new StringBuilder(150);
-            sbRear = new StringBuilder(150);
-            const char delim = '\t';
+            var startColumns = new StringBuilder(150);
+            var endColumns = new StringBuilder(150);
+
+            const char delimiter = '\t';
 
             // Tracks protein names:
             // keys are 0, 1, 2, etc.
@@ -174,78 +175,77 @@ namespace SequestResultsProcessor.Containers
 
             CalculateScoreComponents();
 
-            // sbFront and srRear contain the constant parts of the peptide result
+            // startColumns and endColumns contain the constant parts of the peptide result
             // each multiorf reference will be stuck in the middle during the integration
             // phase at the end of the function
 
+            startColumns.Append(HitNum.ToString());
+            startColumns.Append(delimiter);
+            startColumns.Append(StartScanNum.ToString("##0000"));
+            startColumns.Append(delimiter);
+            startColumns.Append(ScanCount.ToString());
+            startColumns.Append(delimiter);
+            startColumns.Append(ChargeState.ToString());
+            startColumns.Append(delimiter);
+            startColumns.Append(Math.Round(MH, 5).ToString("#####0.00000"));
+            startColumns.Append(delimiter);
+            startColumns.Append(Math.Round(XCorr, 4).ToString("##0.0000"));
+            startColumns.Append(delimiter);
+            startColumns.Append(Math.Round(DelCn, 4).ToString("##0.0000"));
+            startColumns.Append(delimiter);
+            startColumns.Append(Math.Round(Sp, 1).ToString("######0.0"));
+            startColumns.Append(delimiter);
+
+            if (MultiProteinCount > 0)
             {
-                sbFront.Append(HitNum.ToString());
-                sbFront.Append(delim);
-                sbFront.Append(StartScanNum.ToString("##0000"));
-                sbFront.Append(delim);
-                sbFront.Append(ScanCount.ToString());
-                sbFront.Append(delim);
-                sbFront.Append(ChargeState.ToString());
-                sbFront.Append(delim);
-                sbFront.Append(Math.Round(MH, 5).ToString("#####0.00000"));
-                sbFront.Append(delim);
-                sbFront.Append(Math.Round(XCorr, 4).ToString("##0.0000"));
-                sbFront.Append(delim);
-                sbFront.Append(Math.Round(DelCn, 4).ToString("##0.0000"));
-                sbFront.Append(delim);
-                sbFront.Append(Math.Round(Sp, 1).ToString("######0.0"));
-                sbFront.Append(delim);
-                if (MultiProteinCount > 0)
-                {
-                    sbRear.Append(MultiProteinCount.ToString("+0"));
-                }
-                else
-                {
-                    sbRear.Append("0");
-                }
-
-                sbRear.Append(delim);
-                sbRear.Append(Peptide);
-                sbRear.Append(delim);
-                sbRear.Append(Math.Round(DelCn2, 4).ToString("##0.0000"));
-                sbRear.Append(delim);
-                sbRear.Append(RankSp.ToString());
-                sbRear.Append(delim);
-                sbRear.Append(RankXc.ToString());
-                sbRear.Append(delim);
-                sbRear.Append(Math.Round(DelM, 5).ToString("##0.00000"));
-                sbRear.Append(delim);
-                sbRear.Append(Math.Round(XcRatio, 3).ToString("0.000"));
-                sbRear.Append(delim);
-
-                // PassFilt and MScore are Legacy columns
-                // sbRear.Append(.PassFilt.ToString)
-                // sbRear.Append(delim)
-                // If .MScore = 10 OrElse .MScore = 0 Then
-                // sbRear.Append(.MScore.ToString("0"))
-                // Else
-                // sbRear.Append(Math.Round(.MScore, 2).ToString("##0.00"))
-                // End If
-                // sbRear.Append(delim)
-
-                sbRear.Append(ObsIons.ToString());
-                sbRear.Append(delim);
-                sbRear.Append(PossIons.ToString());
-                sbRear.Append(delim);
-                sbRear.Append(NumTrypticEnds.ToString());
-                sbRear.Append(delim);
-                sbRear.Append(DelMPPM.ToString("##0.0000"));
+                endColumns.Append(MultiProteinCount.ToString("+0"));
+            }
+            else
+            {
+                endColumns.Append("0");
             }
 
-            exportList.Add(0, sbFront + Reference + delim + sbRear);
-            if (ExpandMultiProteinEntries && m_MultiProteinEntries != null)
+            endColumns.Append(delimiter);
+            endColumns.Append(Peptide);
+            endColumns.Append(delimiter);
+            endColumns.Append(Math.Round(DelCn2, 4).ToString("##0.0000"));
+            endColumns.Append(delimiter);
+            endColumns.Append(RankSp.ToString());
+            endColumns.Append(delimiter);
+            endColumns.Append(RankXc.ToString());
+            endColumns.Append(delimiter);
+            endColumns.Append(Math.Round(DelM, 5).ToString("##0.00000"));
+            endColumns.Append(delimiter);
+            endColumns.Append(Math.Round(XcRatio, 3).ToString("0.000"));
+            endColumns.Append(delimiter);
+
+            // PassFilt and MScore are Legacy columns
+            // endColumns.Append(PassFilt.ToString)
+            // endColumns.Append(delimiter)
+            // If .MScore = 10 OrElse .MScore = 0 Then
+            // endColumns.Append(MScore.ToString("0"))
+            // Else
+            // endColumns.Append(Math.Round(.MScore, 2).ToString("##0.00"))
+            // End If
+            // endColumns.Append(delimiter)
+
+            endColumns.Append(ObsIons.ToString());
+            endColumns.Append(delimiter);
+            endColumns.Append(PossIons.ToString());
+            endColumns.Append(delimiter);
+            endColumns.Append(NumTrypticEnds.ToString());
+            endColumns.Append(delimiter);
+            endColumns.Append(DelMPPM.ToString("##0.0000"));
+
+            exportList.Add(0, startColumns + Reference + delimiter + endColumns);
+            if (expandMultiProteinEntries && mMultiProteinEntries != null)
             {
-                // Keys in m_MultiProteinEntries are MultiProteinID #, values are protein names
-                foreach (var objEntry in m_MultiProteinEntries)
+                // Keys in mMultiProteinEntries are MultiProteinID #, values are protein names
+                foreach (var objEntry in mMultiProteinEntries)
                 {
                     if ((Reference ?? "") != (objEntry.Value ?? ""))
                     {
-                        exportList.Add(objEntry.Key, sbFront + objEntry.Value + delim + sbRear);
+                        exportList.Add(objEntry.Key, startColumns + objEntry.Value + delimiter + endColumns);
                     }
                 }
             }
@@ -267,11 +267,11 @@ namespace SequestResultsProcessor.Containers
 
         public string Reference
         {
-            get => m_Reference;
+            get => mReference;
 
             set
             {
-                m_Reference = value;
+                mReference = value;
                 AddMultiProteinRef(value);
             }
         }

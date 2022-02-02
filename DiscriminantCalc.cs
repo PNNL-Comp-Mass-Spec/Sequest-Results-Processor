@@ -24,37 +24,37 @@ namespace SequestResultsProcessor
 
     internal class DiscriminantCalc
     {
-        private DTAFileInformation _m_dtaFileInfo;
+        private DTAFileInformation mDtaFileInfo;
 
-        private DTAFileInformation m_dtaFileInfo
+        private DTAFileInformation DtaFileInfo
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get => _m_dtaFileInfo;
+            get => mDtaFileInfo;
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_m_dtaFileInfo != null)
+                if (mDtaFileInfo != null)
                 {
-                    _m_dtaFileInfo.OffsetProgress -= OffsetLoadingProgressHandler;
+                    mDtaFileInfo.OffsetProgress -= OffsetLoadingProgressHandler;
                 }
 
-                _m_dtaFileInfo = value;
-                if (_m_dtaFileInfo != null)
+                mDtaFileInfo = value;
+                if (mDtaFileInfo != null)
                 {
-                    _m_dtaFileInfo.OffsetProgress += OffsetLoadingProgressHandler;
+                    mDtaFileInfo.OffsetProgress += OffsetLoadingProgressHandler;
                 }
             }
         }
 
-        private PeptideIntensities m_CachedScanInfo;
-        private string m_CachedScanKey;
-        private int m_CachedCS;
-        private readonly OutputNLIFile m_NLIDumper;
-        private double m_MassTol;
-        private readonly string m_dtaFilepath;
-        private readonly string m_Version;
-        private readonly bool m_NoDTAs;
+        private PeptideIntensities mCachedScanInfo;
+        private string mCachedScanKey;
+        private int mCachedCS;
+        private readonly OutputNLIFile mNLIDumper;
+        private double mMassTol;
+        private readonly string mDtaFilepath;
+        private readonly string mVersion;
+        private readonly bool mNoDTAs;
 
         public event ProgressUpdateEventHandler ProgressUpdate;
 
@@ -75,19 +75,19 @@ namespace SequestResultsProcessor
             var fi = new FileInfo(dtaFilePath);
             var rootFileName = fi.Name;
             rootFileName = Regex.Replace(rootFileName, "_dta.txt", "");
-            m_dtaFilepath = dtaFilePath;
+            mDtaFilepath = dtaFilePath;
             if (fi.Exists)
             {
-                m_dtaFileInfo = new DTAFileInformation(dtaFilePath);
-                m_NoDTAs = false;
-                m_NLIDumper = new OutputNLIFile(rootFileName, fi.DirectoryName);
+                DtaFileInfo = new DTAFileInformation(dtaFilePath);
+                mNoDTAs = false;
+                mNLIDumper = new OutputNLIFile(rootFileName, fi.DirectoryName);
             }
             else
             {
-                m_NoDTAs = true;
+                mNoDTAs = true;
             }
 
-            m_Version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+            mVersion = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace SequestResultsProcessor
         // ReSharper disable once UnusedMember.Global
         public string Version()
         {
-            return m_Version;
+            return mVersion;
         }
 
         // --------------------
@@ -107,39 +107,39 @@ namespace SequestResultsProcessor
         private double GetPeptideMScore(string PeptideSeq, int StartScanNumber, int EndScanNumber, int ChargeState)
         {
             var ScanKey = StartScanNumber + "." + EndScanNumber;
-            if (m_NoDTAs)
+            if (mNoDTAs)
                 return 10d;
 
-            m_dtaFileInfo ??= new DTAFileInformation(m_dtaFilepath);
+            DtaFileInfo ??= new DTAFileInformation(mDtaFilepath);
 
-            m_MassTol = 0.7d;
-            if (ChargeState != m_CachedCS || ScanKey != (m_CachedScanKey ?? string.Empty))
+            mMassTol = 0.7d;
+            if (ChargeState != mCachedCS || ScanKey != (mCachedScanKey ?? string.Empty))
             {
-                m_dtaFileInfo.GetDTAFileIntensities(StartScanNumber, EndScanNumber, ChargeState);
-                if (m_dtaFileInfo.DTAScanInfo.FragmentList.Count == 0)
+                DtaFileInfo.GetDTAFileIntensities(StartScanNumber, EndScanNumber, ChargeState);
+                if (DtaFileInfo.DTAScanInfo.FragmentList.Count == 0)
                 {
                     return 10d;
                 }
 
-                if (ScanKey != (m_CachedScanKey ?? string.Empty))
+                if (ScanKey != (mCachedScanKey ?? string.Empty))
                 {
-                    m_dtaFileInfo.DTAScanInfo.GetNeutralLosses(m_MassTol);
-                    m_NLIDumper.MakeNLIEntry(StartScanNumber, m_dtaFileInfo.DTAScanInfo.NeutralLosses);
+                    DtaFileInfo.DTAScanInfo.GetNeutralLosses(mMassTol);
+                    mNLIDumper.MakeNLIEntry(StartScanNumber, DtaFileInfo.DTAScanInfo.NeutralLosses);
                 }
 
-                m_CachedScanInfo = m_dtaFileInfo.DTAScanInfo;
-                m_CachedScanKey = ScanKey;
-                m_CachedCS = ChargeState;
+                mCachedScanInfo = DtaFileInfo.DTAScanInfo;
+                mCachedScanKey = ScanKey;
+                mCachedCS = ChargeState;
             }
 
-            return CalculateMScore(PeptideSeq, ChargeState, m_CachedScanInfo);
+            return CalculateMScore(PeptideSeq, ChargeState, mCachedScanInfo);
         }
 
         private double CalculateMScore(string peptideSequence, int peptideChargeState, FragmentInfo scanIntensities)
         {
             var match = 0.0;
 
-            var mTol = m_MassTol;
+            var mTol = mMassTol;
             if (scanIntensities.FragmentList.Count == 0)
             {
                 return 10d;
@@ -185,7 +185,7 @@ namespace SequestResultsProcessor
             return 10d;
         }
 
-        private double HashScanner(FragmentInfo peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoreticalFragments, double massTol, int CSToCheck)
+        private double HashScanner(FragmentInfo peptideRecord, List<TheoreticalFragmentInfo.Fragment> theoreticalFragments, double massTol, int chargeStateToCheck)
         {
             var maxObsRecord = peptideRecord.FragmentList.Count;
             if (maxObsRecord == 0)
@@ -217,7 +217,7 @@ namespace SequestResultsProcessor
                     continue;
                 }
 
-                if (CSToCheck >= 2)
+                if (chargeStateToCheck >= 2)
                 {
                     match += peptideRecord.GetNormalizedIntensity(obsCount);
                 }
@@ -232,32 +232,32 @@ namespace SequestResultsProcessor
 
         private class DTAFileInformation
         {
-            private dtaFileOffsets _m_Offsets;
+            private DTAFileOffsets mOffsets;
 
-            private dtaFileOffsets m_Offsets
+            private DTAFileOffsets Offsets
             {
                 [MethodImpl(MethodImplOptions.Synchronized)]
-                get => _m_Offsets;
+                get => mOffsets;
 
                 [MethodImpl(MethodImplOptions.Synchronized)]
                 set
                 {
-                    if (_m_Offsets != null)
+                    if (mOffsets != null)
                     {
-                        _m_Offsets.dtaScanProgress -= OffsetLoadingProgressHandler;
+                        mOffsets.DtaScanProgress -= OffsetLoadingProgressHandler;
                     }
 
-                    _m_Offsets = value;
-                    if (_m_Offsets != null)
+                    mOffsets = value;
+                    if (mOffsets != null)
                     {
-                        _m_Offsets.dtaScanProgress += OffsetLoadingProgressHandler;
+                        mOffsets.DtaScanProgress += OffsetLoadingProgressHandler;
                     }
                 }
             }
 
-            private PeptideIntensities m_DTAFileIntensities;
-            private FileStream m_dtaStream;
-            private readonly string m_dtaFilePath;
+            private PeptideIntensities mDTAFileIntensities;
+            private FileStream mDtaStream;
+            private readonly string mDtaFilePath;
 
             public event OffsetProgressEventHandler OffsetProgress;
 
@@ -266,25 +266,25 @@ namespace SequestResultsProcessor
             public DTAFileInformation(string dtaFilePath)
             {
                 // Scan the dta file for dta file boundaries
-                m_Offsets = new dtaFileOffsets();
-                m_dtaFilePath = dtaFilePath;
+                Offsets = new DTAFileOffsets();
+                mDtaFilePath = dtaFilePath;
             }
 
             // ReSharper disable once UnusedMember.Local
             public void Configure()
             {
-                m_Offsets.LoadOffsetsFromDTAFile(m_dtaFilePath);
-                m_dtaStream = new FileStream(m_dtaFilePath, FileMode.Open);
-                m_DTAFileIntensities = new PeptideIntensities(m_dtaStream);
+                Offsets.LoadOffsetsFromDTAFile(mDtaFilePath);
+                mDtaStream = new FileStream(mDtaFilePath, FileMode.Open);
+                mDTAFileIntensities = new PeptideIntensities(mDtaStream);
             }
 
             // ReSharper disable once UnusedMember.Local
             public void Close()
             {
-                m_dtaStream.Close();
+                mDtaStream.Close();
             }
 
-            public PeptideIntensities DTAScanInfo => m_DTAFileIntensities;
+            public PeptideIntensities DTAScanInfo => mDTAFileIntensities;
 
             private void OffsetLoadingProgressHandler(double fractionDone)
             {
@@ -293,26 +293,26 @@ namespace SequestResultsProcessor
 
             public void GetDTAFileIntensities(int StartScanNumber, int EndScanNumber, int ChargeState)
             {
-                var fileOffset = m_Offsets.get_GetOffset(StartScanNumber, EndScanNumber, ChargeState);
+                var fileOffset = Offsets.GetOffset(StartScanNumber, EndScanNumber, ChargeState);
                 if (fileOffset > 0L)
                 {
-                    m_DTAFileIntensities.GetIntensitiesFromDTA(fileOffset);
+                    mDTAFileIntensities.GetIntensitiesFromDTA(fileOffset);
                 }
-                else if (m_DTAFileIntensities != null)
+                else if (mDTAFileIntensities != null)
                 {
-                    m_DTAFileIntensities.Clear();
+                    mDTAFileIntensities.Clear();
                 }
                 else
                 {
-                    m_DTAFileIntensities = new PeptideIntensities(m_dtaStream);
+                    mDTAFileIntensities = new PeptideIntensities(mDtaStream);
                 }
             }
 
-            private class dtaFileOffsets
+            private class DTAFileOffsets
             {
                 private readonly Dictionary<string, long> mOffsets = new();
 
-                public long get_GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
+                public long GetOffset(int StartScanNumber, int EndScanNumber, int ChargeState)
                 {
                     var keyName = StartScanNumber + "." + EndScanNumber + "." + ChargeState;
                     if (mOffsets.TryGetValue(keyName, out var offset))
@@ -386,78 +386,78 @@ namespace SequestResultsProcessor
                     tr.Close();
                 }
 
-                public event dtaScanProgressEventHandler dtaScanProgress;
+                public event dtaScanProgressEventHandler DtaScanProgress;
 
                 public delegate void dtaScanProgressEventHandler(double fractionDone);
 
                 private void OnDTAScanUpdate(double fractionDone)
                 {
-                    dtaScanProgress?.Invoke(fractionDone);
+                    DtaScanProgress?.Invoke(fractionDone);
                 }
             }
 
             ~DTAFileInformation()
             {
-                m_DTAFileIntensities = null;
+                mDTAFileIntensities = null;
             }
         }
 
         internal class PeptideIntensities : FragmentInfo
         {
-            private static FileStream m_FileStream;
-            private NeutralLossList m_NeutralLoss;
+            private static FileStream mFileStream;
+            private NeutralLossList mNeutralLoss;
 
-            private double m_ParentMH;
-            private int m_ParentCS;
+            private double mParentMH;
+            private int mParentCS;
             private static CalcNeutralLosses NLCalc;
 
             public PeptideIntensities(FileStream dtaFileStream)
             {
-                if (m_FileStream is null)
+                if (mFileStream is null)
                 {
-                    m_FileStream = dtaFileStream;
+                    mFileStream = dtaFileStream;
                 }
-                else if ((m_FileStream.Name ?? "") != (dtaFileStream.Name ?? ""))
+                else if ((mFileStream.Name ?? "") != (dtaFileStream.Name ?? ""))
                 {
-                    m_FileStream = dtaFileStream;
+                    mFileStream = dtaFileStream;
                 }
 
                 NLCalc ??= new CalcNeutralLosses();
             }
 
-            public NeutralLossList NeutralLosses => m_NeutralLoss;
+            public NeutralLossList NeutralLosses => mNeutralLoss;
 
-            public double ParentMZ => (m_ParentMH - 1.0d + m_ParentCS) / m_ParentCS;
+            public double ParentMZ => (mParentMH - 1.0d + mParentCS) / mParentCS;
 
             public void GetIntensitiesFromDTA(long startOffset)
             {
                 var maxIntensity = 0.0;
-                var sr = new StreamReader(m_FileStream);
+                var reader = new StreamReader(mFileStream);
                 Clear();
-                sr.BaseStream.Seek(startOffset, SeekOrigin.Begin);
+                reader.BaseStream.Seek(startOffset, SeekOrigin.Begin);
 
                 // Read the header line
-                sr.ReadLine();
+                reader.ReadLine();
 
                 //var HeaderLine = new Regex(@"^=+\s+\""\S+\.(?<Scan>\d+)\.\d+\.\d+\.dta");
                 //if (HeaderLine.IsMatch(s))
                 //{
                 //    var headerLineMatch = HeaderLine.Match(s);
-                //    m_ScanNum = int.Parse(headerLineMatch.Groups["Scan"].Value);
+                //    mScanNum = int.Parse(headerLineMatch.Groups["Scan"].Value);
                 //}
 
-                var precursorLine = sr.ReadLine();
+                var precursorLine = reader.ReadLine();
                 var ParentLine = new Regex(@"^(?<ParentMass>\d+\.*\d*)\s+(?<ChargeState>\d+)");
                 if (Regex.IsMatch(precursorLine, @"^\S+"))
                 {
                     var parentLineMatch = ParentLine.Match(precursorLine);
-                    m_ParentMH = double.Parse(parentLineMatch.Groups["ParentMass"].Value);
-                    m_ParentCS = int.Parse(parentLineMatch.Groups["ChargeState"].Value);
+                    mParentMH = double.Parse(parentLineMatch.Groups["ParentMass"].Value);
+                    mParentCS = int.Parse(parentLineMatch.Groups["ChargeState"].Value);
                 }
 
                 var LineMatch = new Regex(@"^(?<Mass>\d+\.\d+)\s(?<Intensity>\d+\.\d+)");
 
-                var dataLine = sr.ReadLine();
+                var dataLine = reader.ReadLine();
                 while (dataLine != null && LineMatch.IsMatch(dataLine))
                 {
                     var m = LineMatch.Match(dataLine);
@@ -470,7 +470,7 @@ namespace SequestResultsProcessor
 
                     Add(tmpMass, tmpIntensity);
 
-                    dataLine = sr.ReadLine();
+                    dataLine = reader.ReadLine();
                 }
 
                 NormalizeIntensities();
@@ -478,7 +478,7 @@ namespace SequestResultsProcessor
 
             public void GetNeutralLosses(double massTol = 0.7)
             {
-                m_NeutralLoss = NLCalc.CalculateNeutralLosses(this, massTol);
+                mNeutralLoss = NLCalc.CalculateNeutralLosses(this, massTol);
             }
         }
     }

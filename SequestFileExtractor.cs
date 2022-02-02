@@ -29,27 +29,27 @@ namespace SequestResultsProcessor
     {
         // Const DEBUG_FLAG As Boolean = True
 
-        private ConcatenatedOutFileProcessor _m_parser;
+        private ConcatenatedOutFileProcessor mParserInstance;
 
-        private ConcatenatedOutFileProcessor m_parser
+        private ConcatenatedOutFileProcessor OutFileParser
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
-            get => _m_parser;
+            get => mParserInstance;
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_m_parser != null)
+                if (mParserInstance != null)
                 {
-                    _m_parser.EndingTask -= TaskEndHandler;
-                    _m_parser.ProgressReport -= ImportProgressHandler;
+                    mParserInstance.EndingTask -= TaskEndHandler;
+                    mParserInstance.ProgressReport -= ImportProgressHandler;
                 }
 
-                _m_parser = value;
-                if (_m_parser != null)
+                mParserInstance = value;
+                if (mParserInstance != null)
                 {
-                    _m_parser.EndingTask += TaskEndHandler;
-                    _m_parser.ProgressReport += ImportProgressHandler;
+                    mParserInstance.EndingTask += TaskEndHandler;
+                    mParserInstance.ProgressReport += ImportProgressHandler;
                 }
             }
         }
@@ -68,9 +68,9 @@ namespace SequestResultsProcessor
             MatchWithoutProtein = 2
         }
 
-        public SequestFileExtractor(StartupArguments StartupArgs)
+        public SequestFileExtractor(StartupArguments startupArgs)
         {
-            m_parser = new ConcatenatedOutFileProcessor(StartupArgs);
+            OutFileParser = new ConcatenatedOutFileProcessor(startupArgs);
             InitializeMatchers();
         }
 
@@ -129,7 +129,7 @@ namespace SequestResultsProcessor
 
         public void ProcessInputFile()
         {
-            m_parser.ProcessInputFile();
+            OutFileParser.ProcessInputFile();
         }
 
         public event ProgressReportEventHandler ProgressReport;
@@ -177,12 +177,12 @@ namespace SequestResultsProcessor
 
         private class ConcatenatedOutFileProcessor
         {
-            private StartupArguments m_StartupArguments;
-            private string m_SourceFileFullPath;
-            private ResultsStorage m_Results;
-            private OutputIRRFile m_IRRDumper;
-            private PRISM.Logging.FileLogger m_Logger;
-            private bool m_StopProcessing;
+            private StartupArguments mStartupArguments;
+            private string mSourceFileFullPath;
+            private ResultsStorage mResults;
+            private OutputIRRFile mIRRDumper;
+            private PRISM.Logging.FileLogger mLogger;
+            private bool mStopProcessing;
             private const int RESULTS_DUMPING_INTERVAL = 200;
 
             #region  Progress Update Events
@@ -212,7 +212,7 @@ namespace SequestResultsProcessor
 
             private void UpdateProgressExtracting(int currentOutFileCount, int totalOutFileCount)
             {
-                var statusString = "Extracting from " + Path.GetFileNameWithoutExtension(m_SourceFileFullPath) + " (File " + currentOutFileCount + " of " + totalOutFileCount + ")";
+                var statusString = "Extracting from " + Path.GetFileNameWithoutExtension(mSourceFileFullPath) + " (File " + currentOutFileCount + " of " + totalOutFileCount + ")";
                 ProgressReport?.Invoke(statusString, currentOutFileCount, totalOutFileCount);
             }
 
@@ -225,10 +225,10 @@ namespace SequestResultsProcessor
 
             public void AbortProcessing()
             {
-                m_StopProcessing = true;
+                mStopProcessing = true;
             }
 
-            private bool AdvanceReaderUntilMatch(StreamReader srInFile, Regex reMatcher, string dataLine, out string matchingLine)
+            private bool AdvanceReaderUntilMatch(StreamReader reader, Regex reMatcher, string dataLine, out string matchingLine)
             {
                 if (reMatcher.IsMatch(dataLine))
                 {
@@ -238,9 +238,9 @@ namespace SequestResultsProcessor
 
                 while (true)
                 {
-                    if (!srInFile.EndOfStream)
+                    if (!reader.EndOfStream)
                     {
-                        var nextLine = srInFile.ReadLine();
+                        var nextLine = reader.ReadLine();
                         var matchFound = reMatcher.IsMatch(nextLine ?? string.Empty);
                         if (matchFound)
                         {
@@ -258,17 +258,17 @@ namespace SequestResultsProcessor
 
             private void DumpCachedResults(string tmpFHTPath, string tmpSynPath, List<ResultsStorage.OutputRecordIndex> FHTOutputIndexList, List<ResultsStorage.OutputRecordIndex> SynOutputIndexList)
             {
-                m_Results.ExportContents(ResultsStorage.OutputTypeList.FHT, m_StartupArguments.FHTXCorrThreshold, false, tmpFHTPath, FHTOutputIndexList);
-                m_Results.ExportContents(ResultsStorage.OutputTypeList.Syn, m_StartupArguments.SynXCorrThreshold, m_StartupArguments.ExpandMultiORF, tmpSynPath, SynOutputIndexList);
-                m_Results.ClearResults();
+                mResults.ExportContents(ResultsStorage.OutputTypeList.FHT, mStartupArguments.FHTXCorrThreshold, false, tmpFHTPath, FHTOutputIndexList);
+                mResults.ExportContents(ResultsStorage.OutputTypeList.Syn, mStartupArguments.SynXCorrThreshold, mStartupArguments.ExpandMultiORF, tmpSynPath, SynOutputIndexList);
+                mResults.ClearResults();
             }
 
             private void InitializeSettings(StartupArguments ProcessSettings)
             {
-                m_StartupArguments = ProcessSettings;
-                m_SourceFileFullPath = m_StartupArguments.InputFileFullPath;
-                m_StartupArguments = ProcessSettings;
-                m_Logger = new FileLogger(Path.Combine(m_StartupArguments.DestinationDirectory, Path.GetFileNameWithoutExtension(m_StartupArguments.LogFileName)));
+                mStartupArguments = ProcessSettings;
+                mSourceFileFullPath = mStartupArguments.InputFileFullPath;
+                mStartupArguments = ProcessSettings;
+                mLogger = new FileLogger(Path.Combine(mStartupArguments.DestinationDirectory, Path.GetFileNameWithoutExtension(mStartupArguments.LogFileName)));
             }
 
             /// <summary>
@@ -279,25 +279,25 @@ namespace SequestResultsProcessor
             {
                 var makeIRRFile = false;
                 var extractorVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "------ Peptide File Extractor, " + Path.GetFileName(Assembly.GetExecutingAssembly().Location) + " v" + extractorVersion);
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "------ Peptide File Extractor, " + Path.GetFileName(Assembly.GetExecutingAssembly().Location) + " v" + extractorVersion);
                 ProgressReport?.Invoke("Initializing", 0L, 0L);
-                m_Results = new ResultsStorage();
+                mResults = new ResultsStorage();
                 var lstOutFilesProcessed = new SortedSet<string>();
                 var FHTOutputIndexList = new List<ResultsStorage.OutputRecordIndex>();
                 var SynOutputIndexList = new List<ResultsStorage.OutputRecordIndex>();
                 var r_FileDelimiterMatcher = new Regex(@"^\s*[=]{5,}\s+\""(?<rootname>.+)\.(?<StartScan>\d+)\.(?<EndScan>\d+)\.(?<ChargeBlock>(?<ChargeState>\d+)[^0-9]?(?<ChargeExtra>\S*))\.(?<FileType>.+)\""\s+[=]{5,}\s*$", RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                if (m_StartupArguments.MakeIRRFile)
+                if (mStartupArguments.MakeIRRFile)
                 {
-                    m_IRRDumper = new OutputIRRFile(m_StartupArguments.RootFileName, m_StartupArguments.DestinationDirectory);
+                    mIRRDumper = new OutputIRRFile(mStartupArguments.RootFileName, mStartupArguments.DestinationDirectory);
                     makeIRRFile = true;
                 }
 
-                var fi = new FileInfo(m_SourceFileFullPath);
-                var removeDupMultiProteinRefs = m_StartupArguments.RemoveDuplicatedMultiProteinRefs;
-                var tmpFHTPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT.txt");
-                var tmpSynPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn.txt");
-                var tmpFHTProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_FHT_Prot.txt");
-                var tmpSynProtPath = Path.Combine(Path.GetDirectoryName(m_SourceFileFullPath), "Tmp_Syn_Prot.txt");
+                var fi = new FileInfo(mSourceFileFullPath);
+                var removeDupMultiProteinRefs = mStartupArguments.RemoveDuplicatedMultiProteinRefs;
+                var tmpFHTPath = Path.Combine(Path.GetDirectoryName(mSourceFileFullPath), "Tmp_FHT.txt");
+                var tmpSynPath = Path.Combine(Path.GetDirectoryName(mSourceFileFullPath), "Tmp_Syn.txt");
+                var tmpFHTProtPath = Path.Combine(Path.GetDirectoryName(mSourceFileFullPath), "Tmp_FHT_Prot.txt");
+                var tmpSynProtPath = Path.Combine(Path.GetDirectoryName(mSourceFileFullPath), "Tmp_Syn_Prot.txt");
                 var tmpFHTFI = new FileInfo(tmpFHTPath);
                 var tmpSynFI = new FileInfo(tmpSynPath);
                 var tmpFHTProtFI = new FileInfo(tmpFHTProtPath);
@@ -324,8 +324,8 @@ namespace SequestResultsProcessor
 
                 if (!fi.Exists)
                 {
-                    m_Logger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- ERROR: '" + m_SourceFileFullPath + "' apparently doesn't exist");
-                    m_Logger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- Exiting program ---------");
+                    mLogger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- ERROR: '" + mSourceFileFullPath + "' apparently doesn't exist");
+                    mLogger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- Exiting program ---------");
                     EndTask();
                     return;
                 }
@@ -334,27 +334,27 @@ namespace SequestResultsProcessor
                 var currentOutFileCount = 0;
                 if (totalOutFileCount == 0)
                 {
-                    m_Logger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- ERROR: '" + m_StartupArguments.InputFileName + "' contained no concatenated .out files");
-                    m_Logger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- Exiting program ---------");
+                    mLogger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- ERROR: '" + mStartupArguments.InputFileName + "' contained no concatenated .out files");
+                    mLogger.LogMessage(BaseLogger.LogLevels.ERROR, "-------- Exiting program ---------");
                     EndTask();
                     return;
                 }
 
-                using (var srInFile = new StreamReader(new FileStream(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.Read)))
+                using (var reader = new StreamReader(new FileStream(fi.FullName, FileMode.Open, FileAccess.Read, FileShare.Read)))
                 {
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Processing '" + m_StartupArguments.InputFileName + "'");
-                    while (!srInFile.EndOfStream)
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Processing '" + mStartupArguments.InputFileName + "'");
+                    while (!reader.EndOfStream)
                     {
-                        var dataLine = srInFile.ReadLine();
+                        var dataLine = reader.ReadLine();
 
-                        var outFileFound = AdvanceReaderUntilMatch(srInFile, r_FileDelimiterMatcher, dataLine, out var matchingLine);
+                        var outFileFound = AdvanceReaderUntilMatch(reader, r_FileDelimiterMatcher, dataLine, out var matchingLine);
                         if (outFileFound)
                         {
                             // Check whether this .out file has already been processed
                             if (lstOutFilesProcessed.Contains(matchingLine))
                             {
                                 // Skip this .out file
-                                m_Logger.LogMessage(BaseLogger.LogLevels.WARN, "Skipping duplicate .out file: " + matchingLine.Trim('='));
+                                mLogger.LogMessage(BaseLogger.LogLevels.WARN, "Skipping duplicate .out file: " + matchingLine.Trim('='));
                                 Console.WriteLine("Warning, skipping duplicate .out file: " + matchingLine.Trim('='));
                                 outFileFound = false;
                             }
@@ -370,10 +370,10 @@ namespace SequestResultsProcessor
                             currentOutFileCount++;
                             if (currentOutFileCount % 1000 == 0)
                             {
-                                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, " ... " + currentOutFileCount.ToString().PadLeft(5) + " spectra processed");
+                                mLogger.LogMessage(BaseLogger.LogLevels.INFO, " ... " + currentOutFileCount.ToString().PadLeft(5) + " spectra processed");
                             }
 
-                            ReadAndStoreOutFileResults(srInFile, matchingLine, r_FileDelimiterMatcher, makeIRRFile, removeDupMultiProteinRefs);
+                            ReadAndStoreOutFileResults(reader, matchingLine, r_FileDelimiterMatcher, makeIRRFile, removeDupMultiProteinRefs);
                         }
 
                         if (currentOutFileCount % RESULTS_DUMPING_INTERVAL == 0 || currentOutFileCount >= totalOutFileCount)
@@ -387,37 +387,37 @@ namespace SequestResultsProcessor
                     }
                 }
 
-                if (m_Results.Count > 0)
+                if (mResults.Count > 0)
                 {
                     DumpCachedResults(tmpFHTPath, tmpSynPath, FHTOutputIndexList, SynOutputIndexList);
                 }
 
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' was generated");
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' was generated");
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' contains " + SynOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.SynXCorrThreshold + " and subsequently filtered)");
-                m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + m_StartupArguments.FHTXCorrThreshold + ")");
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' was generated");
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' was generated");
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' contains " + SynOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + mStartupArguments.SynXCorrThreshold + " and subsequently filtered)");
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + mStartupArguments.FHTXCorrThreshold + ")");
 
                 // Keys in these dictionaries are XCorr threshold; values are the number of peptides with an XCorr over the threshold
-                if (!m_StopProcessing)
+                if (!mStopProcessing)
                 {
                     StartingNewTask("Sorting results...");
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Syn file");
-                    var SynSummaryResults = m_Results.SortPeptides(tmpSynPath, SynOutputIndexList, m_StartupArguments.SynopsisFileFullPath);
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Fht file");
-                    var FHTSummaryResults = m_Results.SortPeptides(tmpFHTPath, FHTOutputIndexList, m_StartupArguments.FirstHitsFullPath);
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(SynSummaryResults, "all peptides"));
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(FHTSummaryResults, "first hits only"));
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "Synopsis File   '" + Path.GetFileName(m_StartupArguments.SynopsisFileFullPath) + "' was generated");
-                    m_Logger.LogMessage(BaseLogger.LogLevels.INFO, "First Hits File '" + Path.GetFileName(m_StartupArguments.FirstHitsFullPath) + "' was generated");
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Syn file");
+                    var SynSummaryResults = mResults.SortPeptides(tmpSynPath, SynOutputIndexList, mStartupArguments.SynopsisFileFullPath);
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Sorting peptides in Fht file");
+                    var FHTSummaryResults = mResults.SortPeptides(tmpFHTPath, FHTOutputIndexList, mStartupArguments.FirstHitsFullPath);
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(SynSummaryResults, "all peptides"));
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, GetScoreSummary(FHTSummaryResults, "first hits only"));
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Synopsis File   '" + Path.GetFileName(mStartupArguments.SynopsisFileFullPath) + "' was generated");
+                    mLogger.LogMessage(BaseLogger.LogLevels.INFO, "First Hits File '" + Path.GetFileName(mStartupArguments.FirstHitsFullPath) + "' was generated");
                 }
 
-                m_Logger = null;
-                if (m_StartupArguments.MakeIRRFile)
+                mLogger = null;
+                if (mStartupArguments.MakeIRRFile)
                 {
-                    m_IRRDumper.CloseIRRWriter();
+                    mIRRDumper.CloseIRRWriter();
                 }
 
-                m_Results = null;
+                mResults = null;
                 EndTask();
             }
 
@@ -448,7 +448,7 @@ namespace SequestResultsProcessor
 
             private int CountOutFiles()
             {
-                var fi = new FileInfo(m_SourceFileFullPath);
+                var fi = new FileInfo(mSourceFileFullPath);
                 var outFileCount = 0;
                 long currentPosition = 0;
                 long lineCount = 0;
@@ -468,7 +468,7 @@ namespace SequestResultsProcessor
                         if (lineCount % 500L == 0L)
                         {
                             UpdateProgressCountingOuts(currentPosition, fi.Length);
-                            if (m_StopProcessing)
+                            if (mStopProcessing)
                                 break;
                         }
                     }
@@ -481,7 +481,7 @@ namespace SequestResultsProcessor
                 return default;
             }
 
-            private void ReadAndStoreOutFileResults(StreamReader srInFile, string fileHeaderLine, Regex fileDelimiterMatcher, bool makeIRRFile, bool removeDupMultiProteinRefs)
+            private void ReadAndStoreOutFileResults(StreamReader reader, string fileHeaderLine, Regex fileDelimiterMatcher, bool makeIRRFile, bool removeDupMultiProteinRefs)
             {
                 int currentStartScan;
                 int currentEndScan;
@@ -505,8 +505,8 @@ namespace SequestResultsProcessor
                 var tmpMultiProteinRefs = new List<string>();
 
                 // Wait until we see the measured mass show up in the header
-                var blnFoundHeaderMass = AdvanceReaderUntilMatch(srInFile, mHeaderMassMatcher, "", out var matchingLine);
-                if (!blnFoundHeaderMass)
+                var foundHeaderMass = AdvanceReaderUntilMatch(reader, mHeaderMassMatcher, "", out var matchingLine);
+                if (!foundHeaderMass)
                     return;
 
                 // grab the header mass value
@@ -515,38 +515,38 @@ namespace SequestResultsProcessor
 
                 // Wait until we see the dashed line underneath the headings for the data block
 
-                var foundDataBlock = AdvanceReaderUntilMatch(srInFile, mDataBlockDelimiterMatcher, "", out _);
-                if (!foundDataBlock || srInFile.EndOfStream)
+                var foundDataBlock = AdvanceReaderUntilMatch(reader, mDataBlockDelimiterMatcher, "", out _);
+                if (!foundDataBlock || reader.EndOfStream)
                     return;
 
                 // Read the first line of the data block
-                var dataLine = srInFile.ReadLine();
+                var dataLine = reader.ReadLine();
 
                 // As long as we keep seeing hit lines, keep grabbing them (also, allow one blank line)
                 // (to separate that VERY last hit that creeps in)
 
-                var eMatchType = eHitMatchType.MatchWithProtein;
-                while (eMatchType != eHitMatchType.NoMatch && dataLine != null)
+                var matchType = eHitMatchType.MatchWithProtein;
+                while (matchType != eHitMatchType.NoMatch && dataLine != null)
                 {
                     var dataLineMatch = mHitLineMatcher.Match(dataLine);
                     if (dataLineMatch.Success)
                     {
-                        eMatchType = eHitMatchType.MatchWithProtein;
+                        matchType = eHitMatchType.MatchWithProtein;
                     }
                     else
                     {
                         dataLineMatch = mHitLineMatcherNoReference.Match(dataLine);
                         if (dataLineMatch.Success)
                         {
-                            eMatchType = eHitMatchType.MatchWithoutProtein;
+                            matchType = eHitMatchType.MatchWithoutProtein;
                         }
                         else
                         {
-                            eMatchType = eHitMatchType.NoMatch;
+                            matchType = eHitMatchType.NoMatch;
                         }
                     }
 
-                    if (eMatchType != eHitMatchType.NoMatch)
+                    if (matchType != eHitMatchType.NoMatch)
                     {
                         var currentPeptide = new PeptideHitEntry
                         {
@@ -557,7 +557,7 @@ namespace SequestResultsProcessor
                             Sp = double.Parse(dataLineMatch.Groups["sp"].Value)
                         };
 
-                        if (eMatchType == eHitMatchType.MatchWithProtein)
+                        if (matchType == eHitMatchType.MatchWithProtein)
                         {
                             currentPeptide.Reference = dataLineMatch.Groups["reference"].Value;
                             if (dataLineMatch.Groups["multiorf"].Length > 0)
@@ -590,13 +590,13 @@ namespace SequestResultsProcessor
 
                         if (makeIRRFile)
                         {
-                            m_IRRDumper.MakeIRREntry(currentStartScan, currentCS, currentPeptide.RankXc, currentPeptide.ObsIons, currentPeptide.PossIons);
+                            mIRRDumper.MakeIRREntry(currentStartScan, currentCS, currentPeptide.RankXc, currentPeptide.ObsIons, currentPeptide.PossIons);
                         }
 
                         // Read the next line
-                        if (!srInFile.EndOfStream)
+                        if (!reader.EndOfStream)
                         {
-                            dataLine = srInFile.ReadLine();
+                            dataLine = reader.ReadLine();
 
                             // Look for multi-protein hit lines, but make sure to exclude those top scoring protein lines underneath them
                             while (true)
@@ -618,9 +618,9 @@ namespace SequestResultsProcessor
                                         tmpMultiProteinRefs.Add(tmpMultiProteinRef);
                                     }
 
-                                    if (!srInFile.EndOfStream)
+                                    if (!reader.EndOfStream)
                                     {
-                                        dataLine = srInFile.ReadLine();
+                                        dataLine = reader.ReadLine();
                                     }
                                     else
                                     {
@@ -638,7 +638,7 @@ namespace SequestResultsProcessor
                         currentPeptide.MultiProteinCount = tmpMultiProteinRefs.Count;
 
                         // Store the results for this peptide
-                        m_Results.AddPeptideResults(currentHeaderMass, currentPeptide);
+                        mResults.AddPeptideResults(currentHeaderMass, currentPeptide);
                         tmpMultiProteinRefs.Clear();
                     }
                 }
@@ -684,13 +684,13 @@ namespace SequestResultsProcessor
 
         public class StartupArguments
         {
-            private readonly string m_SourceDirectory;
-            private string m_DestinationDirectory;
-            private string m_InputFileName;
-            private string m_SynopsisFileName;
-            private string m_FirstHitsFileName;
-            private string m_DTAFileName;
-            private string m_LogFileName;
+            private readonly string mSourceDirectory;
+            private string mDestinationDirectory;
+            private string mInputFileName;
+            private string mSynopsisFileName;
+            private string mFirstHitsFileName;
+            private string mDTAFileName;
+            private string mLogFileName;
 
             /// <summary>
             /// Parameterless constructor
@@ -708,7 +708,7 @@ namespace SequestResultsProcessor
             // ReSharper disable once UnusedMember.Global
             public StartupArguments(string SourceDirectory, string RootFileName)
             {
-                m_SourceDirectory = SourceDirectory;
+                mSourceDirectory = SourceDirectory;
                 this.RootFileName = RootFileName;
             }
 
@@ -722,15 +722,15 @@ namespace SequestResultsProcessor
             {
                 get
                 {
-                    if (m_DestinationDirectory is null)
+                    if (mDestinationDirectory is null)
                     {
-                        return m_SourceDirectory;
+                        return mSourceDirectory;
                     }
 
-                    return m_DestinationDirectory;
+                    return mDestinationDirectory;
                 }
 
-                set => m_DestinationDirectory = value;
+                set => mDestinationDirectory = value;
             }
 
             // ReSharper disable once UnusedMember.Global
@@ -745,75 +745,75 @@ namespace SequestResultsProcessor
             {
                 get
                 {
-                    if (m_InputFileName is null)
+                    if (mInputFileName is null)
                     {
                         return RootFileName + "_out.txt";
                     }
 
-                    return m_InputFileName;
+                    return mInputFileName;
                 }
 
-                set => m_InputFileName = value;
+                set => mInputFileName = value;
             }
 
             public string SynopsisFileName
             {
                 get
                 {
-                    if (m_SynopsisFileName is null)
+                    if (mSynopsisFileName is null)
                     {
                         return RootFileName + "_syn.txt";
                     }
 
-                    return m_SynopsisFileName;
+                    return mSynopsisFileName;
                 }
 
-                set => m_SynopsisFileName = value;
+                set => mSynopsisFileName = value;
             }
 
             public string FirstHitsFileName
             {
                 get
                 {
-                    if (m_FirstHitsFileName is null)
+                    if (mFirstHitsFileName is null)
                     {
                         return RootFileName + "_fht.txt";
                     }
 
-                    return m_FirstHitsFileName;
+                    return mFirstHitsFileName;
                 }
 
-                set => m_FirstHitsFileName = value;
+                set => mFirstHitsFileName = value;
             }
 
             public string DTAFileName
             {
                 get
                 {
-                    if (m_DTAFileName is null)
+                    if (mDTAFileName is null)
                     {
                         return RootFileName + "_dta.txt";
                     }
 
-                    return m_DTAFileName;
+                    return mDTAFileName;
                 }
 
-                set => m_DTAFileName = value;
+                set => mDTAFileName = value;
             }
 
             public string LogFileName
             {
                 get
                 {
-                    if (m_LogFileName is null)
+                    if (mLogFileName is null)
                     {
                         return RootFileName + "_log.txt";
                     }
 
-                    return m_LogFileName;
+                    return mLogFileName;
                 }
 
-                set => m_LogFileName = value;
+                set => mLogFileName = value;
             }
 
             public bool MakeIRRFile { get; set; }

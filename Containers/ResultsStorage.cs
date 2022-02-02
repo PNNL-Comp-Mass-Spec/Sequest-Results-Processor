@@ -32,20 +32,20 @@ namespace SequestResultsProcessor.Containers
         }
 
         // Keys in this dictionary are StartScan.EndScan.Charge
-        private readonly Dictionary<string, ResultsFileEntry> m_Results;
-        private ResultsFileEntry m_CachedResultsFileEntry;
+        private readonly Dictionary<string, ResultsFileEntry> mResults;
+        private ResultsFileEntry mCachedResultsFileEntry;
         private const string HEADER = "HitNum\tScanNum\tScanCount\tChargeState\tMH\tXCorr\tDelCn\tSp\tReference\tMultiProtein\tPeptide\tDelCn2\tRankSp\tRankXc\tDelM\tXcRatio\tIons_Observed\tIons_Expected\tNumTrypticEnds\tDelM_PPM";
 
         public int Count
         {
             get
             {
-                if (m_Results is null)
+                if (mResults is null)
                 {
                     return 0;
                 }
 
-                return m_Results.Count;
+                return mResults.Count;
             }
         }
 
@@ -54,7 +54,7 @@ namespace SequestResultsProcessor.Containers
             // Key/value collection ->
             // key: "StartScan.EndScan.ChargeState"
             // value: ResultsFileEntry entity
-            m_Results = new Dictionary<string, ResultsFileEntry>();
+            mResults = new Dictionary<string, ResultsFileEntry>();
         }
 
         public void AddPeptideResults(double HeaderMass, PeptideHitEntry peptideResults)
@@ -65,27 +65,27 @@ namespace SequestResultsProcessor.Containers
                 return;
             }
 
-            if (m_Results.TryGetValue(tmpKey, out var cachedResultsFileEntry))
+            if (mResults.TryGetValue(tmpKey, out var cachedResultsFileEntry))
             {
-                // Make sure m_CachedResultsFileEntry is up-to-date
-                if (!ReferenceEquals(m_CachedResultsFileEntry, cachedResultsFileEntry))
+                // Make sure mCachedResultsFileEntry is up-to-date
+                if (!ReferenceEquals(mCachedResultsFileEntry, cachedResultsFileEntry))
                 {
-                    m_CachedResultsFileEntry = cachedResultsFileEntry;
+                    mCachedResultsFileEntry = cachedResultsFileEntry;
                 }
             }
             else
             {
-                m_CachedResultsFileEntry = new ResultsFileEntry(peptideResults.StartScanNum, peptideResults.EndScanNum, peptideResults.ChargeState);
-                m_CachedResultsFileEntry.AddHeaderMass(HeaderMass);
-                m_Results.Add(tmpKey, m_CachedResultsFileEntry);
+                mCachedResultsFileEntry = new ResultsFileEntry(peptideResults.StartScanNum, peptideResults.EndScanNum, peptideResults.ChargeState);
+                mCachedResultsFileEntry.AddHeaderMass(HeaderMass);
+                mResults.Add(tmpKey, mCachedResultsFileEntry);
             }
 
-            m_CachedResultsFileEntry.AddPeptideResults(peptideResults);
+            mCachedResultsFileEntry.AddPeptideResults(peptideResults);
         }
 
         public void ClearResults()
         {
-            m_Results.Clear();
+            mResults.Clear();
         }
 
         public void ExportContents(OutputTypeList outputType, double XCorrCutoff, bool ExpandMultiProtein, string ExportFilePath, List<OutputRecordIndex> outputRecordIndexList)
@@ -111,7 +111,7 @@ namespace SequestResultsProcessor.Containers
 
             var outputFileInfo = new FileInfo(ExportFilePath);
             var currentPosition = outputFileInfo.Length;
-            foreach (var resultsFile in m_Results.Values)
+            foreach (var resultsFile in mResults.Values)
             {
                 foreach (var peptideHit in resultsFile.PeptideHits.Values)
                 {
@@ -185,20 +185,20 @@ namespace SequestResultsProcessor.Containers
                 var reUpdateHitNum = new Regex(@"^\d+");
                 outputRecordList.Sort(new OutputRecordIndexComparer());
 
-                using var fsInFile = new FileStream(outputFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                using var swOutFile = new StreamWriter(new FileStream(finalOutputPath, FileMode.Create, FileAccess.Write, FileShare.Read));
+                using var reader = new FileStream(outputFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using var writer = new StreamWriter(new FileStream(finalOutputPath, FileMode.Create, FileAccess.Write, FileShare.Read));
 
-                swOutFile.WriteLine(HEADER);
+                writer.WriteLine(HEADER);
                 foreach (var entry in outputRecordList)
                 {
                     var buffer = new byte[entry.RecordLength + 1];
-                    fsInFile.Seek(entry.StartOffset, SeekOrigin.Begin);
-                    fsInFile.Read(buffer, 0, entry.RecordLength);
+                    reader.Seek(entry.StartOffset, SeekOrigin.Begin);
+                    reader.Read(buffer, 0, entry.RecordLength);
                     var inputString = Encoding.Default.GetString(buffer);
 
                     // Update the the row number (the first number on the line)
                     var outputString = reUpdateHitNum.Replace(inputString, rowCount.ToString());
-                    swOutFile.Write(outputString.Trim('\0'));
+                    writer.Write(outputString.Trim('\0'));
                     rowCount++;
                 }
             }
@@ -331,11 +331,11 @@ namespace SequestResultsProcessor.Containers
 
         internal class XCorrSummaryGenerator
         {
-            private readonly List<OutputRecordIndex> m_OutputIndexList;
+            private readonly List<OutputRecordIndex> mOutputIndexList;
 
             public XCorrSummaryGenerator(List<OutputRecordIndex> outputIndexList)
             {
-                m_OutputIndexList = outputIndexList;
+                mOutputIndexList = outputIndexList;
                 StatsTable = new Dictionary<int, int>();
             }
 
@@ -347,7 +347,7 @@ namespace SequestResultsProcessor.Containers
                 var GT2 = 0;
                 var GT1 = 0;
                 var GT0 = 0;
-                foreach (var entry in m_OutputIndexList)
+                foreach (var entry in mOutputIndexList)
                 {
                     switch (entry.XCorr)
                     {

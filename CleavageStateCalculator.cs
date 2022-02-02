@@ -4,84 +4,84 @@ namespace SequestResultsProcessor
 {
     public class CleavageStateCalculator
     {
-        private readonly Regex m_reFullyTryptic;
-        private readonly Regex m_reFullyTrypticProlineCheck;
-        private readonly Regex m_reFullyTrypticModKR;
-        private readonly Regex m_rePeptideSpanningProtein;
-        private readonly Regex m_reFullyTrypticAtNTerm;
-        private readonly Regex m_reFullyTrypticAtNTermModKR;
-        private readonly Regex m_reFullyTrypticAtCTerm;
-        private readonly Regex m_rePartiallyTryptic1;
-        private readonly Regex m_rePartiallyTryptic2;
-        private readonly Regex m_rePartiallyTrypticModKR;
+        private readonly Regex mFullyTryptic;
+        private readonly Regex mFullyTrypticProlineCheck;
+        private readonly Regex mFullyTrypticModKR;
+        private readonly Regex mPeptideSpanningProtein;
+        private readonly Regex mFullyTrypticAtNTerm;
+        private readonly Regex mFullyTrypticAtNTermModKR;
+        private readonly Regex mFullyTrypticAtCTerm;
+        private readonly Regex mPartiallyTryptic1;
+        private readonly Regex mPartiallyTryptic2;
+        private readonly Regex mPartiallyTrypticModKR;
 
         public CleavageStateCalculator()
         {
-            m_reFullyTryptic = new Regex(@"[KR]\..+[KR]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_reFullyTrypticModKR = new Regex(@"[KR]\..+[KR][^A-Z]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_reFullyTrypticProlineCheck = new Regex(@"\.P.*", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_rePeptideSpanningProtein = new Regex(@"-\..+\.-", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_reFullyTrypticAtNTerm = new Regex(@"-\..+[KR]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_reFullyTrypticAtNTermModKR = new Regex(@"-\..+[KR][^A-Z]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_reFullyTrypticAtCTerm = new Regex(@"[KR]\.[^P].+\.-", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_rePartiallyTryptic1 = new Regex(@"[KR]\.[^P].*\.\S+", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_rePartiallyTryptic2 = new Regex(@"\S+\..*[KR]\.[^P-]", RegexOptions.Compiled | RegexOptions.Singleline);
-            m_rePartiallyTrypticModKR = new Regex(@"\S+\.[^KR].*[KR][^A-Z]\.[^P-]", RegexOptions.Compiled | RegexOptions.Singleline);
+            mFullyTryptic = new Regex(@"[KR]\..+[KR]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
+            mFullyTrypticModKR = new Regex(@"[KR]\..+[KR][^A-Z]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
+            mFullyTrypticProlineCheck = new Regex(@"\.P.*", RegexOptions.Compiled | RegexOptions.Singleline);
+            mPeptideSpanningProtein = new Regex(@"-\..+\.-", RegexOptions.Compiled | RegexOptions.Singleline);
+            mFullyTrypticAtNTerm = new Regex(@"-\..+[KR]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
+            mFullyTrypticAtNTermModKR = new Regex(@"-\..+[KR][^A-Z]\.[^P]", RegexOptions.Compiled | RegexOptions.Singleline);
+            mFullyTrypticAtCTerm = new Regex(@"[KR]\.[^P].+\.-", RegexOptions.Compiled | RegexOptions.Singleline);
+            mPartiallyTryptic1 = new Regex(@"[KR]\.[^P].*\.\S+", RegexOptions.Compiled | RegexOptions.Singleline);
+            mPartiallyTryptic2 = new Regex(@"\S+\..*[KR]\.[^P-]", RegexOptions.Compiled | RegexOptions.Singleline);
+            mPartiallyTrypticModKR = new Regex(@"\S+\.[^KR].*[KR][^A-Z]\.[^P-]", RegexOptions.Compiled | RegexOptions.Singleline);
         }
 
         public int CountTrypticEnds(string peptideSeq)
         {
             // Fully Tryptic
-            if (m_reFullyTryptic.IsMatch(peptideSeq) && !m_reFullyTrypticProlineCheck.IsMatch(peptideSeq))
+            if (mFullyTryptic.IsMatch(peptideSeq) && !mFullyTrypticProlineCheck.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully Tryptic, allowing modified K or R
 
-            if (m_reFullyTrypticModKR.IsMatch(peptideSeq) && !m_reFullyTrypticProlineCheck.IsMatch(peptideSeq))
+            if (mFullyTrypticModKR.IsMatch(peptideSeq) && !mFullyTrypticProlineCheck.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Label sequences spanning the entire protein as fully tryptic
-            if (m_rePeptideSpanningProtein.IsMatch(peptideSeq))
+            if (mPeptideSpanningProtein.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully tryptic at N-Terminus
-            if (m_reFullyTrypticAtNTerm.IsMatch(peptideSeq))
+            if (mFullyTrypticAtNTerm.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully tryptic at N-Terminus, allowing modified K or R
-            if (m_reFullyTrypticAtNTermModKR.IsMatch(peptideSeq))
+            if (mFullyTrypticAtNTermModKR.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Fully tryptic at C-Terminus
-            if (m_reFullyTrypticAtCTerm.IsMatch(peptideSeq))
+            if (mFullyTrypticAtCTerm.IsMatch(peptideSeq))
             {
                 return 2;
             }
 
             // Partially tryptic
-            if (m_rePartiallyTryptic1.IsMatch(peptideSeq))
+            if (mPartiallyTryptic1.IsMatch(peptideSeq))
             {
                 return 1;
             }
 
             // Partially tryptic
-            if (m_rePartiallyTryptic2.IsMatch(peptideSeq))
+            if (mPartiallyTryptic2.IsMatch(peptideSeq))
             {
                 return 1;
             }
 
             // Partially tryptic, allowing modified K or R
-            if (m_rePartiallyTrypticModKR.IsMatch(peptideSeq))
+            if (mPartiallyTrypticModKR.IsMatch(peptideSeq))
             {
                 return 1;
             }

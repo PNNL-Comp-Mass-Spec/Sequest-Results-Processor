@@ -8,59 +8,59 @@ namespace SequestResultsProcessor
         public const double MASS_PROTON = 1.00727649d;               // Note that this is the mass of hydrogen minus the mass of one electron
         #endregion
 
-        public double ComputeDelMCorrected(double dblPrecursorMassMH, double dblPeptideTheoreticalMH)
+        public double ComputeDelMCorrected(double precursorMassMH, double peptideTheoreticalMH)
         {
-            var dblDelM = dblPrecursorMassMH - dblPeptideTheoreticalMH;
-            var dblPrecursorMonoMass = dblPrecursorMassMH - MASS_PROTON;
-            var dblPeptideMonoisotopicMass = dblPeptideTheoreticalMH - MASS_PROTON;
-            return ComputeDelMCorrected(dblDelM, dblPrecursorMonoMass, true, dblPeptideMonoisotopicMass);
+            var delM = precursorMassMH - peptideTheoreticalMH;
+            var precursorMonoMass = precursorMassMH - MASS_PROTON;
+            var peptideMonoisotopicMass = peptideTheoreticalMH - MASS_PROTON;
+            return ComputeDelMCorrected(delM, precursorMonoMass, true, peptideMonoisotopicMass);
         }
 
-        public double ComputeDelMCorrected(double dblDelM, double dblPrecursorMonoMass, bool blnAdjustPrecursorMassForC13, double dblPeptideMonoisotopicMass)
+        public double ComputeDelMCorrected(double delM, double precursorMonoMass, bool adjustPrecursorMassForC13, double peptideMonoisotopicMass)
         {
-            var intCorrectionCount = 0;
+            var correctionCount = 0;
 
-            // Examine dblDelM to determine which isotope was chosen
-            if (dblDelM >= -0.5d)
+            // Examine delM to determine which isotope was chosen
+            if (delM >= -0.5d)
             {
                 // This is the typical case
-                while (dblDelM > 0.5d)
+                while (delM > 0.5d)
                 {
-                    dblDelM -= MASS_C13;
-                    intCorrectionCount++;
+                    delM -= MASS_C13;
+                    correctionCount++;
                 }
             }
             else
             {
                 // This happens less often; but we'll still account for it
-                // In this case, intCorrectionCount will be negative
-                while (dblDelM < -0.5d)
+                // In this case, correctionCount will be negative
+                while (delM < -0.5d)
                 {
-                    dblDelM += MASS_C13;
-                    intCorrectionCount--;
+                    delM += MASS_C13;
+                    correctionCount--;
                 }
             }
 
-            if (intCorrectionCount != 0)
+            if (correctionCount != 0)
             {
-                if (blnAdjustPrecursorMassForC13)
+                if (adjustPrecursorMassForC13)
                 {
-                    // Adjust the precursor mono mass based on intCorrectionCount
-                    dblPrecursorMonoMass -= intCorrectionCount * MASS_C13;
+                    // Adjust the precursor mono mass based on correctionCount
+                    precursorMonoMass -= correctionCount * MASS_C13;
                 }
 
                 // Compute a new DelM value
-                dblDelM = dblPrecursorMonoMass - dblPeptideMonoisotopicMass;
+                delM = precursorMonoMass - peptideMonoisotopicMass;
             }
 
-            return MassToPPM(dblDelM, dblPeptideMonoisotopicMass);
+            return MassToPPM(delM, peptideMonoisotopicMass);
         }
 
-        public double MassToPPM(double dblMassToConvert, double dblCurrentMZ)
+        public double MassToPPM(double massToConvert, double currentMZ)
         {
-            // Converts dblMassToConvert to ppm, based on the value of dblCurrentMZ
+            // Converts massToConvert to ppm, based on the value of currentMZ
 
-            return dblMassToConvert * 1000000.0d / dblCurrentMZ;
+            return massToConvert * 1000000.0d / currentMZ;
         }
     }
 }

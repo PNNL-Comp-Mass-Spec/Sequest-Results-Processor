@@ -21,31 +21,31 @@ namespace SequestResultsProcessor.Containers
     /// <remarks></remarks>
     internal class ResultsFileEntry
     {
-        private double m_HeaderMass;
-        private PeptideHitEntry m_CachedPreviousHit;
-        private double m_CachedHighestXcorr;
-        private SortedList<int, PeptideHitEntry> m_PeptideHits;
-        private readonly ComputeDelMPPM m_ComputeDelMPPM;
+        private double mHeaderMass;
+        private PeptideHitEntry mCachedPreviousHit;
+        private double mCachedHighestXcorr;
+        private SortedList<int, PeptideHitEntry> mPeptideHits;
+        private readonly ComputeDelMPPM mComputeDelMPPM;
 
         public ResultsFileEntry(int startScanNum, int endScanNum, int chargeState)
         {
             StartScanNumber = startScanNum;
             EndScanNumber = endScanNum;
             ChargeState = chargeState;
-            m_ComputeDelMPPM = new ComputeDelMPPM();
+            mComputeDelMPPM = new ComputeDelMPPM();
         }
 
-        public void AddHeaderMass(double HeaderMass)
+        public void AddHeaderMass(double headerMass)
         {
-            m_HeaderMass = HeaderMass;
+            mHeaderMass = headerMass;
         }
 
         public void AddPeptideResults(PeptideHitEntry peptideResults)
         {
-            m_PeptideHits ??= new SortedList<int, PeptideHitEntry>();
+            mPeptideHits ??= new SortedList<int, PeptideHitEntry>();
 
-            // See if peptideResults is already present in m_PeptideHits
-            foreach (var objItem in m_PeptideHits)
+            // See if peptideResults is already present in mPeptideHits
+            foreach (var objItem in mPeptideHits)
             {
                 if (peptideResults.StartScanNum == objItem.Value.StartScanNum && peptideResults.ChargeState == objItem.Value.ChargeState && (peptideResults.Peptide ?? "") == (objItem.Value.Peptide ?? ""))
                 {
@@ -55,7 +55,7 @@ namespace SequestResultsProcessor.Containers
                         objItem.Value.XCorr = peptideResults.XCorr;
                         if (objItem.Key == 0)
                         {
-                            m_CachedHighestXcorr = objItem.Value.XCorr;
+                            mCachedHighestXcorr = objItem.Value.XCorr;
                         }
                     }
 
@@ -63,43 +63,42 @@ namespace SequestResultsProcessor.Containers
                 }
             }
 
-            var newIndex = m_PeptideHits.Count + 1;
+            var newIndex = mPeptideHits.Count + 1;
             if (newIndex > 1)
             {
-                m_CachedPreviousHit = m_PeptideHits[newIndex - 1];
-                m_CachedPreviousHit.DelCn2 = CalculateDelCN2(m_CachedPreviousHit.XCorr, peptideResults.XCorr);
+                mCachedPreviousHit = mPeptideHits[newIndex - 1];
+                mCachedPreviousHit.DelCn2 = CalculateDelCN2(mCachedPreviousHit.XCorr, peptideResults.XCorr);
             }
             else
             {
-                m_CachedHighestXcorr = peptideResults.XCorr;
+                mCachedHighestXcorr = peptideResults.XCorr;
             }
 
-            peptideResults.DelM = CalculateDelM(m_HeaderMass, peptideResults.MH);
-            peptideResults.DelMPPM = CalculateDelMPPM(m_HeaderMass, peptideResults.MH);
-            peptideResults.XcRatio = CalculateXCRatio(peptideResults.XCorr, m_CachedHighestXcorr);
-            m_PeptideHits.Add(newIndex, peptideResults);
+            peptideResults.DelM = CalculateDelM(mHeaderMass, peptideResults.MH);
+            peptideResults.DelMPPM = CalculateDelMPPM(mHeaderMass, peptideResults.MH);
+            peptideResults.XcRatio = CalculateXCRatio(peptideResults.XCorr, mCachedHighestXcorr);
+            mPeptideHits.Add(newIndex, peptideResults);
         }
 
         #region Calculate Differences
-
-        private double CalculateDelCN2(double XCorrCurrent, double XCorrNextLowest)
+        private double CalculateDelCN2(double xcorrCurrent, double xcorrNextLowest)
         {
-            return (XCorrCurrent - XCorrNextLowest) / XCorrCurrent;
+            return (xcorrCurrent - xcorrNextLowest) / xcorrCurrent;
         }
 
-        private double CalculateXCRatio(double XCorrCurrent, double XCorrFirstHit)
+        private double CalculateXCRatio(double xcorrCurrent, double xcorrFirstHit)
         {
-            return XCorrCurrent / XCorrFirstHit;
+            return xcorrCurrent / xcorrFirstHit;
         }
 
-        private double CalculateDelM(double HeaderMass, double PeptideObsMass)
+        private double CalculateDelM(double headerMass, double peptideObsMass)
         {
-            return PeptideObsMass - HeaderMass;
+            return peptideObsMass - headerMass;
         }
 
-        private double CalculateDelMPPM(double dblPrecursorMassMH, double dblPeptideTheoreticalMH)
+        private double CalculateDelMPPM(double precursorMassMH, double peptideTheoreticalMH)
         {
-            return m_ComputeDelMPPM.ComputeDelMCorrected(dblPrecursorMassMH, dblPeptideTheoreticalMH);
+            return mComputeDelMPPM.ComputeDelMCorrected(precursorMassMH, peptideTheoreticalMH);
         }
 
         #endregion
@@ -110,7 +109,7 @@ namespace SequestResultsProcessor.Containers
         public int EndScanNumber { get; }
         public int ChargeState { get; }
 
-        public SortedList<int, PeptideHitEntry> PeptideHits => m_PeptideHits;
+        public SortedList<int, PeptideHitEntry> PeptideHits => mPeptideHits;
 
         #endregion
     }

@@ -19,8 +19,8 @@ namespace SequestResultsProcessor.Containers
     internal class TheoreticalFragmentInfo
     {
         private static Dictionary<string, ResidueInfo> s_Intensities = new();
-        private List<Fragment> m_TheoreticalYIons;
-        private List<Fragment> m_TheoreticalBIons;
+        private List<Fragment> mTheoreticalYIons;
+        private List<Fragment> mTheoreticalBIons;
 
         public struct Fragment
         {
@@ -84,9 +84,9 @@ namespace SequestResultsProcessor.Containers
 
         private const string KNOWN_RESIDUES = "ACDEFGHIKLMNPQRSTVWY";
 
-        public List<Fragment> YIons => m_TheoreticalYIons;
+        public List<Fragment> YIons => mTheoreticalYIons;
 
-        public List<Fragment> BIons => m_TheoreticalBIons;
+        public List<Fragment> BIons => mTheoreticalBIons;
 
         public TheoreticalFragmentInfo(string peptideSequence, int chargeState)
         {
@@ -130,8 +130,8 @@ namespace SequestResultsProcessor.Containers
         {
             var cleanSeq = GetCleanSequence(dirtySeq);
             var peptideLength = cleanSeq.Length;
-            m_TheoreticalYIons = new List<Fragment>();
-            m_TheoreticalBIons = new List<Fragment>();
+            mTheoreticalYIons = new List<Fragment>();
+            mTheoreticalBIons = new List<Fragment>();
             int counter;
 
             var tmpPepMass = GetMass(cleanSeq, chargeState);
@@ -146,17 +146,17 @@ namespace SequestResultsProcessor.Containers
                 tmpBMass += GetMass(bFragment, chargeState);
                 var tmpYMass = tmpPepMass - tmpBMass + 20.02d;
                 var tmpInt = GetIntensity(bFragment, yFragment);
-                m_TheoreticalBIons.Add(new Fragment(Math.Round(tmpBMass, 4), tmpInt, FragmentTypes.b, i + 1));
-                m_TheoreticalYIons.Add(new Fragment(Math.Round(tmpYMass, 4), tmpInt, FragmentTypes.y, peptideLength - (i + 1)));
+                mTheoreticalBIons.Add(new Fragment(Math.Round(tmpBMass, 4), tmpInt, FragmentTypes.b, i + 1));
+                mTheoreticalYIons.Add(new Fragment(Math.Round(tmpYMass, 4), tmpInt, FragmentTypes.y, peptideLength - (i + 1)));
             }
 
             var sorter = new TheoreticalIonComparer();
-            m_TheoreticalBIons.Sort(sorter);
-            m_TheoreticalYIons.Sort(sorter);
-            if (m_TheoreticalBIons.Count > 0)
-                m_TheoreticalBIons.RemoveAt(m_TheoreticalBIons.Count - 1);
-            if (m_TheoreticalYIons.Count > 0)
-                m_TheoreticalYIons.RemoveAt(m_TheoreticalYIons.Count - 1);
+            mTheoreticalBIons.Sort(sorter);
+            mTheoreticalYIons.Sort(sorter);
+            if (mTheoreticalBIons.Count > 0)
+                mTheoreticalBIons.RemoveAt(mTheoreticalBIons.Count - 1);
+            if (mTheoreticalYIons.Count > 0)
+                mTheoreticalYIons.RemoveAt(mTheoreticalYIons.Count - 1);
         }
 
         private string GetCleanSequence(string rawPeptideSeq)

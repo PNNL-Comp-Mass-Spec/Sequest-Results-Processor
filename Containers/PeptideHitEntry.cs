@@ -179,26 +179,25 @@ namespace SequestResultsProcessor.Containers
             // phase at the end of the function
 
             {
-                var withBlock = this;
-                sbFront.Append(withBlock.HitNum.ToString());
+                sbFront.Append(HitNum.ToString());
                 sbFront.Append(delim);
-                sbFront.Append(withBlock.StartScanNum.ToString("##0000"));
+                sbFront.Append(StartScanNum.ToString("##0000"));
                 sbFront.Append(delim);
-                sbFront.Append(withBlock.ScanCount.ToString());
+                sbFront.Append(ScanCount.ToString());
                 sbFront.Append(delim);
-                sbFront.Append(withBlock.ChargeState.ToString());
+                sbFront.Append(ChargeState.ToString());
                 sbFront.Append(delim);
-                sbFront.Append(Math.Round(withBlock.MH, 5).ToString("#####0.00000"));
+                sbFront.Append(Math.Round(MH, 5).ToString("#####0.00000"));
                 sbFront.Append(delim);
-                sbFront.Append(Math.Round(withBlock.XCorr, 4).ToString("##0.0000"));
+                sbFront.Append(Math.Round(XCorr, 4).ToString("##0.0000"));
                 sbFront.Append(delim);
-                sbFront.Append(Math.Round(withBlock.DelCn, 4).ToString("##0.0000"));
+                sbFront.Append(Math.Round(DelCn, 4).ToString("##0.0000"));
                 sbFront.Append(delim);
-                sbFront.Append(Math.Round(withBlock.Sp, 1).ToString("######0.0"));
+                sbFront.Append(Math.Round(Sp, 1).ToString("######0.0"));
                 sbFront.Append(delim);
-                if (withBlock.MultiProteinCount > 0)
+                if (MultiProteinCount > 0)
                 {
-                    sbRear.Append(withBlock.MultiProteinCount.ToString("+0"));
+                    sbRear.Append(MultiProteinCount.ToString("+0"));
                 }
                 else
                 {
@@ -206,17 +205,17 @@ namespace SequestResultsProcessor.Containers
                 }
 
                 sbRear.Append(delim);
-                sbRear.Append(withBlock.Peptide);
+                sbRear.Append(Peptide);
                 sbRear.Append(delim);
-                sbRear.Append(Math.Round(withBlock.DelCn2, 4).ToString("##0.0000"));
+                sbRear.Append(Math.Round(DelCn2, 4).ToString("##0.0000"));
                 sbRear.Append(delim);
-                sbRear.Append(withBlock.RankSp.ToString());
+                sbRear.Append(RankSp.ToString());
                 sbRear.Append(delim);
-                sbRear.Append(withBlock.RankXc.ToString());
+                sbRear.Append(RankXc.ToString());
                 sbRear.Append(delim);
-                sbRear.Append(Math.Round(withBlock.DelM, 5).ToString("##0.00000"));
+                sbRear.Append(Math.Round(DelM, 5).ToString("##0.00000"));
                 sbRear.Append(delim);
-                sbRear.Append(Math.Round(withBlock.XcRatio, 3).ToString("0.000"));
+                sbRear.Append(Math.Round(XcRatio, 3).ToString("0.000"));
                 sbRear.Append(delim);
 
                 // PassFilt and MScore are Legacy columns
@@ -229,13 +228,13 @@ namespace SequestResultsProcessor.Containers
                 // End If
                 // sbRear.Append(delim)
 
-                sbRear.Append(withBlock.ObsIons.ToString());
+                sbRear.Append(ObsIons.ToString());
                 sbRear.Append(delim);
-                sbRear.Append(withBlock.PossIons.ToString());
+                sbRear.Append(PossIons.ToString());
                 sbRear.Append(delim);
-                sbRear.Append(withBlock.NumTrypticEnds.ToString());
+                sbRear.Append(NumTrypticEnds.ToString());
                 sbRear.Append(delim);
-                sbRear.Append(withBlock.DelMPPM.ToString("##0.0000"));
+                sbRear.Append(DelMPPM.ToString("##0.0000"));
             }
 
             exportList.Add(0, sbFront + Reference + delim + sbRear);

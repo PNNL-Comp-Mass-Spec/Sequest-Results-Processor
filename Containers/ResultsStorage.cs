@@ -405,13 +405,12 @@ namespace SequestResultsProcessor.Containers
                 }
 
                 {
-                    var withBlock = StatsTable;
-                    withBlock.Add(5, GT5);
-                    withBlock.Add(4, GT4);
-                    withBlock.Add(3, GT3);
-                    withBlock.Add(2, GT2);
-                    withBlock.Add(1, GT1);
-                    withBlock.Add(0, GT0);
+                    StatsTable.Add(5, GT5);
+                    StatsTable.Add(4, GT4);
+                    StatsTable.Add(3, GT3);
+                    StatsTable.Add(2, GT2);
+                    StatsTable.Add(1, GT1);
+                    StatsTable.Add(0, GT0);
                 }
 
                 return StatsTable;

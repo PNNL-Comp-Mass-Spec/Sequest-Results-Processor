@@ -296,10 +296,7 @@ namespace SequestResultsProcessor
                 var fileOffset = m_Offsets.get_GetOffset(StartScanNumber, EndScanNumber, ChargeState);
                 if (fileOffset > 0L)
                 {
-                    {
-                        var withBlock = m_DTAFileIntensities;
-                        withBlock.GetIntensitiesFromDTA(fileOffset);
-                    }
+                    m_DTAFileIntensities.GetIntensitiesFromDTA(fileOffset);
                 }
                 else if (m_DTAFileIntensities != null)
                 {

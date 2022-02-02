@@ -391,8 +391,8 @@ namespace SequestResultsProcessor
 
                 mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' was generated");
                 mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' was generated");
-                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' contains " + SynOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + mStartupArguments.SynXCorrThreshold + " and subsequently filtered)");
-                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides " + "(XCorr Threshold was " + mStartupArguments.FHTXCorrThreshold + ")");
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpSynPath) + "' contains " + SynOutputIndexList.Count.ToString().PadLeft(7) + " peptides (XCorr Threshold was " + mStartupArguments.SynXCorrThreshold + " and subsequently filtered)");
+                mLogger.LogMessage(BaseLogger.LogLevels.INFO, "Peak file '" + Path.GetFileName(tmpFHTPath) + "' contains " + FHTOutputIndexList.Count.ToString().PadLeft(7) + " peptides (XCorr Threshold was " + mStartupArguments.FHTXCorrThreshold + ")");
 
                 // Keys in these dictionaries are XCorr threshold; values are the number of peptides with an XCorr over the threshold
                 if (!mStopProcessing)

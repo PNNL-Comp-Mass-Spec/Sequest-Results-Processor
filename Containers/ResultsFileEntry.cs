@@ -18,7 +18,6 @@ namespace SequestResultsProcessor.Containers
     /// <summary>
     /// Tracks the peptides listed in a single .Out file
     /// </summary>
-    /// <remarks></remarks>
     internal class ResultsFileEntry
     {
         private double mHeaderMass;

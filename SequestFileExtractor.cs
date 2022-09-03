@@ -271,7 +271,6 @@ namespace SequestResultsProcessor
             /// <summary>
             /// Open a _out.txt file and extract the peptide info
             /// </summary>
-            /// <remarks></remarks>
             public void ProcessInputFile()
             {
                 var makeIRRFile = false;

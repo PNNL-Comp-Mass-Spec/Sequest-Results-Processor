@@ -22,7 +22,6 @@ namespace SequestResultsProcessor.Containers
     /// <summary>
     /// Tracks peptide results from several .Out files
     /// </summary>
-    /// <remarks></remarks>
     internal class ResultsStorage
     {
         public enum OutputTypeList
@@ -419,7 +418,6 @@ namespace SequestResultsProcessor.Containers
             /// <summary>
             /// Keys in this dictionary are XCorr threshold; values are the number of peptides with an XCorr over the threshold
             /// </summary>
-            /// <returns></returns>
             public Dictionary<int, int> StatsTable { get; }
         }
     }
